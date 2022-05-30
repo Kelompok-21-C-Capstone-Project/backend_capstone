@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+//> model tipe data
 type Product struct {
 	ProductId   int       `gorm : "primaryKey" json:"id"`
 	ProductName string    `json:"name"`
@@ -15,6 +16,7 @@ type Product struct {
 	UpdatedAt   time.Time `json:"updated"`
 }
 
+//> fungsi get (read) koreksi
 func GetAllProduct(c echo.Context) error {
 	var product []Product
 	var error error
@@ -24,6 +26,7 @@ func GetAllProduct(c echo.Context) error {
 	return c.JSON(http.StatusOK, product)
 }
 
+//> fungsi post(create) koreksi
 func CreateProduct(c echo.Context) error {
 	var input []Product
 	err := c.Bind(&input)
@@ -34,6 +37,7 @@ func CreateProduct(c echo.Context) error {
 	return c.JSON(http.StatusOK, input)
 }
 
+//> fungsi delete msh butuh koreksi dibagian return
 func DeleteProduct(c echo.Context) error {
 	var product map[int]*Product
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -41,6 +45,7 @@ func DeleteProduct(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
+//>fungsi put(update) msh butuh koreksi
 func UpdateProduct(c echo.Context) error {
 	var product map[int]*Product
 	n := new(Product)
