@@ -19,16 +19,16 @@ type Payment struct {
 
 //> fungsi get (read) koreksi
 func GetAllPayment(c echo.Context) error {
-	var product []Payment
+	var payment []Payment
 	var error error
 	if error != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": error.Error()})
 	}
-	return c.JSON(http.StatusOK, product)
+	return c.JSON(http.StatusOK, payment)
 }
 
 //> fungsi post(create) koreksi
-func CreateProduct(c echo.Context) error {
+func CreatePayment(c echo.Context) error {
 	var input []Payment
 	err := c.Bind(&input)
 	if err != nil {
@@ -39,21 +39,21 @@ func CreateProduct(c echo.Context) error {
 }
 
 //> fungsi delete msh butuh koreksi dibagian return
-func DeleteProduct(c echo.Context) error {
-	var product map[int]*Payment
+func DeletePayment(c echo.Context) error {
+	var payment map[int]*Payment
 	id, _ := strconv.Atoi(c.Param("id"))
-	delete(product, id)
+	delete(payment, id)
 	return c.NoContent(http.StatusNoContent)
 }
 
 //>fungsi put(update) msh butuh koreksi
-func UpdateProduct(c echo.Context) error {
-	var product map[int]*Payment
+func UpdatePayment(c echo.Context) error {
+	var payment map[int]*Payment
 	n := new(Payment)
 	if err := c.Bind(n); err != nil {
 		return err
 	}
 	id, _ := strconv.Atoi(c.Param("id"))
-	product[id].Description = n.Description
-	return c.JSON(http.StatusOK, product[id])
+	payment[id].Description = n.Description
+	return c.JSON(http.StatusOK, payment[id])
 }
