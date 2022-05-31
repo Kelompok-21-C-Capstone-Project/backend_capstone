@@ -68,6 +68,9 @@ func GetSingleData(c echo.Context) error {
 			})
 		}
 		/*
+		disini 2 use case atau 2 role
+		admin : have all akses bisa lihat diri nya dan org lain mau untuk crud
+		user : hanya bisa lihat dirinya hanya read
 			
 		*/
 		// if payloadUser.Role != "admin" && payloadUser.Role != "user" {
@@ -102,7 +105,7 @@ func GetSingleData(c echo.Context) error {
 	return nil
 
 	func DeleteData(c echo.Context) error{
-		
+
 	}
 }
 
