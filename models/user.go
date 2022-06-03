@@ -4,7 +4,7 @@ import "time"
 
 //> model tipe data
 type User struct {
-	UserId    int       `gorm : "primaryKey" json:"id"`
+	UserId    int       `gorm:"primaryKey" json:"id"`
 	Username  string    `json:"username"`
 	Role      string    `json:"role"`
 	Email     string    `json:"email"`

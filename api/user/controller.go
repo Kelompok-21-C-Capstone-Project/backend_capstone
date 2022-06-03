@@ -1,6 +1,10 @@
 package user
 
-import "github.com/labstack/echo/v4"
+import (
+	"strconv"
+
+	"github.com/labstack/echo/v4"
+)
 
 func GetAllData(c echo.Context) error {
 	// user, err := utils.ParsingJWT(c)
@@ -68,20 +72,20 @@ func GetSingleData(c echo.Context) error {
 			})
 		}
 		/*
-		disini 2 use case atau 2 role
-		admin : have all akses bisa lihat diri nya dan org lain mau untuk crud
-		user : hanya bisa lihat dirinya hanya read
-			
+			disini 2 use case atau 2 role
+			admin : have all akses bisa lihat diri nya dan org lain mau untuk crud
+			user : hanya bisa lihat dirinya hanya read
+
 		*/
 		// if payloadUser.Role != "admin" && payloadUser.Role != "user" {
-			return c.JSON(500, map[string]interface{}{
-				"error": "role is invalid",
-			})
+		return c.JSON(500, map[string]interface{}{
+			"error": "role is invalid",
+		})
 		// } else if payloadUser.Role == "user" && payloadUser.Id != idRequest {
-			return c.JSON(500, map[string]interface{}{
-				"error": "user anda memiliki role user, tidak diizinkan untuk melihat user lain",
-			})
-		}
+		return c.JSON(500, map[string]interface{}{
+			"error": "user anda memiliki role user, tidak diizinkan untuk melihat user lain",
+		})
+		// }
 		user, err := ctrl.iUserRepo.GetUserById(idRequest)
 		if err != nil {
 			return c.JSON(500, map[string]interface{}{
@@ -104,8 +108,8 @@ func GetSingleData(c echo.Context) error {
 	}
 	return nil
 
-	func DeleteData(c echo.Context) error{
-
-	}
 }
 
+func DeleteData(c echo.Context) error {
+
+}
