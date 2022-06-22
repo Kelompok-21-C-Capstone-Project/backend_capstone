@@ -1,11 +1,19 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+// TODO: PENETAPAN ATRIBUT ENTITAS
 
 type Payment struct {
 	Id              uuid.UUID `gorm:"type:varchar(50)"`
-	Name            string    `gorm:"type:varchar(30);not null"`
-	BodyRequest     string    `gorm:"type:text;not null"`
-	PaymentMethodId uuid.UUID `gorm:"type:varchar(50)"`
-	PaymentMethod   PaymentMethod
+	TransactionId   uuid.UUID `gorm:"type:varchar(50)"`
+	Details         string    `grom:"type:text"`
+	PaymentVendorId uuid.UUID
+	PaymentVendor   PaymentVendor
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
 }

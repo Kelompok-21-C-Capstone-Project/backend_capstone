@@ -29,11 +29,11 @@ func NewGormMigrationService(dbCon *utils.DatabaseConnection) *GormMigrationServ
 
 func (s *GormMigrationService) GormMigrate() (err error) {
 	log.Print("Enter GormMigration()")
-	err = s.gorm.SetupJoinTable(&Brand{}, "Category", &BrandCategory{})
+	err = s.gorm.SetupJoinTable(&ProductBrand{}, "ProcutCategory", &ProductBrandCategory{})
 	if err != nil {
 		return err
 	}
-	s.gorm.AutoMigrate(&Brand{}, &Category{}, &BrandCategory{}, &Product{}, &User{}, &PaymentMethod{}, &Payment{})
+	s.gorm.AutoMigrate(&ProductBrand{}, &ProductCategory{}, &ProductBrandCategory{}, &Product{}, &User{}, &PaymentMethod{}, &PaymentVendor{})
 	if err != nil {
 		return err
 	}
