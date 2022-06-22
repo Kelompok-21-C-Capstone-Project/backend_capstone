@@ -10,7 +10,7 @@ import (
 
 //> model tipe data
 type Transaction struct {
-	Id          uuid.UUID `gorm:"primaryKey" json:"id"`
+	Id          uuid.UUID `gorm:"type:varchar(50)" json:"id"`
 	UserId      uuid.UUID `gorm:"type:varchar(50)" json:"user_id"`
 	ProductId   uuid.UUID `gorm:"type:varchar(50)" json:"product_id"`
 	Payment     Payment

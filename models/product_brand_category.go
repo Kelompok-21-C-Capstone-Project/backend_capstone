@@ -5,9 +5,9 @@ import (
 )
 
 type ProductBrandCategory struct {
-	Id          uuid.UUID `gorm:"type:varchar(50)"`
-	BrandId     uuid.UUID `gorm:"type:varchar(50);not null"`
-	CategoryId  uuid.UUID `gorm:"type:varchar(50);not null"`
-	Slug        string    `gorm:"type:varchar(50);not null"`
-	IsAvailable bool      `gorm:"default:true;not null"`
+	Id                uuid.UUID `gorm:"type:varchar(50)"`
+	ProductBrandId    uuid.UUID `gorm:"type:varchar(50);not null"`
+	ProductCategoryId uuid.UUID `gorm:"type:varchar(50);not null"`
+	Slug              string    `gorm:"type:varchar(50);not null"`
+	IsAvailable       bool      `gorm:"default:true;not null"`
 }
