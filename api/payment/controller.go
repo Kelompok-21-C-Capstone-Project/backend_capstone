@@ -10,7 +10,7 @@ import (
 
 //> model tipe data
 type Payment struct {
-	PaymentId   int       `gorm : "primaryKey" json:"id"`
+	PaymentId   int       `gorm:"primaryKey" json:"id"`
 	Description string    `json:"description"`
 	Email       string    `json:"email"`
 	PaymentBy   string    `json:"payment"`
