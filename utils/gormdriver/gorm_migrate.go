@@ -1,6 +1,7 @@
-package models
+package gormdriver
 
 import (
+	"backend_capstone/models"
 	"backend_capstone/utils"
 	"log"
 
@@ -29,20 +30,20 @@ func NewGormMigrationService(dbCon *utils.DatabaseConnection) *GormMigrationServ
 
 func (s *GormMigrationService) GormMigrate() (err error) {
 	log.Print("Enter GormMigration()")
-	err = s.gorm.SetupJoinTable(&ProductBrand{}, "ProductCategories", &ProductBrandCategory{})
+	err = s.gorm.SetupJoinTable(&models.ProductBrand{}, "ProductCategories", &models.ProductBrandCategory{})
 	if err != nil {
 		return err
 	}
 	err = s.gorm.AutoMigrate(
-		&ProductBrand{},
-		&ProductCategory{},
-		&ProductBrandCategory{},
-		&Product{},
-		&User{},
-		&PaymentMethod{},
-		&PaymentVendor{},
-		&Payment{},
-		&Transaction{},
+		&models.ProductBrand{},
+		&models.ProductCategory{},
+		&models.ProductBrandCategory{},
+		&models.Product{},
+		&models.User{},
+		&models.PaymentMethod{},
+		&models.PaymentVendor{},
+		&models.Payment{},
+		&models.Transaction{},
 	)
 	if err != nil {
 		return err

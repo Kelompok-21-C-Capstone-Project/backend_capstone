@@ -22,6 +22,10 @@ type AppConfig struct {
 		USERNAME   string `mapstructure:"DB_USERNAME"`
 		PASSWORD   string `mapstructure:"DB_PASSWORD"`
 	}
+	API_Midtrans struct {
+		SERVER_KEY string `mapstructure:"MIDTRANS_SERVER_KEY"`
+		ENV        string `mapstructure:"MIDTRANS_ENV"`
+	}
 }
 
 var lock = &sync.Mutex{}
@@ -56,12 +60,16 @@ func initConfig() *AppConfig {
 
 	errApp := viper.Unmarshal(&finalConfig.App)
 	errDB := viper.Unmarshal(&finalConfig.Database)
+	errMidtrans := viper.Unmarshal(&finalConfig.API_Midtrans)
 
 	if errApp != nil || errDB != nil {
 		if errApp != nil {
 			log.Info("error when parse config file", errApp)
 		}
 		if errDB != nil {
+			log.Info("error when parse config file", errDB)
+		}
+		if errMidtrans != nil {
 			log.Info("error when parse config file", errDB)
 		}
 		return &defaultConfig

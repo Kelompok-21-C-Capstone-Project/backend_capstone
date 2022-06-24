@@ -12,6 +12,8 @@ require (
 	gorm.io/gorm v1.23.5
 )
 
+require github.com/midtrans/midtrans-go v1.3.0
+
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
