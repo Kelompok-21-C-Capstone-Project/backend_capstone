@@ -18,6 +18,6 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	})
 
 	paymentV1 := e.Group("/v1/payments")
-	paymentV1.GET("", controller.PaymentV1Controller.Create)
-	paymentV1.GET("/finish", controller.PaymentV1Controller.Modify)
+	paymentV1.POST("/:method/:vendor", controller.PaymentV1Controller.Create)
+	paymentV1.PUT("/:id", controller.PaymentV1Controller.Modify)
 }

@@ -13,8 +13,8 @@ type MidtransDriver struct {
 	Env       midtrans.EnvironmentType
 }
 
-func NewMidtransDriver(configs *configs.AppConfig) *MidtransDriver {
-	log.Print("Enter NewMidtransDriver")
+func NewMidtransService(configs *configs.AppConfig) *MidtransDriver {
+	log.Print("Enter NewMidtransService")
 	var api MidtransDriver
 
 	// 1. Set you ServerKey with globally

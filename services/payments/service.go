@@ -8,8 +8,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type Repository interface {
-	FindById(id int) (payment *models.Payment, err error)
+type PaymentRepository interface {
+	FindById(id string) (payment *models.Payment, err error)
 	FindByQuery(key string, value interface{}) (payments *[]models.Payment, err error)
 	FindAll() (payments *[]models.Payment, err error)
 	Insert() (payment *models.Payment, err error)
@@ -17,8 +17,14 @@ type Repository interface {
 	Delete() (payment *models.Payment, err error)
 }
 
+type TransactionRepository interface {
+	FindById(id string) (payment *models.Transaction, err error)
+	Insert() (payment *models.Transaction, err error)
+	Update() (payment *models.Transaction, err error)
+}
+
 type Service interface {
-	GetById(id int) (payment models.Payment, err error)
+	GetById(id string) (payment models.Payment, err error)
 	GetAll() (payments []models.Payment, err error)
 	Create() (payment models.Payment, err error)
 	Modify() (payment models.Payment, err error)
@@ -26,21 +32,21 @@ type Service interface {
 }
 
 type service struct {
-	repository Repository
-	validate   *validator.Validate
-	midtrans   *midtransdriver.MidtransDriver
+	paymentRepository PaymentRepository
+	validate          *validator.Validate
+	midtrans          *midtransdriver.MidtransDriver
 }
 
-func NewService(repository Repository, midtransApi *midtransdriver.MidtransDriver) Service {
+func NewService(paymentRepository PaymentRepository, midtransApi *midtransdriver.MidtransDriver) Service {
 	log.Print("Enter NewService")
 	return &service{
-		repository: repository,
-		validate:   validator.New(),
-		midtrans:   midtransApi,
+		paymentRepository: paymentRepository,
+		validate:          validator.New(),
+		midtrans:          midtransApi,
 	}
 }
 
-func (s *service) GetById(id int) (payment models.Payment, err error) {
+func (s *service) GetById(id string) (payment models.Payment, err error) {
 	return
 }
 func (s *service) GetAll() (payments []models.Payment, err error) {
