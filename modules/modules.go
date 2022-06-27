@@ -2,9 +2,9 @@ package modules
 
 import (
 	"backend_capstone/api"
-	paymentController "backend_capstone/api/payments"
+	paymentController "backend_capstone/api/payment"
 	"backend_capstone/configs"
-	paymentService "backend_capstone/services/payments"
+	paymentService "backend_capstone/services/payment"
 	"backend_capstone/utils"
 	"backend_capstone/utils/midtransdriver"
 	"log"

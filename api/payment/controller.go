@@ -1,7 +1,7 @@
-package payments
+package payment
 
 import (
-	paymentUsease "backend_capstone/services/payments"
+	paymentUsease "backend_capstone/services/payment"
 	"net/http"
 	"strconv"
 	"time"

@@ -1,4 +1,4 @@
-package payments
+package payment
 
 import (
 	"backend_capstone/models"
