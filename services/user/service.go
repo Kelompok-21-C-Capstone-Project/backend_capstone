@@ -1,6 +1,10 @@
 package user
 
-import "backend_capstone/models"
+import (
+	"backend_capstone/models"
+
+	"github.com/go-playground/validator/v10"
+)
 
 type Repository interface {
 	FindById(id int) (transaction *models.User, err error)
@@ -22,13 +26,13 @@ type Service interface {
 
 type service struct {
 	repository Repository
-	// validate *validator.Validate
+	validate   *validator.Validate
 }
 
 func NewService(repository Repository) Service {
 	return &service{
 		repository: repository,
-		// validate: validator.New(),
+		validate:   validator.New(),
 	}
 }
 
