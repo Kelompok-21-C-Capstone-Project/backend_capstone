@@ -13,6 +13,7 @@ type Repository interface {
 	Insert() (transaction *models.Product, err error)
 	Update() (transaction *models.Product, err error)
 	Delete() (transaction *models.Product, err error)
+	GetProductBrandCategories() (productBrandCategories []models.ProductBrandCategory, err error)
 }
 
 type Service interface {

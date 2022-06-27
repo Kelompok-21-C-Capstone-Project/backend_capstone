@@ -34,3 +34,6 @@ func (repo *PostgresRepository) Update() (transaction *models.Product, err error
 func (repo *PostgresRepository) Delete() (transaction *models.Product, err error) {
 	return
 }
+func (repo *PostgresRepository) GetProductBrandCategories() (productBrandCategories []models.ProductBrandCategory, err error) {
+	return
+}
