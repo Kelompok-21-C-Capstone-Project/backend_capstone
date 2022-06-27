@@ -1,14 +1,14 @@
 package api
 
 import (
-	"backend_capstone/api/payments"
+	"backend_capstone/api/payment"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 type Controller struct {
-	PaymentV1Controller *payments.Controller
+	PaymentV1Controller *payment.Controller
 }
 
 func RegistrationPath(e *echo.Echo, controller Controller) {
