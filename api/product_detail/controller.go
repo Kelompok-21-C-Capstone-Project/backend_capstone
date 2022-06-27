@@ -1,16 +1,26 @@
-package product
+package productdetail
 
 import (
-	"backend_capstone/models"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
 
+//> model tipe data
+type Detail struct {
+	ProductDetailId int       `gorm : "primaryKey" json:"id"`
+	ProductId       int       `json:"id"`
+	ProductList     string    `json:"list"`
+	Description     string    `json:"description"`
+	StockProduct    int       `json:"stock"`
+	UpdatedAt       time.Time `json:"updated"`
+}
+
 //> fungsi get (read) koreksi
-func GetAllProduct(c echo.Context) error {
-	var product []models.Product
+func GetAllDetail(c echo.Context) error {
+	var product []Detail
 	var error error
 	if error != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": error.Error()})
@@ -19,8 +29,8 @@ func GetAllProduct(c echo.Context) error {
 }
 
 //> fungsi post(create) koreksi
-func CreateProduct(c echo.Context) error {
-	var input []models.Product
+func CreateProductDetail(c echo.Context) error {
+	var input []Detail
 	err := c.Bind(&input)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
@@ -30,21 +40,22 @@ func CreateProduct(c echo.Context) error {
 }
 
 //> fungsi delete msh butuh koreksi dibagian return
-func DeleteProduct(c echo.Context) error {
-	var product map[int]*models.Product
+func DeleteProductDetail(c echo.Context) error {
+	var product map[int]*Detail
 	id, _ := strconv.Atoi(c.Param("id"))
 	delete(product, id)
 	return c.NoContent(http.StatusNoContent)
 }
 
 //>fungsi put(update) msh butuh koreksi
-func UpdateProduct(c echo.Context) error {
-	var product map[int]*models.Product
-	n := new(models.Product)
+func UpdateProductDetail(c echo.Context) error {
+	var product map[int]*Detail
+	n := new(Detail)
 	if err := c.Bind(n); err != nil {
 		return err
 	}
 	id, _ := strconv.Atoi(c.Param("id"))
-	product[id].Name = n.Name
+	product[id].StockProduct = n.StockProduct
+	product[id].Description = n.Description
 	return c.JSON(http.StatusOK, product[id])
 }

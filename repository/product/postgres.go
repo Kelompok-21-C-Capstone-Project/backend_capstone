@@ -16,7 +16,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id int) (transaction *models.Product, err error) {
+func (repo *PostgresRepository) FindById(id string) (transaction *models.Product, err error) {
 	return
 }
 func (repo *PostgresRepository) FindByQuery(key string, value interface{}) (products *[]models.Product, err error) {

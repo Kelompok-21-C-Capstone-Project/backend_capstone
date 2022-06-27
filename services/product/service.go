@@ -1,9 +1,13 @@
-package products
+package product
 
-import "backend_capstone/models"
+import (
+	"backend_capstone/models"
+
+	"github.com/go-playground/validator/v10"
+)
 
 type Repository interface {
-	FindById(id int) (transaction *models.Product, err error)
+	FindById(id string) (transaction *models.Product, err error)
 	FindByQuery(key string, value interface{}) (transactions *[]models.Product, err error)
 	FindAll() (transactions *[]models.Product, err error)
 	Insert() (transaction *models.Product, err error)
@@ -12,8 +16,8 @@ type Repository interface {
 }
 
 type Service interface {
-	GetById(id int) (transaction models.Product, err error)
-	GetByUserId(id int) (transaction models.Product, err error)
+	GetById(id string) (transaction models.Product, err error)
+	GetByUserId(id string) (transaction models.Product, err error)
 	GetAll() (transactions []models.Product, err error)
 	Create() (transaction models.Product, err error)
 	Modify() (transaction models.Product, err error)
@@ -22,20 +26,20 @@ type Service interface {
 
 type service struct {
 	repository Repository
-	// validate *validator.Validate
+	validate   *validator.Validate
 }
 
 func NewService(repository Repository) Service {
 	return &service{
 		repository: repository,
-		// validate: validator.New(),
+		validate:   validator.New(),
 	}
 }
 
-func (s *service) GetById(id int) (transaction models.Product, err error) {
+func (s *service) GetById(id string) (transaction models.Product, err error) {
 	return
 }
-func (s *service) GetByUserId(id int) (transaction models.Product, err error) {
+func (s *service) GetByUserId(id string) (transaction models.Product, err error) {
 	return
 }
 func (s *service) GetAll() (transactions []models.Product, err error) {
