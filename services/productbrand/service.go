@@ -13,6 +13,9 @@ type Repository interface {
 	Insert() (productBrand *models.ProductBrand, err error)
 	Update() (productBrand *models.ProductBrand, err error)
 	Delete() (productBrand *models.ProductBrand, err error)
+	GetBrandCategory() (productBrands *[]models.ProductCategory, err error)
+	InsertBrandCategory() (productBrand *models.ProductBrandCategory, err error)
+	DeleteBrandCategory() (err error)
 }
 
 type Service interface {
@@ -21,6 +24,8 @@ type Service interface {
 	Create() (productBrand models.ProductBrand, err error)
 	Modify() (productBrand models.ProductBrand, err error)
 	Remove() (err error)
+	AddBrandCategory() (productBrandCategory models.ProductBrandCategory, err error)
+	RemoveBrandCategory() (err error)
 }
 
 type service struct {
@@ -48,5 +53,14 @@ func (s *service) Modify() (productBrand models.ProductBrand, err error) {
 	return
 }
 func (s *service) Remove() (err error) {
+	return
+}
+func (s *service) BrandCategory() (productBrandCategory models.ProductBrandCategory, err error) {
+	return
+}
+func (s *service) AddBrandCategory() (productBrandCategory models.ProductBrandCategory, err error) {
+	return
+}
+func (s *service) RemoveBrandCategory() (err error) {
 	return
 }
