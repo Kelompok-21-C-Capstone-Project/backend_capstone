@@ -5,6 +5,8 @@ import (
 	"backend_capstone/configs"
 	"backend_capstone/modules"
 	"backend_capstone/utils"
+	"backend_capstone/utils/gormdriver"
+	"backend_capstone/utils/midtransdriver"
 	"fmt"
 	"log"
 	"net/http"
@@ -25,11 +27,19 @@ func main() {
 	// Infrastructure driver adapters initialization
 	// Database Adapters
 	dbCon := utils.NewDatabaseConnection(config)
+
+	// gorm migration
+	gormMigrationService := gormdriver.NewGormMigrationService(dbCon)
+	gormMigrationService.GormMigrate()
+
 	defer dbCon.CloseConnection()
+
+	// Midtrans Adapters
+	midtransDriver := midtransdriver.NewMidtransDriver(config)
 
 	// Interface driving adapters initialization
 	// API Adapters
-	controllers := modules.RegisterModules(dbCon, config)
+	controllers := modules.RegisterModules(dbCon, midtransDriver, config)
 	api.RegistrationPath(e, controllers)
 
 	// Swagger api documentation

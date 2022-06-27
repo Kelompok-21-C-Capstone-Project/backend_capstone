@@ -1,19 +1,20 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+// TODO: PENETAPAN ATRIBUT ENTITAS
 
 //> model tipe data
 type Transaction struct {
-	TransactionId     int       `gorm:"primaryKey" json:"id"`
-	UserId            int       `json:"user id"`
-	PaymentId         int       `json:"payment_id"`
-	ProductId         int       `json:"product_id"`
-	Description       string    `json:"description"`
-	TransactionDate   time.Time `json:"date"`
-	TransactionDetail string    `json:"transaction detail"`
-	UpdatedAt         time.Time `json:"updated"`
-}
-
-func (Transaction) TableName() string {
-	return "transaction"
+	Id          uuid.UUID `gorm:"type:varchar(50)" json:"id"`
+	UserId      uuid.UUID `gorm:"type:varchar(50)" json:"user_id"`
+	ProductId   uuid.UUID `gorm:"type:varchar(50)" json:"product_id"`
+	Payment     Payment
+	Description string    `gorm:"type:text" json:"description"`
+	CreatedAt   time.Time `json:"date"`
+	UpdatedAt   time.Time `json:"updated"`
 }

@@ -1,4 +1,4 @@
-package transactions
+package transaction
 
 import (
 	"backend_capstone/models"
@@ -16,7 +16,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id int) (transaction *models.Transaction, err error) {
+func (repo *PostgresRepository) FindById(id string) (transaction *models.Transaction, err error) {
 	return
 }
 func (repo *PostgresRepository) FindByQuery(key string, value interface{}) (transactions *[]models.Transaction, err error) {

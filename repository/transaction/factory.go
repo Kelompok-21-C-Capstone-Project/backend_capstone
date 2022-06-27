@@ -1,16 +1,16 @@
-package transactions
+package transaction
 
 import (
-	"backend_capstone/services/transactions"
+	"backend_capstone/services/transaction"
 	"backend_capstone/utils"
 )
 
-func RepositoryFactory(dbCon *utils.DatabaseConnection) transactions.Repository {
-	var transactionsRepo transactions.Repository
+func RepositoryFactory(dbCon *utils.DatabaseConnection) transaction.Repository {
+	var transactionRepo transaction.Repository
 
 	if dbCon.Driver == utils.Postgres {
-		transactionsRepo = NewPostgresRepository(dbCon.Postgres)
+		transactionRepo = NewPostgresRepository(dbCon.Postgres)
 	}
 
-	return transactionsRepo
+	return transactionRepo
 }
