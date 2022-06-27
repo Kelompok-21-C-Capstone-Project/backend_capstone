@@ -10,7 +10,7 @@ import (
 
 //> model tipe data
 type Detail struct {
-	ProductDetailId int       `gor:"primaryKey" json:"id"`
+	ProductDetailId int       `gorm:"primaryKey" json:"id"`
 	ProductId       int       `json:"product_id"`
 	ProductList     string    `json:"list"`
 	Description     string    `json:"description"`
