@@ -73,7 +73,7 @@ func (s *service) Modify(id string, updatecategoryDTO dto.UpdateCategoryDTO) (pr
 		return
 	}
 	_, err = s.repository.FindById(id)
-	if err == nil {
+	if err != nil {
 		return
 	}
 	slug := strings.ReplaceAll(strings.ToLower(updatecategoryDTO.Name), " ", "-")
@@ -83,11 +83,11 @@ func (s *service) Modify(id string, updatecategoryDTO dto.UpdateCategoryDTO) (pr
 }
 func (s *service) Remove(id string) (err error) {
 	_, err = s.repository.FindById(id)
-	if err == nil {
+	if err != nil {
 		return
 	}
 	err = s.repository.Delete(id)
-	if err == nil {
+	if err != nil {
 		return
 	}
 	return
