@@ -2,6 +2,7 @@ package productbrand
 
 import (
 	"backend_capstone/models"
+	"errors"
 	"log"
 
 	"github.com/google/uuid"
@@ -62,9 +63,10 @@ func (repo *PostgresRepository) Delete(id string) (err error) {
 	}
 	return
 }
-func (repo *PostgresRepository) CheckBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (productBrands *models.ProductBrandCategory, err error) {
-	if err = repo.db.Where("product_brand_id = ? AND product_category_id = ?", brandId, categoryId).Find(&productBrands).Error; err != nil {
-		return
+func (repo *PostgresRepository) CheckBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (rowCount int64, err error) {
+	rowCount = repo.db.Where("product_brand_id = ? AND product_category_id = ?", brandId, categoryId).Find(&models.ProductBrandCategory{}).RowsAffected
+	if rowCount > 0 {
+		return rowCount, errors.New("")
 	}
 	return
 }

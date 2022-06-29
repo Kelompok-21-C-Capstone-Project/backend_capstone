@@ -16,7 +16,7 @@ type Repository interface {
 	Insert(data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
 	Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
 	Delete(id string) (err error)
-	CheckBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (productBrands *models.ProductBrandCategory, err error)
+	CheckBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (rowCount int64, err error)
 	InsertBrandCategory(brandId uuid.UUID, categoryId uuid.UUID, slug string) (productBrand *models.ProductBrandCategory, err error)
 	DeleteBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (err error)
 }
@@ -101,8 +101,8 @@ func (s *service) AddBrandCategory(brandId string, categoryId string) (productBr
 	if err != nil {
 		return
 	}
-	data, err := s.repository.CheckBrandCategory(bid, cid)
-	if err == nil {
+	_, err = s.repository.CheckBrandCategory(bid, cid)
+	if err != nil {
 		return
 	}
 	dataCategory, err := s.repository.FindCategoryById(categoryId)
@@ -114,7 +114,7 @@ func (s *service) AddBrandCategory(brandId string, categoryId string) (productBr
 		return
 	}
 	slug := dataBrand.Name + " - " + dataCategory.Name
-	data, err = s.repository.InsertBrandCategory(bid, cid, slug)
+	data, err := s.repository.InsertBrandCategory(bid, cid, slug)
 	productBrandCategory = *data
 	return
 }
