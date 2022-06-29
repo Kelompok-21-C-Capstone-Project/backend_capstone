@@ -72,12 +72,20 @@ func (s *service) Modify(id string, updatecategoryDTO dto.UpdateCategoryDTO) (pr
 	if err != nil {
 		return
 	}
+	_, err = s.repository.FindById(id)
+	if err == nil {
+		return
+	}
 	slug := strings.ReplaceAll(strings.ToLower(updatecategoryDTO.Name), " ", "-")
 	data, err := s.repository.Update(id, updatecategoryDTO.GenerateModel(uid, slug))
 	productCategory = *data
 	return
 }
 func (s *service) Remove(id string) (err error) {
+	_, err = s.repository.FindById(id)
+	if err == nil {
+		return
+	}
 	err = s.repository.Delete(id)
 	if err == nil {
 		return
