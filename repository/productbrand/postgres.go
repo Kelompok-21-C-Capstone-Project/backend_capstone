@@ -34,7 +34,7 @@ func (repo *PostgresRepository) Update() (productBrand *models.ProductBrand, err
 func (repo *PostgresRepository) Delete() (productBrand *models.ProductBrand, err error) {
 	return
 }
-func (repo *PostgresRepository) GetAllCategory() (productBrands *[]models.ProductCategory, err error) {
+func (repo *PostgresRepository) GetBrandCategory() (productBrands *[]models.ProductCategory, err error) {
 	return
 }
 func (repo *PostgresRepository) InsertBrandCategory() (productBrand *models.ProductBrandCategory, err error) {
