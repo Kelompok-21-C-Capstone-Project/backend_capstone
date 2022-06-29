@@ -41,19 +41,13 @@ func (repo *PostgresRepository) Insert(data *models.ProductCategory) (productCat
 }
 func (repo *PostgresRepository) Update(id string, data *models.ProductCategory) (productCategory *models.ProductCategory, err error) {
 	uid, err := uuid.Parse(id)
-	if err = repo.db.First(&productCategory, uid).Error; err != nil {
-		return
-	}
-	if err = repo.db.Model(productCategory).Updates(data).Error; err != nil {
+	if err = repo.db.First(&productCategory, uid).Model(productCategory).Updates(data).Error; err != nil {
 		return
 	}
 	return
 }
 func (repo *PostgresRepository) Delete(id string) (err error) {
 	uid, err := uuid.Parse(id)
-	if err = repo.db.First(&models.ProductCategory{}, uid).Error; err != nil {
-		return
-	}
 	if err = repo.db.Delete(&models.ProductCategory{}, uid).Error; err != nil {
 		return
 	}
