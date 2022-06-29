@@ -1,6 +1,6 @@
 package response
 
 type BasicCategoryResponse struct {
-	Status  string
-	Message string `json:"omitempty"`
+	Status  string `json:"status"`
+	Message string `json:"message"`
 }
