@@ -1,6 +1,7 @@
 package api
 
 import (
+	"backend_capstone/api/paymentmethod"
 	"backend_capstone/api/product"
 	"backend_capstone/api/productbrand"
 	"backend_capstone/api/productcategory"
@@ -13,6 +14,7 @@ type Controller struct {
 	ProductCategory *productcategory.Controller
 	ProductBrand    *productbrand.Controller
 	Product         *product.Controller
+	PaymentMethod   *paymentmethod.Controller
 }
 
 func RegistrationPath(e *echo.Echo, controller Controller) {
@@ -21,14 +23,14 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 		return c.String(http.StatusOK, "Payzone API v1.0.0 Basepath")
 	})
 
-	categoryV1 := e.Group("v1/categories")
+	categoryV1 := e.Group("v1/product_categories")
 	categoryV1.POST("", controller.ProductCategory.Create)
 	categoryV1.GET("", controller.ProductCategory.GetAll)
 	categoryV1.GET("/:id", controller.ProductCategory.GetById)
 	categoryV1.PUT("/:id", controller.ProductCategory.Modify)
 	categoryV1.DELETE("/:id", controller.ProductCategory.Remove)
 
-	brandV1 := e.Group("v1/brands")
+	brandV1 := e.Group("v1/product_brands")
 	brandV1.POST("", controller.ProductBrand.Create)
 	brandV1.GET("", controller.ProductBrand.GetAll)
 	brandV1.GET("/:id", controller.ProductBrand.GetById)
@@ -44,4 +46,11 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	productV1.GET("/:id", controller.Product.GetById)
 	productV1.PUT("/:id", controller.Product.Modify)
 	productV1.DELETE("/:id", controller.Product.Remove)
+
+	methodV1 := e.Group("v1/payment_methods")
+	methodV1.POST("", controller.ProductCategory.Create)
+	methodV1.GET("", controller.ProductCategory.GetAll)
+	methodV1.GET("/:id", controller.ProductCategory.GetById)
+	methodV1.PUT("/:id", controller.ProductCategory.Modify)
+	methodV1.DELETE("/:id", controller.ProductCategory.Remove)
 }

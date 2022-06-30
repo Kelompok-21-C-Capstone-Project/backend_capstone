@@ -2,13 +2,16 @@ package modules
 
 import (
 	"backend_capstone/api"
+	methodController "backend_capstone/api/paymentmethod"
 	productController "backend_capstone/api/product"
 	brandController "backend_capstone/api/productbrand"
 	categoryController "backend_capstone/api/productcategory"
 	"backend_capstone/configs"
+	methodRepo "backend_capstone/repository/paymentmethod"
 	productRepo "backend_capstone/repository/product"
 	brandRepo "backend_capstone/repository/productbrand"
 	categoryRepo "backend_capstone/repository/productcategory"
+	methodService "backend_capstone/services/paymentmethod"
 	productService "backend_capstone/services/product"
 	brandService "backend_capstone/services/productbrand"
 	categoryService "backend_capstone/services/productcategory"
@@ -30,10 +33,15 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 	productPermitService := productService.NewService(productPermitRepository)
 	productPermitController := productController.NewController(productPermitService)
 
+	methodPermitRepository := methodRepo.RepositoryFactory(dbCon)
+	methodPermitService := methodService.NewService(methodPermitRepository)
+	methodPermitController := methodController.NewController(methodPermitService)
+
 	controllers := api.Controller{
 		ProductCategory: categoryPermitController,
 		ProductBrand:    brandPermitController,
 		Product:         productPermitController,
+		PaymentMethod:   methodPermitController,
 	}
 
 	return controllers
