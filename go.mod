@@ -12,13 +12,14 @@ require (
 	gorm.io/gorm v1.23.5
 )
 
-require github.com/midtrans/midtrans-go v1.3.0
+require (
+	github.com/go-playground/validator/v10 v10.11.0
+	github.com/midtrans/midtrans-go v1.3.0
+)
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/go-playground/validator/v10 v10.11.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 )
 
@@ -29,6 +30,7 @@ require (
 	github.com/go-openapi/jsonreference v0.20.0 // indirect
 	github.com/go-openapi/spec v0.20.6 // indirect
 	github.com/go-openapi/swag v0.21.1 // indirect
+	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/hcl v1.0.0 // indirect
