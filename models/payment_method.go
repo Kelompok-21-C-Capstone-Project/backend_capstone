@@ -1,10 +1,8 @@
 package models
 
-import "github.com/google/uuid"
-
 type PaymentMethod struct {
-	Id             uuid.UUID `gorm:"type:varchar(50)"`
-	Name           string    `gorm:"type:varchar(50);not null"`
-	Slug           string    `gorm:"type:varchar(50);not null"`
+	Id             string `gorm:"type:varchar(50)"`
+	Name           string `gorm:"type:varchar(50);not null"`
+	Slug           string `gorm:"type:varchar(50);not null"`
 	PaymentVendors []PaymentVendor
 }

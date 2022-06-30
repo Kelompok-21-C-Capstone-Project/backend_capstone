@@ -9,14 +9,14 @@ import (
 )
 
 type Repository interface {
-	FindById(id uuid.UUID) (product *models.Product, err error)
+	FindById(id string) (product *models.Product, err error)
 	FindByQuery(key string, value interface{}) (products *[]models.Product, err error)
 	FindAll() (products *[]models.Product, err error)
 	ClientFindAll() (products *[]dto.ProductCategory, err error)
 	Insert(data *models.Product) (product *models.Product, err error)
-	Update(id uuid.UUID, data *models.Product) (product *models.Product, err error)
-	Delete(id uuid.UUID) (err error)
-	ValidateProductBrandCategories(brandId uuid.UUID, categoryId uuid.UUID) (productBrandCategoriesId uuid.UUID, err error)
+	Update(id string, data *models.Product) (product *models.Product, err error)
+	Delete(id string) (err error)
+	ValidateProductBrandCategories(brandId string, categoryId string) (productBrandCategoriesId string, err error)
 }
 
 type Service interface {
@@ -42,11 +42,11 @@ func NewService(repository Repository) Service {
 }
 
 func (s *service) GetById(id string) (product models.Product, err error) {
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	data, err := s.repository.FindById(uid)
+	data, err := s.repository.FindById(id)
 	if err != nil {
 		return
 	}
@@ -67,13 +67,13 @@ func (s *service) ClientGetAll() (products []dto.ProductCategory, err error) {
 		return
 	}
 	products = *data
-	// for ic, category := range products {
-	// 	for ip := range *category.Products {
-	// 		if product.Id == "" {
-	// 		(*products[ic].Products)[ip] = dto.ClientProduct{}
-	// 		}
-	// 	}
-	// }
+	for ic, category := range products {
+		for ip := range category.Products {
+			if products[ic].Products[ip].Id == "" {
+				products[ic].Products[ip] = nil
+			}
+		}
+	}
 	return
 }
 func (s *service) GetAllByCategory(categoryId string) (products []models.Product, err error) {
@@ -83,20 +83,20 @@ func (s *service) Create(createproductDTO dto.CraeteProductDTO) (product models.
 	if err = s.validate.Struct(createproductDTO); err != nil {
 		return
 	}
-	bid, err := uuid.Parse(createproductDTO.BrandId)
+	_, err = uuid.Parse(createproductDTO.BrandId)
 	if err != nil {
 		return
 	}
-	cid, err := uuid.Parse(createproductDTO.CategoryId)
+	_, err = uuid.Parse(createproductDTO.CategoryId)
 	if err != nil {
 		return
 	}
-	pbcid, err := s.repository.ValidateProductBrandCategories(bid, cid)
+	pbcid, err := s.repository.ValidateProductBrandCategories(createproductDTO.BrandId, createproductDTO.CategoryId)
 	if err != nil {
 		return
 	}
 	id := uuid.New()
-	data, err := s.repository.Insert(createproductDTO.GenerateModel(id, pbcid))
+	data, err := s.repository.Insert(createproductDTO.GenerateModel(id.String(), pbcid))
 	if err != nil {
 		return
 	}
@@ -107,23 +107,23 @@ func (s *service) Modify(id string, updateproductDTO dto.UpdateProductDTO) (prod
 	if err = s.validate.Struct(updateproductDTO); err != nil {
 		return
 	}
-	bid, err := uuid.Parse(updateproductDTO.BrandId)
+	_, err = uuid.Parse(updateproductDTO.BrandId)
 	if err != nil {
 		return
 	}
-	cid, err := uuid.Parse(updateproductDTO.CategoryId)
+	_, err = uuid.Parse(updateproductDTO.CategoryId)
 	if err != nil {
 		return
 	}
-	pbcid, err := s.repository.ValidateProductBrandCategories(bid, cid)
+	pbcid, err := s.repository.ValidateProductBrandCategories(updateproductDTO.BrandId, updateproductDTO.CategoryId)
 	if err != nil {
 		return
 	}
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	data, err := s.repository.Update(uid, updateproductDTO.GenerateModel(uid, pbcid))
+	data, err := s.repository.Update(id, updateproductDTO.GenerateModel(id, pbcid))
 	if err != nil {
 		return
 	}
@@ -131,10 +131,10 @@ func (s *service) Modify(id string, updateproductDTO dto.UpdateProductDTO) (prod
 	return
 }
 func (s *service) Remove(id string) (err error) {
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	s.repository.Delete(uid)
+	s.repository.Delete(id)
 	return
 }

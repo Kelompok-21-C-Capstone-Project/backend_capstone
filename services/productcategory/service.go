@@ -10,12 +10,12 @@ import (
 )
 
 type Repository interface {
-	FindById(id uuid.UUID) (productCategory *models.ProductCategory, err error)
+	FindById(id string) (productCategory *models.ProductCategory, err error)
 	FindByQuery(key string, value interface{}) (productCategories *[]models.ProductCategory, err error)
 	FindAll() (productCategories *[]models.ProductCategory, err error)
 	Insert(data *models.ProductCategory) (productCategory *models.ProductCategory, err error)
-	Update(id uuid.UUID, data *models.ProductCategory) (productCategory *models.ProductCategory, err error)
-	Delete(id uuid.UUID) (err error)
+	Update(id string, data *models.ProductCategory) (productCategory *models.ProductCategory, err error)
+	Delete(id string) (err error)
 }
 
 type Service interface {
@@ -39,11 +39,11 @@ func NewService(repository Repository) Service {
 }
 
 func (s *service) GetById(id string) (productCategory models.ProductCategory, err error) {
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	data, err := s.repository.FindById(uid)
+	data, err := s.repository.FindById(id)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (s *service) Create(createcategoryDTO dto.CreateCategoryDTO) (productCatego
 	}
 	id := uuid.New()
 	slug := strings.ReplaceAll(strings.ToLower(createcategoryDTO.Name), " ", "-")
-	data, err := s.repository.Insert(createcategoryDTO.GenerateModel(id, slug))
+	data, err := s.repository.Insert(createcategoryDTO.GenerateModel(id.String(), slug))
 	productCategory = *data
 	return
 }
@@ -72,29 +72,29 @@ func (s *service) Modify(id string, updatecategoryDTO dto.UpdateCategoryDTO) (pr
 	if err = s.validate.Struct(updatecategoryDTO); err != nil {
 		return
 	}
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindById(uid)
+	_, err = s.repository.FindById(id)
 	if err != nil {
 		return
 	}
 	slug := strings.ReplaceAll(strings.ToLower(updatecategoryDTO.Name), " ", "-")
-	data, err := s.repository.Update(uid, updatecategoryDTO.GenerateModel(uid, slug))
+	data, err := s.repository.Update(id, updatecategoryDTO.GenerateModel(id, slug))
 	productCategory = *data
 	return
 }
 func (s *service) Remove(id string) (err error) {
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindById(uid)
+	_, err = s.repository.FindById(id)
 	if err != nil {
 		return
 	}
-	err = s.repository.Delete(uid)
+	err = s.repository.Delete(id)
 	if err != nil {
 		return
 	}

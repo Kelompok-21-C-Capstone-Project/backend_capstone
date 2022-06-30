@@ -3,7 +3,6 @@ package productcategory
 import (
 	"backend_capstone/models"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +16,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id uuid.UUID) (productCategory *models.ProductCategory, err error) {
+func (repo *PostgresRepository) FindById(id string) (productCategory *models.ProductCategory, err error) {
 	if err = repo.db.First(&productCategory, id).Error; err != nil {
 		return
 	}
@@ -38,13 +37,13 @@ func (repo *PostgresRepository) Insert(data *models.ProductCategory) (productCat
 	}
 	return data, err
 }
-func (repo *PostgresRepository) Update(id uuid.UUID, data *models.ProductCategory) (productCategory *models.ProductCategory, err error) {
+func (repo *PostgresRepository) Update(id string, data *models.ProductCategory) (productCategory *models.ProductCategory, err error) {
 	if err = repo.db.First(&productCategory, id).Model(productCategory).Updates(data).Error; err != nil {
 		return
 	}
 	return
 }
-func (repo *PostgresRepository) Delete(id uuid.UUID) (err error) {
+func (repo *PostgresRepository) Delete(id string) (err error) {
 	if err = repo.db.Delete(&models.ProductCategory{}, id).Error; err != nil {
 		return
 	}

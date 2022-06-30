@@ -2,8 +2,6 @@ package dto
 
 import (
 	"backend_capstone/models"
-
-	"github.com/google/uuid"
 )
 
 type CreateBrandDTO struct {
@@ -11,7 +9,7 @@ type CreateBrandDTO struct {
 	Description string `validate:"required"`
 }
 
-func (data *CreateBrandDTO) GenerateModel(id uuid.UUID) *models.ProductBrand {
+func (data *CreateBrandDTO) GenerateModel(id string) *models.ProductBrand {
 	return &models.ProductBrand{
 		Id:          id,
 		Name:        data.Name,

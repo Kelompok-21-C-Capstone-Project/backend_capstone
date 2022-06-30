@@ -2,8 +2,6 @@ package dto
 
 import (
 	"backend_capstone/models"
-
-	"github.com/google/uuid"
 )
 
 type UpdateBrandDTO struct {
@@ -12,7 +10,7 @@ type UpdateBrandDTO struct {
 	Description string `validator:"required,alphaunicode"`
 }
 
-func (data *UpdateBrandDTO) GenerateModel(id uuid.UUID) *models.ProductBrand {
+func (data *UpdateBrandDTO) GenerateModel(id string) *models.ProductBrand {
 	return &models.ProductBrand{
 		Id:          id,
 		Name:        data.Name,

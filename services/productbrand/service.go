@@ -9,16 +9,16 @@ import (
 )
 
 type Repository interface {
-	FindById(id uuid.UUID) (productBrand *models.ProductBrand, err error)
-	FindCategoryById(id uuid.UUID) (productCategory *models.ProductCategory, err error)
+	FindById(id string) (productBrand *models.ProductBrand, err error)
+	FindCategoryById(id string) (productCategory *models.ProductCategory, err error)
 	FindByQuery(key string, value interface{}) (productBrands *[]models.ProductBrand, err error)
 	FindAll() (productBrands *[]models.ProductBrand, err error)
 	Insert(data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
-	Update(id uuid.UUID, data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
-	Delete(id uuid.UUID) (err error)
-	CheckBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (rowCount int64, err error)
-	InsertBrandCategory(brandId uuid.UUID, categoryId uuid.UUID, slug string) (productBrand *models.ProductBrandCategory, err error)
-	DeleteBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (err error)
+	Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
+	Delete(id string) (err error)
+	CheckBrandCategory(brandId string, categoryId string) (rowCount int64, err error)
+	InsertBrandCategory(brandId string, categoryId string, slug string) (productBrand *models.ProductBrandCategory, err error)
+	DeleteBrandCategory(brandId string, categoryId string) (err error)
 }
 
 type Service interface {
@@ -44,11 +44,11 @@ func NewService(repository Repository) Service {
 }
 
 func (s *service) GetById(id string) (productBrand models.ProductBrand, err error) {
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	data, err := s.repository.FindById(uid)
+	data, err := s.repository.FindById(id)
 	if err != nil {
 		return
 	}
@@ -68,81 +68,81 @@ func (s *service) Create(createbrandDTO dto.CreateBrandDTO) (productBrand models
 		return
 	}
 	id := uuid.New()
-	data, err := s.repository.Insert(createbrandDTO.GenerateModel(id))
+	data, err := s.repository.Insert(createbrandDTO.GenerateModel(id.String()))
 	productBrand = *data
 	return
 }
 func (s *service) Modify(id string, updatebrandDTO dto.UpdateBrandDTO) (productBrand models.ProductBrand, err error) {
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindById(uid)
+	_, err = s.repository.FindById(id)
 	if err != nil {
 		return
 	}
-	data, err := s.repository.Update(uid, updatebrandDTO.GenerateModel(uid))
+	data, err := s.repository.Update(id, updatebrandDTO.GenerateModel(id))
 	productBrand = *data
 	return
 }
 func (s *service) Remove(id string) (err error) {
-	uid, err := uuid.Parse(id)
+	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindById(uid)
+	_, err = s.repository.FindById(id)
 	if err != nil {
 		return
 	}
-	err = s.repository.Delete(uid)
+	err = s.repository.Delete(id)
 	if err != nil {
 		return
 	}
 	return
 }
 func (s *service) AddBrandCategory(brandId string, categoryId string) (productBrandCategory models.ProductBrandCategory, err error) {
-	bid, err := uuid.Parse(brandId)
+	_, err = uuid.Parse(brandId)
 	if err != nil {
 		return
 	}
-	cid, err := uuid.Parse(categoryId)
+	_, err = uuid.Parse(categoryId)
 	if err != nil {
 		return
 	}
-	_, err = s.repository.CheckBrandCategory(bid, cid)
+	_, err = s.repository.CheckBrandCategory(brandId, categoryId)
 	if err != nil {
 		return
 	}
-	dataCategory, err := s.repository.FindCategoryById(cid)
+	dataCategory, err := s.repository.FindCategoryById(categoryId)
 	if err != nil {
 		return
 	}
-	dataBrand, err := s.repository.FindById(bid)
+	dataBrand, err := s.repository.FindById(brandId)
 	if err != nil {
 		return
 	}
 	slug := dataBrand.Name + " - " + dataCategory.Name
-	data, err := s.repository.InsertBrandCategory(bid, cid, slug)
+	data, err := s.repository.InsertBrandCategory(brandId, categoryId, slug)
 	productBrandCategory = *data
 	return
 }
 func (s *service) RemoveBrandCategory(brandId string, categoryId string) (err error) {
-	bid, err := uuid.Parse(brandId)
+	_, err = uuid.Parse(brandId)
 	if err != nil {
 		return
 	}
-	cid, err := uuid.Parse(categoryId)
+	_, err = uuid.Parse(categoryId)
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindCategoryById(cid)
+	_, err = s.repository.FindCategoryById(categoryId)
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindById(bid)
+	_, err = s.repository.FindById(brandId)
 	if err != nil {
 		return
 	}
-	s.repository.DeleteBrandCategory(bid, cid)
+	s.repository.DeleteBrandCategory(brandId, categoryId)
 	return
 }

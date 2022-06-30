@@ -18,7 +18,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id uuid.UUID) (product *models.Product, err error) {
+func (repo *PostgresRepository) FindById(id string) (product *models.Product, err error) {
 	if err = repo.db.Preload("ProductBrandCategory").First(&product, id).Error; err != nil {
 		return
 	}
@@ -39,7 +39,7 @@ func (repo *PostgresRepository) ClientFindAll() (products *[]dto.ProductCategory
 		return
 	}
 	for i, el := range *products {
-		if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as group, products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount as id_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.product_category_id = ?", el.Id).Find(&(*products)[i].Products).Error; err != nil {
+		if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as group, products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.product_category_id = ?", el.Id).Find(&(*products)[i].Products).Error; err != nil {
 			return
 		}
 	}
@@ -51,19 +51,19 @@ func (repo *PostgresRepository) Insert(data *models.Product) (product *models.Pr
 	}
 	return data, err
 }
-func (repo *PostgresRepository) Update(id uuid.UUID, data *models.Product) (product *models.Product, err error) {
+func (repo *PostgresRepository) Update(id string, data *models.Product) (product *models.Product, err error) {
 	if err = repo.db.First(&product, id).Model(product).Updates(data).Preload("ProductBrandCategory").First(&product, id).Error; err != nil {
 		return
 	}
 	return
 }
-func (repo *PostgresRepository) Delete(id uuid.UUID) (err error) {
+func (repo *PostgresRepository) Delete(id string) (err error) {
 	if err = repo.db.Delete(&models.Product{}, id).Error; err != nil {
 		return
 	}
 	return
 }
-func (repo *PostgresRepository) ValidateProductBrandCategories(brandId uuid.UUID, categoryId uuid.UUID) (productBrandCategoriesId uuid.UUID, err error) {
+func (repo *PostgresRepository) ValidateProductBrandCategories(brandId string, categoryId string) (productBrandCategoriesId string, err error) {
 	check := models.ProductBrandCategory{}
 	rowCount := repo.db.Where("product_brand_id = ? AND product_category_id = ?", brandId, categoryId).Find(&check).RowsAffected
 	if rowCount > 0 {
@@ -71,7 +71,7 @@ func (repo *PostgresRepository) ValidateProductBrandCategories(brandId uuid.UUID
 	}
 	id := uuid.New()
 	if err = repo.db.Create(&models.ProductBrandCategory{
-		Id:                id,
+		Id:                id.String(),
 		ProductBrandId:    brandId,
 		ProductCategoryId: categoryId,
 		Slug:              "",
@@ -79,5 +79,5 @@ func (repo *PostgresRepository) ValidateProductBrandCategories(brandId uuid.UUID
 	}).Error; err != nil {
 		return
 	}
-	return id, err
+	return id.String(), err
 }
