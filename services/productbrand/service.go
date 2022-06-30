@@ -9,13 +9,13 @@ import (
 )
 
 type Repository interface {
-	FindById(id string) (productBrand *models.ProductBrand, err error)
-	FindCategoryById(id string) (productCategory *models.ProductCategory, err error)
+	FindById(id uuid.UUID) (productBrand *models.ProductBrand, err error)
+	FindCategoryById(id uuid.UUID) (productCategory *models.ProductCategory, err error)
 	FindByQuery(key string, value interface{}) (productBrands *[]models.ProductBrand, err error)
 	FindAll() (productBrands *[]models.ProductBrand, err error)
 	Insert(data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
-	Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
-	Delete(id string) (err error)
+	Update(id uuid.UUID, data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
+	Delete(id uuid.UUID) (err error)
 	CheckBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (rowCount int64, err error)
 	InsertBrandCategory(brandId uuid.UUID, categoryId uuid.UUID, slug string) (productBrand *models.ProductBrandCategory, err error)
 	DeleteBrandCategory(brandId uuid.UUID, categoryId uuid.UUID) (err error)
@@ -44,7 +44,11 @@ func NewService(repository Repository) Service {
 }
 
 func (s *service) GetById(id string) (productBrand models.ProductBrand, err error) {
-	data, err := s.repository.FindById(id)
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		return
+	}
+	data, err := s.repository.FindById(uid)
 	if err != nil {
 		return
 	}
@@ -73,20 +77,24 @@ func (s *service) Modify(id string, updatebrandDTO dto.UpdateBrandDTO) (productB
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindById(id)
+	_, err = s.repository.FindById(uid)
 	if err != nil {
 		return
 	}
-	data, err := s.repository.Update(id, updatebrandDTO.GenerateModel(uid))
+	data, err := s.repository.Update(uid, updatebrandDTO.GenerateModel(uid))
 	productBrand = *data
 	return
 }
 func (s *service) Remove(id string) (err error) {
-	_, err = s.repository.FindById(id)
+	uid, err := uuid.Parse(id)
 	if err != nil {
 		return
 	}
-	err = s.repository.Delete(id)
+	_, err = s.repository.FindById(uid)
+	if err != nil {
+		return
+	}
+	err = s.repository.Delete(uid)
 	if err != nil {
 		return
 	}
@@ -105,11 +113,11 @@ func (s *service) AddBrandCategory(brandId string, categoryId string) (productBr
 	if err != nil {
 		return
 	}
-	dataCategory, err := s.repository.FindCategoryById(categoryId)
+	dataCategory, err := s.repository.FindCategoryById(cid)
 	if err != nil {
 		return
 	}
-	dataBrand, err := s.repository.FindById(brandId)
+	dataBrand, err := s.repository.FindById(bid)
 	if err != nil {
 		return
 	}
@@ -127,11 +135,11 @@ func (s *service) RemoveBrandCategory(brandId string, categoryId string) (err er
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindCategoryById(categoryId)
+	_, err = s.repository.FindCategoryById(cid)
 	if err != nil {
 		return
 	}
-	_, err = s.repository.FindById(brandId)
+	_, err = s.repository.FindById(bid)
 	if err != nil {
 		return
 	}
