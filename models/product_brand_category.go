@@ -10,4 +10,5 @@ type ProductBrandCategory struct {
 	ProductCategoryId uuid.UUID `gorm:"type:varchar(50);not null"`
 	Slug              string    `gorm:"type:varchar(50);not null"`
 	IsAvailable       bool      `gorm:"default:true;not null"`
+	Products          []Product
 }
