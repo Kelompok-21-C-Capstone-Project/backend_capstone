@@ -12,15 +12,17 @@ type Repository interface {
 	FindById(id uuid.UUID) (product *models.Product, err error)
 	FindByQuery(key string, value interface{}) (products *[]models.Product, err error)
 	FindAll() (products *[]models.Product, err error)
+	ClientFindAll() (products *[]dto.ProductCategory, err error)
 	Insert(data *models.Product) (product *models.Product, err error)
 	Update(id uuid.UUID, data *models.Product) (product *models.Product, err error)
-	Delete(id uuid.UUID) (product *models.Product, err error)
+	Delete(id uuid.UUID) (err error)
 	ValidateProductBrandCategories(brandId uuid.UUID, categoryId uuid.UUID) (productBrandCategoriesId uuid.UUID, err error)
 }
 
 type Service interface {
 	GetById(id string) (product models.Product, err error)
 	GetAll() (products []models.Product, err error)
+	ClientGetAll() (products []dto.ProductCategory, err error)
 	GetAllByCategory(categoryId string) (products []models.Product, err error)
 	Create(createproductDTO dto.CraeteProductDTO) (product models.Product, err error)
 	Modify(id string, updateproductDTO dto.UpdateProductDTO) (product models.Product, err error)
@@ -57,6 +59,21 @@ func (s *service) GetAll() (products []models.Product, err error) {
 		return
 	}
 	products = *data
+	return
+}
+func (s *service) ClientGetAll() (products []dto.ProductCategory, err error) {
+	data, err := s.repository.ClientFindAll()
+	if err != nil {
+		return
+	}
+	products = *data
+	// for ic, category := range products {
+	// 	for ip := range *category.Products {
+	// 		if product.Id == "" {
+	// 		(*products[ic].Products)[ip] = dto.ClientProduct{}
+	// 		}
+	// 	}
+	// }
 	return
 }
 func (s *service) GetAllByCategory(categoryId string) (products []models.Product, err error) {
