@@ -1,6 +1,7 @@
 package api
 
 import (
+	"backend_capstone/api/product"
 	"backend_capstone/api/productbrand"
 	"backend_capstone/api/productcategory"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 type Controller struct {
 	ProductCategory *productcategory.Controller
 	ProductBrand    *productbrand.Controller
+	Product         *product.Controller
 }
 
 func RegistrationPath(e *echo.Echo, controller Controller) {
@@ -34,4 +36,12 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	brandV1.DELETE("/:id", controller.ProductBrand.Remove)
 	brandV1.POST("/:id/categories/:category_id", controller.ProductBrand.AddBrandCategory)
 	brandV1.DELETE("/:id/categories/:category_id", controller.ProductBrand.RemoveBrandCategory)
+
+	productV1 := e.Group("v1/products")
+	productV1.POST("", controller.Product.Create)
+	productV1.GET("", controller.Product.GetAll)
+	productV1.GET("/clients", controller.Product.ClientGetAll)
+	productV1.GET("/:id", controller.Product.GetById)
+	productV1.PUT("/:id", controller.Product.Modify)
+	productV1.DELETE("/:id", controller.Product.Remove)
 }
