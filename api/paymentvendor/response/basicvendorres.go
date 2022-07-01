@@ -1,6 +1,6 @@
 package response
 
-type BasicCategoryResponse struct {
+type BasicVendorResponse struct {
 	Status  string `json:"status"`
 	Message string `json:"message,omitempty"`
 }

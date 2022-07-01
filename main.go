@@ -35,7 +35,7 @@ func main() {
 	defer dbCon.CloseConnection()
 
 	// Midtrans Adapters
-	midtransDriver := midtransdriver.NewMidtransDriver(config)
+	midtransDriver := midtransdriver.NewMidtransService(config)
 
 	// Interface driving adapters initialization
 	// API Adapters

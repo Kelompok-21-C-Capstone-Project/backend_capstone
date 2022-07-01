@@ -1,7 +1,9 @@
 package api
 
 import (
+	"backend_capstone/api/payment"
 	"backend_capstone/api/paymentmethod"
+	"backend_capstone/api/paymentvendor"
 	"backend_capstone/api/product"
 	"backend_capstone/api/productbrand"
 	"backend_capstone/api/productcategory"
@@ -11,10 +13,12 @@ import (
 )
 
 type Controller struct {
+	Payment         *payment.Controller
 	ProductCategory *productcategory.Controller
 	ProductBrand    *productbrand.Controller
 	Product         *product.Controller
 	PaymentMethod   *paymentmethod.Controller
+	PaymentVendor   *paymentvendor.Controller
 }
 
 func RegistrationPath(e *echo.Echo, controller Controller) {
@@ -22,6 +26,10 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	e.GET("/v1", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Payzone API v1.0.0 Basepath")
 	})
+
+	paymentV1 := e.Group("/v1/payments")
+	paymentV1.POST("/:method/:vendor", controller.Payment.Create)
+	paymentV1.PUT("/:id", controller.Payment.Modify)
 
 	categoryV1 := e.Group("v1/product_categories")
 	categoryV1.POST("", controller.ProductCategory.Create)
@@ -53,4 +61,11 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	methodV1.GET("/:id", controller.ProductCategory.GetById)
 	methodV1.PUT("/:id", controller.ProductCategory.Modify)
 	methodV1.DELETE("/:id", controller.ProductCategory.Remove)
+
+	vendorV1 := e.Group("v1/payment_vendors")
+	vendorV1.POST("", controller.ProductCategory.Create)
+	vendorV1.GET("", controller.ProductCategory.GetAll)
+	vendorV1.GET("/:id", controller.ProductCategory.GetById)
+	vendorV1.PUT("/:id", controller.ProductCategory.Modify)
+	vendorV1.DELETE("/:id", controller.ProductCategory.Remove)
 }
