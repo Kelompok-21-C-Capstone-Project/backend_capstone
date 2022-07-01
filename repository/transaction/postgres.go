@@ -25,8 +25,17 @@ func (repo *PostgresRepository) FindByQuery(key string, value interface{}) (tran
 func (repo *PostgresRepository) FindAll() (transactions *[]models.Transaction, err error) {
 	return
 }
-func (repo *PostgresRepository) Insert() (transaction *models.Transaction, err error) {
-	return
+func (repo *PostgresRepository) Insert(data *models.Transaction) (transaction *models.Transaction, err error) {
+	if err = repo.db.Create(&data).Error; err != nil {
+		return
+	}
+	return data, err
+}
+func (repo *PostgresRepository) InsertPayment(data *models.Payment) (transaction *models.Payment, err error) {
+	if err = repo.db.Create(&data).Error; err != nil {
+		return
+	}
+	return data, err
 }
 func (repo *PostgresRepository) Update() (transaction *models.Transaction, err error) {
 	return
