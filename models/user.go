@@ -14,6 +14,7 @@ const (
 )
 
 type User struct {
+<<<<<<< HEAD
 	Id           uuid.UUID `gorm:"type:varchar(50);not null"`
 	Username     string    `gorm:"type:varchar(50);unique;not null"`
 	FirstName    string    `gorm:"type:varchar(50);not null"`
@@ -26,4 +27,15 @@ type User struct {
 	Transactions []Transaction
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
+=======
+	UserId    int       `gorm:"primaryKey" json:"id"`
+	Username  string    `json:"username"`
+	Role      string    `json:"role"`
+	Email     string    `json:"email"`
+	UpdatedAt time.Time `json:"updated"`
+}
+
+func (User) TableName() string {
+	return ("user")
+>>>>>>> 65166d77642f4b6bd22d874e21c2f25979889c2f
 }
