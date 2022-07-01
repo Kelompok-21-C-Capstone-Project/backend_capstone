@@ -3,6 +3,7 @@ package transaction
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/transaction/dto"
+	"backend_capstone/utils/midtransdriver"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -30,12 +31,14 @@ type Service interface {
 type service struct {
 	repository Repository
 	validate   *validator.Validate
+	midtrans   *midtransdriver.MidtransDriver
 }
 
-func NewService(repository Repository) Service {
+func NewService(repository Repository, midtransApi *midtransdriver.MidtransDriver) Service {
 	return &service{
 		repository: repository,
 		validate:   validator.New(),
+		midtrans:   midtransApi,
 	}
 }
 
