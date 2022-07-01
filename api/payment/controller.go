@@ -1,6 +1,7 @@
 package payment
 
 import (
+	paymentUsease "backend_capstone/services/payment"
 	"net/http"
 	"strconv"
 	"time"
@@ -15,6 +16,25 @@ type Payment struct {
 	Email       string    `json:"email"`
 	PaymentBy   string    `json:"payment"`
 	UpdatedAt   time.Time `json:"updated"`
+}
+
+type Controller struct {
+	service paymentUsease.Service
+}
+
+func NewController(service paymentUsease.Service) *Controller {
+	return &Controller{
+		service: service,
+	}
+}
+
+func (controller *Controller) Create(c echo.Context) (err error) {
+	controller.service.Create()
+	return
+}
+func (controller *Controller) Modify(c echo.Context) (err error) {
+	controller.service.Modify()
+	return
 }
 
 //> fungsi get (read) koreksi
