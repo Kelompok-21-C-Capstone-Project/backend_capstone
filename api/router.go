@@ -1,6 +1,7 @@
 package api
 
 import (
+	"backend_capstone/api/payment"
 	"backend_capstone/api/paymentmethod"
 	"backend_capstone/api/paymentvendor"
 	"backend_capstone/api/product"
@@ -12,6 +13,7 @@ import (
 )
 
 type Controller struct {
+	Payment         *payment.Controller
 	ProductCategory *productcategory.Controller
 	ProductBrand    *productbrand.Controller
 	Product         *product.Controller
@@ -24,6 +26,10 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	e.GET("/v1", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Payzone API v1.0.0 Basepath")
 	})
+
+	paymentV1 := e.Group("/v1/payments")
+	paymentV1.POST("/:method/:vendor", controller.Payment.Create)
+	paymentV1.PUT("/:id", controller.Payment.Modify)
 
 	categoryV1 := e.Group("v1/product_categories")
 	categoryV1.POST("", controller.ProductCategory.Create)
