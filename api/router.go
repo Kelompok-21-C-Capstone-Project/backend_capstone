@@ -2,6 +2,7 @@ package api
 
 import (
 	"backend_capstone/api/paymentmethod"
+	"backend_capstone/api/paymentvendor"
 	"backend_capstone/api/product"
 	"backend_capstone/api/productbrand"
 	"backend_capstone/api/productcategory"
@@ -15,6 +16,7 @@ type Controller struct {
 	ProductBrand    *productbrand.Controller
 	Product         *product.Controller
 	PaymentMethod   *paymentmethod.Controller
+	PaymentVendor   *paymentvendor.Controller
 }
 
 func RegistrationPath(e *echo.Echo, controller Controller) {
@@ -53,4 +55,11 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	methodV1.GET("/:id", controller.ProductCategory.GetById)
 	methodV1.PUT("/:id", controller.ProductCategory.Modify)
 	methodV1.DELETE("/:id", controller.ProductCategory.Remove)
+
+	vendorV1 := e.Group("v1/payment_vendors")
+	vendorV1.POST("", controller.ProductCategory.Create)
+	vendorV1.GET("", controller.ProductCategory.GetAll)
+	vendorV1.GET("/:id", controller.ProductCategory.GetById)
+	vendorV1.PUT("/:id", controller.ProductCategory.Modify)
+	vendorV1.DELETE("/:id", controller.ProductCategory.Remove)
 }
