@@ -2,6 +2,7 @@ package midtransdriver
 
 import (
 	"backend_capstone/configs"
+	"backend_capstone/utils/midtransdriver/dto"
 	"log"
 
 	"github.com/midtrans/midtrans-go"
@@ -36,60 +37,106 @@ func (d *MidtransDriver) PutApprovePaymentMethod() interface{} {
 }
 
 // Create ChargeReq for bank transfer
-func (d *MidtransDriver) CreateBankTransferTransaction() interface{} {
+func (d *MidtransDriver) CreateBankTransferPayment(midtranspaymentDTO dto.MidtransPaymentDTO) *coreapi.ChargeReq {
 	log.Print("Enter midtransdriver.CreateBankTransferTransaction")
-	return nil
-}
-
-// Create ChargeReq for ShopeePay
-func (d *MidtransDriver) CreateShopeePayTransaction() interface{} {
-	log.Print("Enter midtransdriver.CreateShopeePayTransaction")
-	return nil
-}
-
-// Create ChargeReq for Gopay
-func (d *MidtransDriver) CreateGopayTransaction() interface{} {
-	log.Print("Enter midtransdriver.CreateGopayTransaction")
-	return nil
-}
-
-// Create ChargeReq for ConvStore
-func (d *MidtransDriver) CreateConvStoreTransaction() interface{} {
-	log.Print("Enter midtransdriver.CreateConvStoreTransaction")
-	return nil
-}
-
-// Create ChargeReq for Qris
-func (d *MidtransDriver) CreateQrisTransaction() interface{} {
-	log.Print("Enter midtransdriver.CreateQrisTransaction")
-	return nil
-}
-
-func (d *MidtransDriver) GetPaymentMethod() interface{} {
-	log.Print("Enter midtransdriver.GetPaymentMethod")
-
-	// 2. Initiate charge request
-	chargeReq := &coreapi.ChargeReq{
+	return &coreapi.ChargeReq{
 		PaymentType: coreapi.PaymentTypeBankTransfer,
 		TransactionDetails: midtrans.TransactionDetails{
-			OrderID:  "54321",
-			GrossAmt: 200000,
-		},
-		CreditCard: &coreapi.CreditCardDetails{
-			TokenID:        "YOUR-CC-TOKEN",
-			Authentication: true,
+			OrderID:  midtranspaymentDTO.OrderId,
+			GrossAmt: midtranspaymentDTO.Paid,
 		},
 		BankTransfer: &coreapi.BankTransferDetails{
-			Bank: midtrans.BankBca,
+			Bank: midtrans.Bank(midtranspaymentDTO.MethodDetails),
 		},
 		Items: &[]midtrans.ItemDetails{
 			{
-				ID:    "ITEM2",
-				Price: 200000,
+				ID:    midtranspaymentDTO.ItemId,
+				Price: midtranspaymentDTO.ItemPrice,
 				Qty:   1,
-				Name:  "Someitem",
+				Name:  midtranspaymentDTO.ItemName,
 			},
 		},
+	}
+}
+
+// Create ChargeReq for ShopeePay
+func (d *MidtransDriver) CreateShopeePayPayment(midtranspaymentDTO dto.MidtransPaymentDTO) *coreapi.ChargeReq {
+	log.Print("Enter midtransdriver.CreateShopeePayTransaction")
+	return &coreapi.ChargeReq{
+		PaymentType: coreapi.PaymentTypeBankTransfer,
+		TransactionDetails: midtrans.TransactionDetails{
+			OrderID:  midtranspaymentDTO.OrderId,
+			GrossAmt: midtranspaymentDTO.Paid,
+		},
+		ShopeePay: &coreapi.ShopeePayDetails{},
+		Items: &[]midtrans.ItemDetails{
+			{
+				ID:    midtranspaymentDTO.ItemId,
+				Price: midtranspaymentDTO.ItemPrice,
+				Qty:   1,
+				Name:  midtranspaymentDTO.ItemName,
+			},
+		},
+	}
+}
+
+// Create ChargeReq for Gopay
+func (d *MidtransDriver) CreateGopayPayment(midtranspaymentDTO dto.MidtransPaymentDTO) *coreapi.ChargeReq {
+	log.Print("Enter midtransdriver.CreateGopayTransaction")
+	return &coreapi.ChargeReq{
+		PaymentType: coreapi.PaymentTypeBankTransfer,
+		TransactionDetails: midtrans.TransactionDetails{
+			OrderID:  midtranspaymentDTO.OrderId,
+			GrossAmt: midtranspaymentDTO.Paid,
+		},
+		Gopay: &coreapi.GopayDetails{},
+		Items: &[]midtrans.ItemDetails{
+			{
+				ID:    midtranspaymentDTO.ItemId,
+				Price: midtranspaymentDTO.ItemPrice,
+				Qty:   1,
+				Name:  midtranspaymentDTO.ItemName,
+			},
+		},
+	}
+}
+
+// Create ChargeReq for Qris
+func (d *MidtransDriver) CreateQrisPayment(midtranspaymentDTO dto.MidtransPaymentDTO) *coreapi.ChargeReq {
+	log.Print("Enter midtransdriver.CreateQrisTransaction")
+	return &coreapi.ChargeReq{
+		PaymentType: coreapi.PaymentTypeBankTransfer,
+		TransactionDetails: midtrans.TransactionDetails{
+			OrderID:  midtranspaymentDTO.OrderId,
+			GrossAmt: midtranspaymentDTO.Paid,
+		},
+		Qris: &coreapi.QrisDetails{},
+		Items: &[]midtrans.ItemDetails{
+			{
+				ID:    midtranspaymentDTO.ItemId,
+				Price: midtranspaymentDTO.ItemPrice,
+				Qty:   1,
+				Name:  midtranspaymentDTO.ItemName,
+			},
+		},
+	}
+}
+
+func (d *MidtransDriver) DoPayment(method string, midtranspaymentDTO dto.MidtransPaymentDTO) interface{} {
+	log.Print("Enter midtransdriver.DoPayment")
+
+	chargeReq := new(coreapi.ChargeReq)
+
+	// 2. Initiate charge request
+	switch method {
+	case "bank_transfer":
+		chargeReq = d.CreateBankTransferPayment(midtranspaymentDTO)
+	case "gopay":
+		chargeReq = d.CreateGopayPayment(midtranspaymentDTO)
+	case "shopeepay":
+		chargeReq = d.CreateShopeePayPayment(midtranspaymentDTO)
+	case "qris":
+		chargeReq = d.CreateQrisPayment(midtranspaymentDTO)
 	}
 
 	// 3. Request to Midtrans using global config
