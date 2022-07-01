@@ -63,7 +63,7 @@ func (s *service) Create(methodDTO dto.CreateMethodDTO) (paymentMethod models.Pa
 		return
 	}
 	id := uuid.New().String()
-	slug := strings.ReplaceAll(strings.ToLower(methodDTO.Name), " ", "-")
+	slug := strings.ReplaceAll(strings.ToLower(methodDTO.Name), " ", "_")
 	data, err := s.repository.Insert(methodDTO.GenerateModel(id, slug))
 	paymentMethod = *data
 	return
@@ -77,7 +77,7 @@ func (s *service) Modify(id string, methodDTO dto.CreateMethodDTO) (paymentMetho
 	if err != nil {
 		return
 	}
-	slug := strings.ReplaceAll(strings.ToLower(methodDTO.Name), " ", "-")
+	slug := strings.ReplaceAll(strings.ToLower(methodDTO.Name), " ", "_")
 	data, err := s.repository.Insert(methodDTO.GenerateModel(id, slug))
 	paymentMethod = *data
 	return
