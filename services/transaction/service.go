@@ -63,7 +63,7 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 	s.repository.Insert(createtransactionDTO.GenerateTransactionModel(tid, userId))
 
 	pid := uuid.New().String()
-	s.repository.InsertPayment(createtransactionDTO.GeneratePaymentModel(pid, tid, "pending"))
+	s.repository.InsertPayment(createtransactionDTO.GeneratePaymentModel(pid, tid, "pending", "", "", ""))
 	return
 }
 func (s *service) Modify() (transaction models.Transaction, err error) {

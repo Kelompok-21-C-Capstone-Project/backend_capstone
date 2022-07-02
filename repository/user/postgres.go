@@ -19,7 +19,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 
 func (repo *PostgresRepository) FindById(id string) (user *models.User, err error) {
 	log.Print(id)
-	err = repo.db.Debug().First(&user, id).Error
+	err = repo.db.Debug().First(&user, &id).Error
 	if err != nil {
 		return
 	}
@@ -47,14 +47,14 @@ func (repo *PostgresRepository) Insert(data *models.User) (user *models.User, er
 	return data, err
 }
 func (repo *PostgresRepository) Update(id string, data *models.User) (user *models.User, err error) {
-	err = repo.db.First(user, id).Select("name", "phone", "password").UpdateColumns(data).Error
+	err = repo.db.First(user, &id).Select("name", "phone", "password").UpdateColumns(data).Error
 	if err != nil {
 		return
 	}
 	return
 }
 func (repo *PostgresRepository) Delete(id string) (err error) {
-	if err = repo.db.Delete(&models.ProductCategory{}, id).Error; err != nil {
+	if err = repo.db.Delete(&models.ProductCategory{}, &id).Error; err != nil {
 		return
 	}
 	return

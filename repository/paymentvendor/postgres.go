@@ -17,7 +17,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 }
 
 func (repo *PostgresRepository) FindById(id string) (paymentVendor *models.PaymentVendor, err error) {
-	if err = repo.db.First(&paymentVendor, id).Error; err != nil {
+	if err = repo.db.First(&paymentVendor, &id).Error; err != nil {
 		return
 	}
 	return
@@ -32,7 +32,7 @@ func (repo *PostgresRepository) FindAll() (paymentVendors *[]models.PaymentVendo
 	return
 }
 func (repo *PostgresRepository) ValidatePaymentMethod(MethodId string) (err error) {
-	if err = repo.db.Table("payment_methods").First(&models.PaymentMethod{}, MethodId).Error; err != nil {
+	if err = repo.db.Table("payment_methods").First(&models.PaymentMethod{}, &MethodId).Error; err != nil {
 		return
 	}
 	return
@@ -44,13 +44,13 @@ func (repo *PostgresRepository) Insert(data *models.PaymentVendor) (paymentVendo
 	return data, err
 }
 func (repo *PostgresRepository) Update(id string, data *models.PaymentVendor) (paymentVendor *models.PaymentVendor, err error) {
-	if err = repo.db.First(&paymentVendor, id).Model(paymentVendor).Updates(data).First(&paymentVendor, id).Error; err != nil {
+	if err = repo.db.First(&paymentVendor, &id).Model(paymentVendor).Updates(data).First(&paymentVendor, &id).Error; err != nil {
 		return
 	}
 	return
 }
 func (repo *PostgresRepository) Delete(id string) (paymentVendor *models.PaymentVendor, err error) {
-	if err = repo.db.Delete(&paymentVendor, id).Error; err != nil {
+	if err = repo.db.Delete(&paymentVendor, &id).Error; err != nil {
 		return
 	}
 	return

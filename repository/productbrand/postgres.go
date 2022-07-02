@@ -20,7 +20,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 }
 
 func (repo *PostgresRepository) FindById(id string) (productBrand *models.ProductBrand, err error) {
-	if err = repo.db.Preload("ProductCategories").First(&productBrand, id).Error; err != nil {
+	if err = repo.db.Preload("ProductCategories").First(&productBrand, &id).Error; err != nil {
 		return
 	}
 	return
@@ -35,26 +35,26 @@ func (repo *PostgresRepository) FindAll() (productBrands *[]models.ProductBrand,
 	return
 }
 func (repo *PostgresRepository) FindCategoryById(id string) (productCategory *models.ProductCategory, err error) {
-	if err = repo.db.First(&productCategory, id).Error; err != nil {
+	if err = repo.db.First(&productCategory, &id).Error; err != nil {
 		return
 	}
 	return
 }
 func (repo *PostgresRepository) Insert(data *models.ProductBrand) (productBrand *models.ProductBrand, err error) {
-	if err = repo.db.Create(data).Preload("ProductCategories").First(&productBrand, data.Id).Error; err != nil {
+	if err = repo.db.Create(data).Preload("ProductCategories").First(&productBrand, &data.Id).Error; err != nil {
 		return
 	}
 	return
 }
 func (repo *PostgresRepository) Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrand, err error) {
-	if err = repo.db.First(&productBrand, id).Model(productBrand).Updates(data).Error; err != nil {
+	if err = repo.db.First(&productBrand, &id).Model(productBrand).Updates(data).Error; err != nil {
 		return
 	}
 	log.Print(productBrand)
 	return
 }
 func (repo *PostgresRepository) Delete(id string) (err error) {
-	if err = repo.db.Delete(&models.ProductBrand{}, id).Error; err != nil {
+	if err = repo.db.Delete(&models.ProductBrand{}, &id).Error; err != nil {
 		return
 	}
 	return
