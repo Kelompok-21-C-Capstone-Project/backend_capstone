@@ -8,18 +8,21 @@ import (
 	productController "backend_capstone/api/product"
 	brandController "backend_capstone/api/productbrand"
 	categoryController "backend_capstone/api/productcategory"
+	"backend_capstone/api/user"
 	"backend_capstone/configs"
 	methodRepo "backend_capstone/repository/paymentmethod"
 	vendorRepo "backend_capstone/repository/paymentvendor"
 	productRepo "backend_capstone/repository/product"
 	brandRepo "backend_capstone/repository/productbrand"
 	categoryRepo "backend_capstone/repository/productcategory"
+	userRepo "backend_capstone/repository/user"
 	paymentService "backend_capstone/services/payment"
 	methodService "backend_capstone/services/paymentmethod"
 	vendorService "backend_capstone/services/paymentvendor"
 	productService "backend_capstone/services/product"
 	brandService "backend_capstone/services/productbrand"
 	categoryService "backend_capstone/services/productcategory"
+	userService "backend_capstone/services/user"
 	"backend_capstone/utils"
 	"backend_capstone/utils/midtransdriver"
 	"log"
@@ -50,6 +53,10 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 	vendorPermitService := vendorService.NewService(vendorPermitRepository)
 	vendorPermitController := vendorController.NewController(vendorPermitService)
 
+	userPermitRepository := userRepo.RepositoryFactory(dbCon)
+	userPermitService := userService.NewService(userPermitRepository)
+	userPermitController := user.NewController(userPermitService)
+
 	controllers := api.Controller{
 		ProductCategory: categoryPermitController,
 		ProductBrand:    brandPermitController,
@@ -57,6 +64,7 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 		PaymentMethod:   methodPermitController,
 		PaymentVendor:   vendorPermitController,
 		Payment:         paymentV1PermitController,
+		User:            userPermitController,
 	}
 
 	return controllers
