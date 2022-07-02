@@ -19,7 +19,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 }
 
 func (repo *PostgresRepository) FindById(id string) (product *models.Product, err error) {
-	if err = repo.db.Preload("ProductBrandCategory").First(&product, id).Error; err != nil {
+	if err = repo.db.Preload("ProductBrandCategory").First(&product, &id).Error; err != nil {
 		return
 	}
 	return
@@ -52,13 +52,13 @@ func (repo *PostgresRepository) Insert(data *models.Product) (product *models.Pr
 	return data, err
 }
 func (repo *PostgresRepository) Update(id string, data *models.Product) (product *models.Product, err error) {
-	if err = repo.db.First(&product, id).Model(product).Updates(data).Preload("ProductBrandCategory").First(&product, id).Error; err != nil {
+	if err = repo.db.First(&product, &id).Model(product).Updates(data).Preload("ProductBrandCategory").First(&product, &id).Error; err != nil {
 		return
 	}
 	return
 }
 func (repo *PostgresRepository) Delete(id string) (err error) {
-	if err = repo.db.Delete(&models.Product{}, id).Error; err != nil {
+	if err = repo.db.Delete(&models.Product{}, &id).Error; err != nil {
 		return
 	}
 	return
