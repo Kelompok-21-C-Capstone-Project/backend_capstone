@@ -13,7 +13,8 @@ type MidtransDriver struct {
 	Env       midtrans.EnvironmentType
 }
 
-func NewMidtransDriver(configs *configs.AppConfig) *MidtransDriver {
+func NewMidtransService(configs *configs.AppConfig) *MidtransDriver {
+	log.Print("Enter NewMidtransService")
 	var api MidtransDriver
 
 	// 1. Set you ServerKey with globally
@@ -28,22 +29,62 @@ func NewMidtransDriver(configs *configs.AppConfig) *MidtransDriver {
 	return &api
 }
 
+func (d *MidtransDriver) PutApprovePaymentMethod() interface{} {
+	approveRes, _ := coreapi.ApproveTransaction("54321")
+	log.Print("Response :", approveRes)
+	return nil
+}
+
+// Create ChargeReq for bank transfer
+func (d *MidtransDriver) CreateBankTransferTransaction() interface{} {
+	log.Print("Enter midtransdriver.CreateBankTransferTransaction")
+	return nil
+}
+
+// Create ChargeReq for ShopeePay
+func (d *MidtransDriver) CreateShopeePayTransaction() interface{} {
+	log.Print("Enter midtransdriver.CreateShopeePayTransaction")
+	return nil
+}
+
+// Create ChargeReq for Gopay
+func (d *MidtransDriver) CreateGopayTransaction() interface{} {
+	log.Print("Enter midtransdriver.CreateGopayTransaction")
+	return nil
+}
+
+// Create ChargeReq for ConvStore
+func (d *MidtransDriver) CreateConvStoreTransaction() interface{} {
+	log.Print("Enter midtransdriver.CreateConvStoreTransaction")
+	return nil
+}
+
+// Create ChargeReq for Qris
+func (d *MidtransDriver) CreateQrisTransaction() interface{} {
+	log.Print("Enter midtransdriver.CreateQrisTransaction")
+	return nil
+}
+
 func (d *MidtransDriver) GetPaymentMethod() interface{} {
+	log.Print("Enter midtransdriver.GetPaymentMethod")
 
 	// 2. Initiate charge request
 	chargeReq := &coreapi.ChargeReq{
-		PaymentType: coreapi.PaymentTypeCreditCard,
+		PaymentType: coreapi.PaymentTypeBankTransfer,
 		TransactionDetails: midtrans.TransactionDetails{
-			OrderID:  "12345",
+			OrderID:  "54321",
 			GrossAmt: 200000,
 		},
 		CreditCard: &coreapi.CreditCardDetails{
 			TokenID:        "YOUR-CC-TOKEN",
 			Authentication: true,
 		},
+		BankTransfer: &coreapi.BankTransferDetails{
+			Bank: midtrans.BankBca,
+		},
 		Items: &[]midtrans.ItemDetails{
 			{
-				ID:    "ITEM1",
+				ID:    "ITEM2",
 				Price: 200000,
 				Qty:   1,
 				Name:  "Someitem",
@@ -54,5 +95,6 @@ func (d *MidtransDriver) GetPaymentMethod() interface{} {
 	// 3. Request to Midtrans using global config
 	coreApiRes, _ := coreapi.ChargeTransaction(chargeReq)
 	log.Print("Response :", coreApiRes)
-	return false
+
+	return nil
 }
