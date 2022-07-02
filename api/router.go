@@ -7,6 +7,7 @@ import (
 	"backend_capstone/api/product"
 	"backend_capstone/api/productbrand"
 	"backend_capstone/api/productcategory"
+	"backend_capstone/api/user"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -19,7 +20,12 @@ type Controller struct {
 	Product         *product.Controller
 	PaymentMethod   *paymentmethod.Controller
 	PaymentVendor   *paymentvendor.Controller
+	User            *user.Controller
 }
+
+// func Init(e *echo.Echo) {
+// 	e.GET("/generate-hash/:password", user.GenerateHashPassword)
+// }
 
 func RegistrationPath(e *echo.Echo, controller Controller) {
 	// API v1 basepath
@@ -68,4 +74,12 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	vendorV1.GET("/:id", controller.ProductCategory.GetById)
 	vendorV1.PUT("/:id", controller.ProductCategory.Modify)
 	vendorV1.DELETE("/:id", controller.ProductCategory.Remove)
+
+	userV1 := e.Group("v1/users")
+	userV1.POST("", controller.User.Create)
+	userV1.GET("", controller.User.GetAllData)
+	userV1.GET("/:id", controller.User.GetSingleData)
+	userV1.PUT("/:id", controller.User.UpdateUserData)
+	userV1.DELETE("/:id", controller.User.DeleteData)
+	// e.GET("/user", controller.User.GetAllData, middleware.IsAuthenticated)
 }
