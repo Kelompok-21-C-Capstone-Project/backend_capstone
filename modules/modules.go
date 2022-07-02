@@ -25,11 +25,16 @@ import (
 	userService "backend_capstone/services/user"
 	"backend_capstone/utils"
 	"backend_capstone/utils/midtransdriver"
+	"backend_capstone/utils/security"
+
 	"log"
 )
 
 func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdriver.MidtransDriver, configs *configs.AppConfig) api.Controller {
 	log.Print("Enter RegisterModules")
+
+	passwordHashPermitUtils := security.NewPasswordHash()
+
 	paymentPermitService := paymentService.NewService(nil, midtransDriver)
 	paymentV1PermitController := paymentController.NewController(paymentPermitService)
 
@@ -54,7 +59,7 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 	vendorPermitController := vendorController.NewController(vendorPermitService)
 
 	userPermitRepository := userRepo.RepositoryFactory(dbCon)
-	userPermitService := userService.NewService(userPermitRepository)
+	userPermitService := userService.NewService(userPermitRepository, passwordHashPermitUtils)
 	userPermitController := user.NewController(userPermitService)
 
 	controllers := api.Controller{

@@ -23,6 +23,10 @@ type Controller struct {
 	User            *user.Controller
 }
 
+// func Init(e *echo.Echo) {
+// 	e.GET("/generate-hash/:password", user.GenerateHashPassword)
+// }
+
 func RegistrationPath(e *echo.Echo, controller Controller) {
 	// API v1 basepath
 	e.GET("/v1", func(c echo.Context) error {
@@ -77,4 +81,5 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	userV1.GET("/:id", controller.User.GetSingleData)
 	userV1.PUT("/:id", controller.User.UpdateUserData)
 	userV1.DELETE("/:id", controller.User.DeleteData)
+	// e.GET("/user", controller.User.GetAllData, middleware.IsAuthenticated)
 }

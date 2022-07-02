@@ -25,7 +25,11 @@ func (repo *PostgresRepository) FindById(id string) (user *models.User, err erro
 	}
 	return
 }
-func (repo *PostgresRepository) FindByQuery(key string, value interface{}) (users *[]models.User, err error) {
+func (repo *PostgresRepository) FindByIdentifier(identifier string) (user *models.User, err error) {
+	err = repo.db.Debug().Where("email = ? or username = ?", identifier, identifier).First(&user).Error
+	if err != nil {
+		return
+	}
 	return
 }
 func (repo *PostgresRepository) FindAll() (users *[]models.User, err error) {

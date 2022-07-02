@@ -11,9 +11,6 @@ func RepositoryFactory(dbCon *utils.DatabaseConnection) transaction.Repository {
 	if dbCon.Driver == utils.Postgres {
 		transactionRepo = NewPostgresRepository(dbCon.Postgres)
 	}
-	if dbCon.Driver == utils.MySQL {
-		transactionRepo = NewPostgresRepository(dbCon.MySQL)
-	}
 
 	return transactionRepo
 }

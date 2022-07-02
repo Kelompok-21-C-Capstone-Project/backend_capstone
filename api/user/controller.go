@@ -5,6 +5,7 @@ import (
 	"backend_capstone/api/user/response"
 	"backend_capstone/services/user"
 	"log"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
@@ -19,15 +20,15 @@ func NewController(service user.Service) *Controller {
 	}
 }
 
-func (ctrl *Controller) GetAllData(c echo.Context) (err error) {
-	log.Print("enter ctrl.user.GetAllData")
+func (controller *Controller) GetAllData(c echo.Context) (err error) {
+	log.Print("enter controller.user.GetAllData")
 	// user, err := utils.ParsingJWT(c)
 	// else if user.Role != "admin" {
 	// 	return c.JSON(200, echo.Map{
 	// 		"error": "restricted (*only for admin)",
 	// 	})
 	// }
-	users, err := ctrl.service.GetAll()
+	users, err := controller.service.GetAll()
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
 			Status:  "fail",
@@ -39,18 +40,18 @@ func (ctrl *Controller) GetAllData(c echo.Context) (err error) {
 	})
 }
 
-func (ctrl *Controller) Create(c echo.Context) (err error) {
-	log.Print("enter ctrl.user.Create")
+func (controller *Controller) Create(c echo.Context) (err error) {
+	log.Print("enter controller.user.Create")
 
 	data := new(request.RegisterUserRequest)
 	err = c.Bind(&data)
 	if err != nil {
-		return c.JSON(400, &response.BasicUserResponse{
+		return c.JSON(http.StatusBadRequest, &response.BasicUserResponse{
 			Status:  "fail",
 			Message: err.Error(),
 		})
 	}
-	user, err := ctrl.service.Create(data.DtoReq())
+	user, err := controller.service.Create(data.DtoReq())
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
 			Status:  "fail",
@@ -62,19 +63,19 @@ func (ctrl *Controller) Create(c echo.Context) (err error) {
 	})
 }
 
-func (ctrl *Controller) UpdateUserData(c echo.Context) (err error) {
-	log.Print("enter ctrl.user.UpdateUserData")
+func (controller *Controller) UpdateUserData(c echo.Context) (err error) {
+	log.Print("enter controller.user.UpdateUserData")
 
 	data := new(request.UpdateUserRequest)
 	stringId := c.Param("id")
 	err = c.Bind(&data)
 	if err != nil {
-		return c.JSON(400, &response.BasicUserResponse{
+		return c.JSON(http.StatusBadRequest, &response.BasicUserResponse{
 			Status:  "fail",
 			Message: err.Error(),
 		})
 	}
-	user, err := ctrl.service.Modify(stringId, data.DtoReq())
+	user, err := controller.service.Modify(stringId, data.DtoReq())
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
 			Status:  "fail",
@@ -86,10 +87,10 @@ func (ctrl *Controller) UpdateUserData(c echo.Context) (err error) {
 	})
 }
 
-func (ctrl *Controller) GetSingleData(c echo.Context) (err error) {
-	log.Print("enter ctrl.user.GetSingleData")
+func (controller *Controller) GetSingleData(c echo.Context) (err error) {
+	log.Print("enter controller.user.GetSingleData")
 	stringId := c.Param("id")
-	user, err := ctrl.service.GetById(stringId)
+	user, err := controller.service.GetById(stringId)
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
 			Status:  "fail",
@@ -101,10 +102,10 @@ func (ctrl *Controller) GetSingleData(c echo.Context) (err error) {
 	})
 }
 
-func (ctrl *Controller) DeleteData(c echo.Context) (err error) {
-	log.Print("enter ctrl.user.DeleteData")
+func (controller *Controller) DeleteData(c echo.Context) (err error) {
+	log.Print("enter controller.user.DeleteData")
 	stringId := c.Param("id")
-	err = ctrl.service.Remove(stringId)
+	err = controller.service.Remove(stringId)
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
 			Status:  "fail",
@@ -113,5 +114,28 @@ func (ctrl *Controller) DeleteData(c echo.Context) (err error) {
 	}
 	return c.JSON(200, &response.BasicUserResponse{
 		Status: "success",
+	})
+}
+
+func (controller *Controller) AuthUser(c echo.Context) (err error) {
+	log.Print("enter controller.user.AuthUser")
+	data := new(request.LoginUserRequest)
+	err = c.Bind(&data)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, &response.BasicUserResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	token, err := controller.service.UserLogin(data.DtoReq())
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, &response.BasicUserResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusAccepted, &response.BasicUserResponse{
+		Status:  "success",
+		Message: token,
 	})
 }

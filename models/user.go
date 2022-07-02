@@ -18,7 +18,7 @@ type User struct {
 	Role         string `gorm:"type:varchar(30);default:'user';not null"`
 	Email        string `gorm:"type:varchar(30);unique;not null"`
 	Phone        string `gorm:"type:varchar(15);unique;not null"`
-	Password     string `gorm:"type:varchar(30);not null"`
+	Password     string `gorm:"type:varchar(100);not null"`
 	IconPath     string `gorm:"type:text"`
 	Transactions []Transaction
 	CreatedAt    time.Time

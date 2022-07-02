@@ -40,8 +40,6 @@ func (s *GormMigrationService) GormMigrate() (err error) {
 		&models.ProductBrandCategory{},
 		&models.Product{},
 		&models.User{},
-		&models.PaymentMethod{},
-		&models.PaymentVendor{},
 		&models.Payment{},
 		&models.Transaction{},
 	)
