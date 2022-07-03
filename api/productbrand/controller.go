@@ -20,6 +20,19 @@ func NewController(service productbrandUseCase.Service) *Controller {
 	}
 }
 
+// Create godoc
+// @Summary Create brand
+// @Description  Create new product brand
+// @Tags         product_brands
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.CreateBrandRequest true "Payload format" SchemaExample(request.CreateBrandRequest)
+// @Success      201  {object}  models.ProductBrand
+// @Failure      400  {object}  response.BasicBrandResponse
+// @Failure      403  {object}  response.BasicBrandResponse
+// @Failure      500  {object}  response.BasicBrandResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_brands [post]
 func (controller *Controller) Create(c echo.Context) (err error) {
 	log.Print("enter controller.productbrand.Create")
 	createProductBrandReq := new(request.CreateBrandRequest)
@@ -38,6 +51,18 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// GetAll godoc
+// @Summary Get brand
+// @Description  Get product brand by id
+// @Tags         product_brands
+// @Produce      json
+// @Success      200  {array}  models.ProductBrand
+// @Failure      400  {object}  response.BasicBrandResponse
+// @Failure      403  {object}  response.BasicBrandResponse
+// @Failure      500  {object}  response.BasicBrandResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_brands [get]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.productbrand.GetAll")
 	datas, err := controller.service.GetAll()
@@ -49,6 +74,19 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, datas)
 }
+
+// GetById godoc
+// @Summary Get brand
+// @Description  Get product brand by id
+// @Tags         product_brands
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Success      200  {object}  models.ProductBrand
+// @Failure      400  {object}  response.BasicBrandResponse
+// @Failure      403  {object}  response.BasicBrandResponse
+// @Failure      500  {object}  response.BasicBrandResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_brands/{id} [get]
 func (controller *Controller) GetById(c echo.Context) (err error) {
 	log.Print("enter controller.productbrand.GetById")
 	id := c.Param("id")
@@ -61,6 +99,21 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// Modify godoc
+// @Summary Update brand
+// @Description  Update brand data
+// @Tags         product_brands
+// @Accept       json
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Param Payload body request.UpdateBrandRequest true "Payload format" SchemaExample(request.UpdateBrandRequest)
+// @Success      200  {object}  models.ProductBrand
+// @Failure      400  {object}  response.BasicBrandResponse
+// @Failure      403  {object}  response.BasicBrandResponse
+// @Failure      500  {object}  response.BasicBrandResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_brands/{id} [put]
 func (controller *Controller) Modify(c echo.Context) (err error) {
 	log.Print("enter controller.productbrand.Modify")
 	id := c.Param("id")
@@ -80,6 +133,19 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// Remove godoc
+// @Summary Delete brand data by id
+// @Description  Delete brand data from database
+// @Tags         product_brands
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Success      200  {object}  response.BasicBrandSuccessResponse
+// @Failure      400  {object}  response.BasicBrandResponse
+// @Failure      403  {object}  response.BasicBrandResponse
+// @Failure      500  {object}  response.BasicBrandResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_brands/{id} [delete]
 func (controller *Controller) Remove(c echo.Context) (err error) {
 	log.Print("enter controller.productbrand.Remove")
 	id := c.Param("id")
@@ -89,22 +155,52 @@ func (controller *Controller) Remove(c echo.Context) (err error) {
 			Message: err.Error(),
 		})
 	}
-	return c.JSON(http.StatusAccepted, response.BasicBrandResponse{
+	return c.JSON(http.StatusAccepted, response.BasicBrandSuccessResponse{
 		Status: "success",
 	})
 }
+
+// AddBrandCategory godoc
+// @Summary Add category to brand
+// @Description  Add category to brand
+// @Tags         product_brands
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Param category_id   path  string  true  "Category ID" minLength:"32"
+// @Success      200  {object}  response.BasicBrandSuccessResponse
+// @Failure      400  {object}  response.BasicBrandResponse
+// @Failure      403  {object}  response.BasicBrandResponse
+// @Failure      500  {object}  response.BasicBrandResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_brands/{id}/categories/{category_id} [post]
 func (controller *Controller) AddBrandCategory(c echo.Context) (err error) {
 	brandId := c.Param("id")
 	categoryId := c.Param("category_id")
-	data, err := controller.service.AddBrandCategory(brandId, categoryId)
+	_, err = controller.service.AddBrandCategory(brandId, categoryId)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicBrandResponse{
 			Status:  "fail",
 			Message: err.Error(),
 		})
 	}
-	return c.JSON(http.StatusAccepted, data)
+	return c.JSON(http.StatusAccepted, response.BasicBrandSuccessResponse{
+		Status: "success",
+	})
 }
+
+// RemoveBrandCategory godoc
+// @Summary Remove category from brand
+// @Description  Remove category from brand
+// @Tags         product_brands
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Param category_id   path  string  true  "Category ID" minLength:"32"
+// @Success      200  {object}  response.BasicBrandSuccessResponse
+// @Failure      400  {object}  response.BasicBrandResponse
+// @Failure      403  {object}  response.BasicBrandResponse
+// @Failure      500  {object}  response.BasicBrandResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_brands/{id}/categories/{category_id} [delete]
 func (controller *Controller) RemoveBrandCategory(c echo.Context) (err error) {
 	brandId := c.Param("id")
 	categoryId := c.Param("category_id")
@@ -115,7 +211,7 @@ func (controller *Controller) RemoveBrandCategory(c echo.Context) (err error) {
 			Message: err.Error(),
 		})
 	}
-	return c.JSON(http.StatusAccepted, response.BasicBrandResponse{
+	return c.JSON(http.StatusAccepted, response.BasicBrandSuccessResponse{
 		Status: "success",
 	})
 }

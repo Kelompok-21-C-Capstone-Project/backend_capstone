@@ -26,12 +26,12 @@ type User struct {
 }
 
 type UserResponse struct {
-	Id       string `json:"id"`
-	Username string `json:"username"`
-	Name     string `json:"name"`
-	Role     string `json:"role"`
-	Email    string `json:"email"`
-	Phone    string `json:"phone"`
+	Id       string `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" format:"uuid"`
+	Username string `json:"username" example:"username"`
+	Name     string `json:"name" example:"somen name"`
+	Role     string `json:"role" example:"user"`
+	Email    string `json:"email" example:"testmail@mail.com" format:"email"`
+	Phone    string `json:"phone" example:"0811111111"`
 }
 
 func (UserResponse) TableName() string {

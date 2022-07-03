@@ -3,9 +3,9 @@ package request
 import "backend_capstone/services/productcategory/dto"
 
 type UpdateCategoryRequest struct {
-	Name        string `json:"name"`
-	IsAvailable bool   `json:"status"`
-	Description string `json:"description"`
+	Name        string `json:"name" example:"some name"`
+	IsAvailable bool   `json:"status" example:"true"`
+	Description string `json:"description" example:"some description"`
 }
 
 func (req *UpdateCategoryRequest) DtoReq() *dto.UpdateCategoryDTO {

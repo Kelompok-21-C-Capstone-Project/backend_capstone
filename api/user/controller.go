@@ -40,6 +40,19 @@ func (controller *Controller) GetAllData(c echo.Context) (err error) {
 	})
 }
 
+// Create godoc
+// @Summary User register
+// @Description  Create new user
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.RegisterUserRequest true "Payload format" SchemaExample(request.RegisterUserRequest)
+// @Success      201  {object}  models.UserResponse
+// @Failure      400  {object}  response.BasicUserResponse
+// @Failure      403  {object}  response.BasicUserResponse
+// @Failure      500  {object}  response.BasicUserResponse
+// @Security ApiKeyAuth
+// @Router       /v1/user_register [post]
 func (controller *Controller) Create(c echo.Context) (err error) {
 	log.Print("enter controller.user.Create")
 
@@ -63,6 +76,19 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 	})
 }
 
+// CreateAdmin godoc
+// @Summary Admin register
+// @Description  Create new admin
+// @Tags         admins
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.RegisterAdminRequest true "Payload format" SchemaExample(request.RegisterAdminRequest)
+// @Success      201  {object}  models.UserResponse
+// @Failure      400  {object}  response.BasicUserResponse
+// @Failure      403  {object}  response.BasicUserResponse
+// @Failure      500  {object}  response.BasicUserResponse
+// @Security ApiKeyAuth
+// @Router       /v1/admin_register [post]
 func (controller *Controller) CreateAdmin(c echo.Context) (err error) {
 	log.Print("enter controller.user.Create")
 
@@ -86,6 +112,20 @@ func (controller *Controller) CreateAdmin(c echo.Context) (err error) {
 	})
 }
 
+// UpdateUserData godoc
+// @Summary Update user
+// @Description  Update user data
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param id   path  string  true  "User ID" minLength:"32"
+// @Param Payload body request.UpdateUserRequest true "Payload format" SchemaExample(request.UpdateUserRequest)
+// @Success      200  {object}  models.UserResponse
+// @Failure      400  {object}  response.BasicUserResponse
+// @Failure      403  {object}  response.BasicUserResponse
+// @Failure      500  {object}  response.BasicUserResponse
+// @Security ApiKeyAuth
+// @Router       /v1/users/{id} [put]
 func (controller *Controller) UpdateUserData(c echo.Context) (err error) {
 	log.Print("enter controller.user.UpdateUserData")
 
@@ -111,6 +151,18 @@ func (controller *Controller) UpdateUserData(c echo.Context) (err error) {
 	})
 }
 
+// GetSingleData godoc
+// @Summary Get user data by id
+// @Description  Get detailed user data by id from database
+// @Tags         users
+// @Produce      json
+// @Param id   path  string  true  "User ID" minLength:"32"
+// @Success      200  {object}  models.UserResponse
+// @Failure      400  {object}  response.BasicUserResponse
+// @Failure      403  {object}  response.BasicUserResponse
+// @Failure      500  {object}  response.BasicUserResponse
+// @Security ApiKeyAuth
+// @Router       /v1/users/{id} [get]
 func (controller *Controller) GetSingleData(c echo.Context) (err error) {
 	log.Print("enter controller.user.GetSingleData")
 	stringId := c.Param("id")
@@ -127,6 +179,18 @@ func (controller *Controller) GetSingleData(c echo.Context) (err error) {
 	})
 }
 
+// DeleteData godoc
+// @Summary Delete user data by id
+// @Description  Delete user data from database
+// @Tags         users
+// @Produce      json
+// @Param id   path  string  true  "User ID" minLength:"32"
+// @Success      200  {object}  response.BasicUserSuccessResponse
+// @Failure      400  {object}  response.BasicUserResponse
+// @Failure      403  {object}  response.BasicUserResponse
+// @Failure      500  {object}  response.BasicUserResponse
+// @Security ApiKeyAuth
+// @Router       /v1/users/{id} [delete]
 func (controller *Controller) DeleteData(c echo.Context) (err error) {
 	log.Print("enter controller.user.DeleteData")
 	stringId := c.Param("id")
@@ -138,11 +202,24 @@ func (controller *Controller) DeleteData(c echo.Context) (err error) {
 			Message: err.Error(),
 		})
 	}
-	return c.JSON(200, &response.BasicUserResponse{
+	return c.JSON(200, &response.BasicUserSuccessResponse{
 		Status: "success",
 	})
 }
 
+// DeleteData godoc
+// @Summary Delete user data by id
+// @Description  Delete user data from database
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.LoginUserRequest true "Payload format" SchemaExample(request.LoginUserRequest)
+// @Success      200  {object}  response.SuccessLoginResponse
+// @Failure      400  {object}  response.BasicUserResponse
+// @Failure      403  {object}  response.BasicUserResponse
+// @Failure      500  {object}  response.BasicUserResponse
+// @Security ApiKeyAuth
+// @Router       /v1/auth [post]
 func (controller *Controller) AuthUser(c echo.Context) (err error) {
 	log.Print("enter controller.user.AuthUser")
 	data := new(request.LoginUserRequest)
@@ -160,8 +237,8 @@ func (controller *Controller) AuthUser(c echo.Context) (err error) {
 			Message: err.Error(),
 		})
 	}
-	return c.JSON(http.StatusAccepted, &response.BasicUserResponse{
-		Status:  "success",
-		Message: token,
+	return c.JSON(http.StatusAccepted, &response.SuccessLoginResponse{
+		Status: "success",
+		Token:  token,
 	})
 }

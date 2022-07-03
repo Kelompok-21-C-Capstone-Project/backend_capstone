@@ -3,11 +3,9 @@ package product
 import (
 	"backend_capstone/api/product/request"
 	"backend_capstone/api/product/response"
-	"backend_capstone/models"
 	productUseCase "backend_capstone/services/product"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -16,6 +14,19 @@ type Controller struct {
 	service productUseCase.Service
 }
 
+// Create godoc
+// @Summary Create product
+// @Description  Create new product product
+// @Tags         products
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
+// @Success      201  {object}  models.Product
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products [post]
 func NewController(service productUseCase.Service) *Controller {
 	return &Controller{
 		service: service,
@@ -39,6 +50,18 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// GetAll godoc
+// @Summary Get product
+// @Description  Get product product by id
+// @Tags         products
+// @Produce      json
+// @Success      200  {array}  models.ProductBrand
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products [get]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.product.GetAll")
 	datas, err := controller.service.GetAll()
@@ -61,6 +84,19 @@ func (controller *Controller) ClientGetAll(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, datas)
 }
+
+// GetById godoc
+// @Summary Get product
+// @Description  Get product product by id
+// @Tags         products
+// @Produce      json
+// @Param id   path  string  true  "Product ID" minLength:"32"
+// @Success      200  {object}  models.Product
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products/{id} [get]
 func (controller *Controller) GetById(c echo.Context) (err error) {
 	log.Print("enter controller.product.GetById")
 	id := c.Param("id")
@@ -73,6 +109,21 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// Modify godoc
+// @Summary Update product
+// @Description  Update product data
+// @Tags         products
+// @Accept       json
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Param Payload body request.UpdateProductRequest true "Payload format" SchemaExample(request.UpdateProductRequest)
+// @Success      200  {object}  models.Product
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products/{id} [put]
 func (controller *Controller) Modify(c echo.Context) (err error) {
 	log.Print("enter controller.product.Modify")
 	id := c.Param("id")
@@ -92,6 +143,19 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// Remove godoc
+// @Summary Delete product data by id
+// @Description  Delete product data from database
+// @Tags         products
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Success      200  {object}  response.BasicProductSuccessResponse
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products/{id} [delete]
 func (controller *Controller) Remove(c echo.Context) (err error) {
 	log.Print("enter controller.product.Remove")
 	id := c.Param("id")
@@ -101,48 +165,7 @@ func (controller *Controller) Remove(c echo.Context) (err error) {
 			Message: err.Error(),
 		})
 	}
-	return c.JSON(http.StatusAccepted, response.BasicProductResponse{
+	return c.JSON(http.StatusAccepted, response.BasicProductSuccessResponse{
 		Status: "success",
 	})
-}
-
-//> fungsi get (read) koreksi
-func GetAllProduct(c echo.Context) error {
-	var product []models.Product
-	var error error
-	if error != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": error.Error()})
-	}
-	return c.JSON(http.StatusOK, product)
-}
-
-//> fungsi post(create) koreksi
-func CreateProduct(c echo.Context) error {
-	var input []models.Product
-	err := c.Bind(&input)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
-	}
-
-	return c.JSON(http.StatusOK, input)
-}
-
-//> fungsi delete msh butuh koreksi dibagian return
-func DeleteProduct(c echo.Context) error {
-	var product map[int]*models.Product
-	id, _ := strconv.Atoi(c.Param("id"))
-	delete(product, id)
-	return c.NoContent(http.StatusNoContent)
-}
-
-//>fungsi put(update) msh butuh koreksi
-func UpdateProduct(c echo.Context) error {
-	var product map[int]*models.Product
-	n := new(models.Product)
-	if err := c.Bind(n); err != nil {
-		return err
-	}
-	id, _ := strconv.Atoi(c.Param("id"))
-	product[id].Name = n.Name
-	return c.JSON(http.StatusOK, product[id])
 }
