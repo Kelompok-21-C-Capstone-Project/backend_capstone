@@ -63,6 +63,29 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 	})
 }
 
+func (controller *Controller) CreateAdmin(c echo.Context) (err error) {
+	log.Print("enter controller.user.Create")
+
+	data := new(request.RegisterAdminRequest)
+	err = c.Bind(&data)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, &response.BasicUserResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	user, err := controller.service.CreateAdmin(data.DtoReq())
+	if err != nil {
+		return c.JSON(500, &response.BasicUserResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(201, echo.Map{
+		"data": user,
+	})
+}
+
 func (controller *Controller) UpdateUserData(c echo.Context) (err error) {
 	log.Print("enter controller.user.UpdateUserData")
 
