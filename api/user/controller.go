@@ -114,7 +114,8 @@ func (controller *Controller) UpdateUserData(c echo.Context) (err error) {
 func (controller *Controller) GetSingleData(c echo.Context) (err error) {
 	log.Print("enter controller.user.GetSingleData")
 	stringId := c.Param("id")
-	user, err := controller.service.GetById(stringId)
+	payloadId := c.Get("payload").(string)
+	user, err := controller.service.GetById(stringId, payloadId)
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
 			Status:  "fail",
