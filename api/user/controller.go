@@ -105,7 +105,8 @@ func (controller *Controller) GetSingleData(c echo.Context) (err error) {
 func (controller *Controller) DeleteData(c echo.Context) (err error) {
 	log.Print("enter controller.user.DeleteData")
 	stringId := c.Param("id")
-	err = controller.service.Remove(stringId)
+	payloadId := c.Get("payload").(string)
+	err = controller.service.Remove(stringId, payloadId)
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
 			Status:  "fail",

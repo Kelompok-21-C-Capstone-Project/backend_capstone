@@ -3,6 +3,7 @@ package payment
 import (
 	"backend_capstone/models"
 	"backend_capstone/utils/midtransdriver"
+	utilsdto "backend_capstone/utils/midtransdriver/dto"
 	"log"
 
 	"github.com/go-playground/validator/v10"
@@ -54,7 +55,7 @@ func (s *service) GetAll() (payments []models.Payment, err error) {
 }
 func (s *service) Create() (payment models.Payment, err error) {
 	log.Print("Enter PaymentService.Create")
-	s.midtrans.GetPaymentMethod()
+	s.midtrans.DoPayment("bank_transfer", utilsdto.MidtransPaymentDTO{})
 	return
 }
 func (s *service) Modify() (payment models.Payment, err error) {
