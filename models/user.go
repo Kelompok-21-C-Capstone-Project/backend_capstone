@@ -24,3 +24,16 @@ type User struct {
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }
+
+type UserResponse struct {
+	Id       string `json:"id"`
+	Username string `json:"username"`
+	Name     string `json:"name"`
+	Role     string `json:"role"`
+	Email    string `json:"email"`
+	Phone    string `json:"phone"`
+}
+
+func (UserResponse) TableName() string {
+	return "users"
+}

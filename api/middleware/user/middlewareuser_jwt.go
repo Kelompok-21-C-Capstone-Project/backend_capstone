@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"reflect"
 	"strings"
 	"time"
 
@@ -72,14 +73,14 @@ func (s *jwtUserMiddleware) JwtUserMiddleware() echo.MiddlewareFunc {
 				})
 			}
 
-			if claim["role"] != "user" {
+			if reflect.ValueOf(claim["role"]).Index(0).Interface().(string) != "user" {
 				return c.JSON(http.StatusForbidden, response.FailResponse{
 					Status:  "fail",
 					Message: "invalid token",
 				})
 			}
 
-			c.Set("payload", fmt.Sprintf("%v:%s", claim["ID"], claim["Username"].(string)))
+			c.Set("payload", fmt.Sprintf("%v:%s", claim["id"], claim["username"].(string)))
 
 			return next(c)
 		}

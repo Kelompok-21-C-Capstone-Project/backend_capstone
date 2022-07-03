@@ -1,6 +1,8 @@
 package api
 
 import (
+	AdminMiddleware "backend_capstone/api/middleware/admin"
+	UserMiddleware "backend_capstone/api/middleware/user"
 	"backend_capstone/api/payment"
 	"backend_capstone/api/paymentmethod"
 	"backend_capstone/api/paymentvendor"
@@ -21,11 +23,10 @@ type Controller struct {
 	PaymentMethod   *paymentmethod.Controller
 	PaymentVendor   *paymentvendor.Controller
 	User            *user.Controller
-}
 
-// func Init(e *echo.Echo) {
-// 	e.GET("/generate-hash/:password", user.GenerateHashPassword)
-// }
+	MiddlewareAdminJWT AdminMiddleware.JwtService
+	MiddlewareUserJWT  UserMiddleware.JwtService
+}
 
 func RegistrationPath(e *echo.Echo, controller Controller) {
 	// API v1 basepath
@@ -33,11 +34,15 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 		return c.String(http.StatusOK, "Payzone API v1.0.0 Basepath")
 	})
 
+	authV1 := e.Group("/v1/auth")
+	authV1.POST("", controller.User.AuthUser)
+
 	paymentV1 := e.Group("/v1/payments")
 	paymentV1.POST("/:method/:vendor", controller.Payment.Create)
 	paymentV1.PUT("/:id", controller.Payment.Modify)
 
 	categoryV1 := e.Group("v1/product_categories")
+	categoryV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
 	categoryV1.POST("", controller.ProductCategory.Create)
 	categoryV1.GET("", controller.ProductCategory.GetAll)
 	categoryV1.GET("/:id", controller.ProductCategory.GetById)
@@ -45,6 +50,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	categoryV1.DELETE("/:id", controller.ProductCategory.Remove)
 
 	brandV1 := e.Group("v1/product_brands")
+	brandV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
 	brandV1.POST("", controller.ProductBrand.Create)
 	brandV1.GET("", controller.ProductBrand.GetAll)
 	brandV1.GET("/:id", controller.ProductBrand.GetById)
@@ -54,6 +60,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	brandV1.DELETE("/:id/categories/:category_id", controller.ProductBrand.RemoveBrandCategory)
 
 	productV1 := e.Group("v1/products")
+	productV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
 	productV1.POST("", controller.Product.Create)
 	productV1.GET("", controller.Product.GetAll)
 	productV1.GET("/clients", controller.Product.ClientGetAll)
@@ -61,21 +68,8 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	productV1.PUT("/:id", controller.Product.Modify)
 	productV1.DELETE("/:id", controller.Product.Remove)
 
-	methodV1 := e.Group("v1/payment_methods")
-	methodV1.POST("", controller.ProductCategory.Create)
-	methodV1.GET("", controller.ProductCategory.GetAll)
-	methodV1.GET("/:id", controller.ProductCategory.GetById)
-	methodV1.PUT("/:id", controller.ProductCategory.Modify)
-	methodV1.DELETE("/:id", controller.ProductCategory.Remove)
-
-	vendorV1 := e.Group("v1/payment_vendors")
-	vendorV1.POST("", controller.ProductCategory.Create)
-	vendorV1.GET("", controller.ProductCategory.GetAll)
-	vendorV1.GET("/:id", controller.ProductCategory.GetById)
-	vendorV1.PUT("/:id", controller.ProductCategory.Modify)
-	vendorV1.DELETE("/:id", controller.ProductCategory.Remove)
-
 	userV1 := e.Group("v1/users")
+	productV1.Use(controller.MiddlewareUserJWT.JwtUserMiddleware())
 	userV1.POST("", controller.User.Create)
 	userV1.GET("", controller.User.GetAllData)
 	userV1.GET("/:id", controller.User.GetSingleData)
