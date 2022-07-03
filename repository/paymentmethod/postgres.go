@@ -17,7 +17,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 }
 
 func (repo *PostgresRepository) FindById(id string) (paymentMethod *models.PaymentMethod, err error) {
-	if err = repo.db.Preload("PaymentVendors").First(&paymentMethod, id).Error; err != nil {
+	if err = repo.db.Preload("PaymentVendors").First(&paymentMethod, &id).Error; err != nil {
 		return
 	}
 	return
@@ -38,13 +38,13 @@ func (repo *PostgresRepository) Insert(data *models.PaymentMethod) (paymentMetho
 	return data, err
 }
 func (repo *PostgresRepository) Update(id string, data *models.PaymentMethod) (paymentMethod *models.PaymentMethod, err error) {
-	if err = repo.db.First(&paymentMethod, id).Model(paymentMethod).Updates(data).Preload("PaymentVendors").First(&paymentMethod, id).Error; err != nil {
+	if err = repo.db.First(&paymentMethod, &id).Model(paymentMethod).Updates(data).Preload("PaymentVendors").First(&paymentMethod, &id).Error; err != nil {
 		return
 	}
 	return
 }
 func (repo *PostgresRepository) Delete(id string) (err error) {
-	if err = repo.db.Delete(&models.PaymentMethod{}, id).Error; err != nil {
+	if err = repo.db.Delete(&models.PaymentMethod{}, &id).Error; err != nil {
 		return
 	}
 	return

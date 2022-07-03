@@ -54,6 +54,10 @@ func newPostgres(configs *configs.AppConfig) *gorm.DB {
 			configs.Database.DATABASE)
 	}
 
+	if configs.Database.CONNECTION != "" {
+		connectionString = configs.Database.CONNECTION
+	}
+
 	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 
 	if err != nil {

@@ -1,6 +1,8 @@
 package configs
 
 import (
+	"os"
+	"strconv"
 	"sync"
 
 	"github.com/labstack/gommon/log"
@@ -45,7 +47,19 @@ func GetConfig() *AppConfig {
 func initConfig() *AppConfig {
 	var defaultConfig AppConfig
 
-	defaultConfig.App.PORT = 5404
+	defaultConfig.App.PORT, _ = strconv.Atoi(os.Getenv("PORT"))
+	defaultConfig.App.JWT = os.Getenv("JWT")
+
+	defaultConfig.Database.DRIVER = os.Getenv("DB_DRIVER")
+	defaultConfig.Database.CONNECTION = os.Getenv("DATABASE_URL")
+	defaultConfig.Database.HOST = os.Getenv("DB_HOST")
+	defaultConfig.Database.PORT = os.Getenv("DB_PORT")
+	defaultConfig.Database.DATABASE = os.Getenv("DB_DATABASE")
+	defaultConfig.Database.USERNAME = os.Getenv("DB_USERNAME")
+	defaultConfig.Database.PASSWORD = os.Getenv("DB_PASSWORD")
+
+	defaultConfig.API_Midtrans.SERVER_KEY = os.Getenv("MIDTRANS_KEY")
+	defaultConfig.API_Midtrans.ENV = os.Getenv("MIDTRANS_ENV")
 
 	viper.SetConfigType("env")
 	viper.SetConfigName("config")
