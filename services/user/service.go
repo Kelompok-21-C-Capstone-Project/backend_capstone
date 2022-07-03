@@ -31,6 +31,7 @@ type Service interface {
 	GetById(id string) (user models.UserResponse, err error)
 	GetAll() (users []models.UserResponse, err error)
 	Create(registeruserDTO dto.RegisterUserDTO) (user models.UserResponse, err error)
+	CreateAdmin(registeradminDTO dto.RegisterAdminDTO) (user models.UserResponse, err error)
 	Modify(id string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error)
 	Remove(id string, payloadId string) (err error)
 	UserLogin(loginuserDTO dto.LoginUserDTO) (token string, err error)
@@ -41,13 +42,15 @@ type service struct {
 	hasher     PasswordHash
 	validate   *validator.Validate
 	jwtService JwtService
+	adminKey   string
 }
 
-func NewService(repository Repository, hasher PasswordHash, jwtService JwtService) Service {
+func NewService(repository Repository, hasher PasswordHash, jwtService JwtService, adminKey string) Service {
 	return &service{
 		repository: repository,
 		hasher:     hasher,
 		jwtService: jwtService,
+		adminKey:   adminKey,
 		validate:   validator.New(),
 	}
 }
@@ -73,6 +76,29 @@ func (s *service) GetAll() (users []models.UserResponse, err error) {
 		return
 	}
 	users = *datas
+	return
+}
+
+// Registrasi admin
+func (s *service) CreateAdmin(registeradminDTO dto.RegisterAdminDTO) (user models.UserResponse, err error) {
+	if registeradminDTO.Key != s.adminKey {
+		err = errors.New("unauthorized")
+		return
+	}
+	err = s.validate.Struct(registeradminDTO)
+	if err != nil {
+		return
+	}
+	id := uuid.New().String()
+	registeradminDTO.Password, err = s.hasher.Hash(registeradminDTO.Password)
+	if err != nil {
+		return
+	}
+	data, err := s.repository.Insert(registeradminDTO.GenerateModel(id))
+	if err != nil {
+		return
+	}
+	user = *data
 	return
 }
 

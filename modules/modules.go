@@ -61,7 +61,7 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 	vendorPermitController := vendorController.NewController(vendorPermitService)
 
 	userPermitRepository := userRepo.RepositoryFactory(dbCon)
-	userPermitService := userService.NewService(userPermitRepository, passwordHashPermitUtils, jwtPermitUtils)
+	userPermitService := userService.NewService(userPermitRepository, passwordHashPermitUtils, jwtPermitUtils, configs.App.ADMIN_KEY)
 	userPermitController := user.NewController(userPermitService)
 
 	middlewarePermitUser := UserMiddleware.NewJwtUserMiddleware(configs.App.JWT)

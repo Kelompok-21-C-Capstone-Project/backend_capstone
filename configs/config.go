@@ -11,9 +11,10 @@ import (
 
 type AppConfig struct {
 	App struct {
-		NAME string `mapstructure:"APP_NAME"`
-		PORT int    `mapstructure:"APP_PORT"`
-		JWT  string `mapstructure:"JWT_KEY"`
+		NAME      string `mapstructure:"APP_NAME"`
+		PORT      int    `mapstructure:"APP_PORT"`
+		JWT       string `mapstructure:"JWT_KEY"`
+		ADMIN_KEY string `mapstructure:"APP_ADMINKEY"`
 	}
 	Database struct {
 		DRIVER     string `mapstructure:"DB_DRIVER"`
@@ -49,6 +50,7 @@ func initConfig() *AppConfig {
 
 	defaultConfig.App.PORT, _ = strconv.Atoi(os.Getenv("PORT"))
 	defaultConfig.App.JWT = os.Getenv("JWT")
+	defaultConfig.App.ADMIN_KEY = os.Getenv("ADMIN_KEY")
 
 	defaultConfig.Database.DRIVER = os.Getenv("DB_DRIVER")
 	defaultConfig.Database.CONNECTION = os.Getenv("DATABASE_URL")
