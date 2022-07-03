@@ -28,7 +28,7 @@ type Repository interface {
 }
 
 type Service interface {
-	GetById(id string) (user models.UserResponse, err error)
+	GetById(id string, payloadId string) (user models.UserResponse, err error)
 	GetAll() (users []models.UserResponse, err error)
 	Create(registeruserDTO dto.RegisterUserDTO) (user models.UserResponse, err error)
 	CreateAdmin(registeradminDTO dto.RegisterAdminDTO) (user models.UserResponse, err error)
@@ -56,9 +56,13 @@ func NewService(repository Repository, hasher PasswordHash, jwtService JwtServic
 }
 
 // Untuk mengambil data user berdasarkan id
-func (s *service) GetById(id string) (user models.UserResponse, err error) {
+func (s *service) GetById(id string, payloadId string) (user models.UserResponse, err error) {
 	_, err = uuid.Parse(id)
 	if err != nil {
+		return
+	}
+	if id != payloadId {
+		err = errors.New("unauthorized")
 		return
 	}
 	data, err := s.repository.FindById(id)
@@ -121,16 +125,16 @@ func (s *service) Create(registeruserDTO dto.RegisterUserDTO) (user models.UserR
 	return
 }
 func (s *service) Modify(id string, payloadId string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error) {
-	if id != payloadId {
-		err = errors.New("unauthorized")
-		return
-	}
 	_, err = uuid.Parse(id)
 	if err != nil {
 		return
 	}
 	_, err = s.repository.FindById(id)
 	if err != nil {
+		return
+	}
+	if id != payloadId {
+		err = errors.New("unauthorized")
 		return
 	}
 	updateuserDTO.Password, err = s.hasher.Hash(updateuserDTO.Password)
@@ -142,9 +146,6 @@ func (s *service) Modify(id string, payloadId string, updateuserDTO dto.UpdateUs
 	return
 }
 func (s *service) Remove(id string, payloadId string) (err error) {
-	if id != payloadId {
-		return errors.New("unauthorized")
-	}
 	_, err = uuid.Parse(id)
 	if err != nil {
 		return
@@ -152,6 +153,9 @@ func (s *service) Remove(id string, payloadId string) (err error) {
 	err = s.repository.Delete(id)
 	if err != nil {
 		return
+	}
+	if id != payloadId {
+		return errors.New("unauthorized")
 	}
 	return
 }
