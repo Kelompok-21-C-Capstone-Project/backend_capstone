@@ -122,7 +122,8 @@ func (s *service) Create(registeruserDTO dto.RegisterUserDTO) (user models.UserR
 }
 func (s *service) Modify(id string, payloadId string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error) {
 	if id != payloadId {
-		return errors.New("unauthorized")
+		err = errors.New("unauthorized")
+		return
 	}
 	_, err = uuid.Parse(id)
 	if err != nil {
