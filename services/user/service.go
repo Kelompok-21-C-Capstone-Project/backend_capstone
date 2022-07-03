@@ -32,7 +32,7 @@ type Service interface {
 	GetAll() (users []models.UserResponse, err error)
 	Create(registeruserDTO dto.RegisterUserDTO) (user models.UserResponse, err error)
 	CreateAdmin(registeradminDTO dto.RegisterAdminDTO) (user models.UserResponse, err error)
-	Modify(id string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error)
+	Modify(id string, payloadId string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error)
 	Remove(id string, payloadId string) (err error)
 	UserLogin(loginuserDTO dto.LoginUserDTO) (token string, err error)
 }
@@ -120,7 +120,10 @@ func (s *service) Create(registeruserDTO dto.RegisterUserDTO) (user models.UserR
 	user = *data
 	return
 }
-func (s *service) Modify(id string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error) {
+func (s *service) Modify(id string, payloadId string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error) {
+	if id != payloadId {
+		return errors.New("unauthorized")
+	}
 	_, err = uuid.Parse(id)
 	if err != nil {
 		return

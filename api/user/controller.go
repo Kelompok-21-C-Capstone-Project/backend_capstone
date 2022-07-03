@@ -91,6 +91,7 @@ func (controller *Controller) UpdateUserData(c echo.Context) (err error) {
 
 	data := new(request.UpdateUserRequest)
 	stringId := c.Param("id")
+	payloadId := c.Get("payload").(string)
 	err = c.Bind(&data)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, &response.BasicUserResponse{
@@ -98,7 +99,7 @@ func (controller *Controller) UpdateUserData(c echo.Context) (err error) {
 			Message: err.Error(),
 		})
 	}
-	user, err := controller.service.Modify(stringId, data.DtoReq())
+	user, err := controller.service.Modify(stringId, payloadId, data.DtoReq())
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
 			Status:  "fail",
