@@ -3,6 +3,7 @@ package user
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/user/dto"
+	"errors"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -31,7 +32,7 @@ type Service interface {
 	GetAll() (users []models.UserResponse, err error)
 	Create(registeruserDTO dto.RegisterUserDTO) (user models.UserResponse, err error)
 	Modify(id string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error)
-	Remove(id string) (err error)
+	Remove(id string, payloadId string) (err error)
 	UserLogin(loginuserDTO dto.LoginUserDTO) (token string, err error)
 }
 
@@ -110,7 +111,10 @@ func (s *service) Modify(id string, updateuserDTO dto.UpdateUserDTO) (user model
 	user = *data
 	return
 }
-func (s *service) Remove(id string) (err error) {
+func (s *service) Remove(id string, payloadId string) (err error) {
+	if id != payloadId {
+		return errors.New("unauthorized")
+	}
 	_, err = uuid.Parse(id)
 	if err != nil {
 		return
