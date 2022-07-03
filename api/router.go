@@ -34,6 +34,9 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 		return c.String(http.StatusOK, "Payzone API v1.0.0 Basepath")
 	})
 
+	e.POST("/v1/user_register", controller.User.Create)
+	e.POST("/v1/admin_register", controller.User.CreateAdmin)
+
 	authV1 := e.Group("/v1/auth")
 	authV1.POST("", controller.User.AuthUser)
 
@@ -69,9 +72,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	productV1.DELETE("/:id", controller.Product.Remove)
 
 	userV1 := e.Group("v1/users")
-	productV1.Use(controller.MiddlewareUserJWT.JwtUserMiddleware())
-	userV1.POST("", controller.User.Create)
-	userV1.GET("", controller.User.GetAllData)
+	userV1.Use(controller.MiddlewareUserJWT.JwtUserMiddleware())
 	userV1.GET("/:id", controller.User.GetSingleData)
 	userV1.PUT("/:id", controller.User.UpdateUserData)
 	userV1.DELETE("/:id", controller.User.DeleteData)

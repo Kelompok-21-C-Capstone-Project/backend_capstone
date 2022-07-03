@@ -20,6 +20,19 @@ func NewController(service productcategoryUseCase.Service) *Controller {
 	}
 }
 
+// Create godoc
+// @Summary Create category
+// @Description  Create new product category
+// @Tags         product_categories
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.CreateCategoryRequest true "Payload format" SchemaExample(request.CreateCategoryRequest)
+// @Success      201  {object}  models.ProductCategory
+// @Failure      400  {object}  response.BasicCategoryResponse
+// @Failure      403  {object}  response.BasicCategoryResponse
+// @Failure      500  {object}  response.BasicCategoryResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_categories [post]
 func (controller *Controller) Create(c echo.Context) (err error) {
 	log.Print("enter controller.productcategory.Create")
 	createProductCategoryReq := new(request.CreateCategoryRequest)
@@ -49,6 +62,19 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, datas)
 }
+
+// GetById godoc
+// @Summary Get category
+// @Description  Get product category by id
+// @Tags         product_categories
+// @Produce      json
+// @Param id   path  string  true  "Category ID" minLength:"32"
+// @Success      200  {object}  models.ProductCategory
+// @Failure      400  {object}  response.BasicCategoryResponse
+// @Failure      403  {object}  response.BasicCategoryResponse
+// @Failure      500  {object}  response.BasicCategoryResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_categories/{id} [get]
 func (controller *Controller) GetById(c echo.Context) (err error) {
 	log.Print("enter controller.productcategory.GetById")
 	id := c.Param("id")
@@ -61,6 +87,21 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// Modify godoc
+// @Summary Update category
+// @Description  Update category data
+// @Tags         product_categories
+// @Accept       json
+// @Produce      json
+// @Param id   path  string  true  "Category ID" minLength:"32"
+// @Param Payload body request.UpdateCategoryRequest true "Payload format" SchemaExample(request.UpdateCategoryRequest)
+// @Success      200  {object}  models.ProductCategory
+// @Failure      400  {object}  response.BasicCategoryResponse
+// @Failure      403  {object}  response.BasicCategoryResponse
+// @Failure      500  {object}  response.BasicCategoryResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_categories/{id} [put]
 func (controller *Controller) Modify(c echo.Context) (err error) {
 	log.Print("enter controller.productcategory.Modify")
 	id := c.Param("id")
@@ -80,6 +121,19 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// Remove godoc
+// @Summary Delete category data by id
+// @Description  Delete category data from database
+// @Tags         product_categories
+// @Produce      json
+// @Param id   path  string  true  "Category ID" minLength:"32"
+// @Success      200  {object}  response.BasicCategorySuccessResponse
+// @Failure      400  {object}  response.BasicCategoryResponse
+// @Failure      403  {object}  response.BasicCategoryResponse
+// @Failure      500  {object}  response.BasicCategoryResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_categories/{id} [delete]
 func (controller *Controller) Remove(c echo.Context) (err error) {
 	log.Print("enter controller.productcategory.Remove")
 	id := c.Param("id")
@@ -89,7 +143,7 @@ func (controller *Controller) Remove(c echo.Context) (err error) {
 			Message: err.Error(),
 		})
 	}
-	return c.JSON(http.StatusAccepted, response.BasicCategoryResponse{
+	return c.JSON(http.StatusAccepted, response.BasicCategorySuccessResponse{
 		Status: "success",
 	})
 }

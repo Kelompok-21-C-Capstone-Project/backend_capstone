@@ -3,9 +3,9 @@ package request
 import "backend_capstone/services/productbrand/dto"
 
 type UpdateBrandRequest struct {
-	Name        string `json:"name"`
-	IsAvailable bool   `json:"status"`
-	Description string `json:"description"`
+	Name        string `json:"name" example:"XL"`
+	IsAvailable bool   `json:"status" example:"true"`
+	Description string `json:"description" example:"Excelent Celullar"`
 }
 
 func (req *UpdateBrandRequest) DtoReq() *dto.UpdateBrandDTO {

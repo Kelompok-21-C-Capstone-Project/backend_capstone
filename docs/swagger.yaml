@@ -1,0 +1,1165 @@
+definitions:
+  models.Payment:
+    properties:
+      amount:
+        type: integer
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      method:
+        type: string
+      methodDetails:
+        type: string
+      status:
+        type: string
+      transactionId:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.Product:
+    properties:
+      category:
+        $ref: '#/definitions/models.ProductBrandCategory'
+      category_id:
+        type: string
+      description:
+        example: some description
+        type: string
+      discount:
+        type: number
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      is_discount:
+        example: false
+        type: boolean
+      name:
+        example: Some Product
+        type: string
+      price:
+        example: 30000
+        type: integer
+      stock:
+        example: 30
+        type: integer
+      transactions:
+        items:
+          $ref: '#/definitions/models.Transaction'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  models.ProductBrand:
+    properties:
+      description:
+        example: some description
+        type: string
+      icon_path:
+        example: /path/to/file
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      isAvailable:
+        example: false
+        type: boolean
+      name:
+        example: some name
+        type: string
+      product_category:
+        items:
+          $ref: '#/definitions/models.ProductCategory'
+        type: array
+    type: object
+  models.ProductBrandCategory:
+    properties:
+      brand_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      category_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      products:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
+      slug:
+        type: string
+    type: object
+  models.ProductCategory:
+    properties:
+      description:
+        example: some description
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      isAvailable:
+        example: true
+        type: boolean
+      name:
+        example: Some Name
+        type: string
+      slug:
+        example: some-name
+        type: string
+    type: object
+  models.Transaction:
+    properties:
+      date:
+        type: string
+      description:
+        example: some description
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      payment:
+        $ref: '#/definitions/models.Payment'
+      product_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      updated:
+        type: string
+      user_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+    type: object
+  models.UserResponse:
+    properties:
+      email:
+        example: testmail@mail.com
+        format: email
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        format: uuid
+        type: string
+      name:
+        example: somen name
+        type: string
+      phone:
+        example: "0811111111"
+        type: string
+      role:
+        example: user
+        type: string
+      username:
+        example: username
+        type: string
+    type: object
+  request.CreateBrandRequest:
+    properties:
+      description:
+        example: Telekomunikasi
+        type: string
+      name:
+        example: Telkomsel
+        type: string
+    type: object
+  request.CreateCategoryRequest:
+    properties:
+      description:
+        example: some description
+        type: string
+      name:
+        example: soma name
+        type: string
+    type: object
+  request.CreateProductRequest:
+    properties:
+      brand_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      category_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      description:
+        example: some description
+        type: string
+      name:
+        example: Some Product
+        type: string
+      price:
+        example: 30000
+        type: integer
+      stock:
+        example: 20
+        type: integer
+    type: object
+  request.LoginUserRequest:
+    properties:
+      identifier:
+        example: username
+        minLength: 5
+        type: string
+      password:
+        example: supersecret
+        minLength: 8
+        type: string
+    type: object
+  request.RegisterAdminRequest:
+    properties:
+      email:
+        example: somemail@mail.com
+        format: email
+        type: string
+      key:
+        example: adminsupersecret
+        type: string
+      name:
+        example: some name
+        minLength: 5
+        type: string
+      password:
+        example: supersecret
+        minLength: 8
+        type: string
+      phone:
+        example: "0833333333"
+        minLength: 10
+        type: string
+      username:
+        example: username
+        minLength: 5
+        type: string
+    type: object
+  request.RegisterUserRequest:
+    properties:
+      email:
+        example: test@mail.com
+        format: email
+        type: string
+      name:
+        example: some name
+        minLength: 5
+        type: string
+      password:
+        example: supersecret
+        minLength: 8
+        type: string
+      phone:
+        example: "081111111"
+        minLength: 10
+        type: string
+      username:
+        example: some username
+        minLength: 5
+        type: string
+    type: object
+  request.UpdateBrandRequest:
+    properties:
+      description:
+        example: Excelent Celullar
+        type: string
+      name:
+        example: XL
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  request.UpdateCategoryRequest:
+    properties:
+      description:
+        example: some description
+        type: string
+      name:
+        example: some name
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  request.UpdateProductRequest:
+    properties:
+      brand_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      category_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      description:
+        example: some description
+        type: string
+      is_discount:
+        example: true
+        type: boolean
+      name:
+        example: Some Product
+        type: string
+      price:
+        example: 30000
+        type: integer
+      status:
+        example: true
+        type: boolean
+      stock:
+        example: 20
+        type: integer
+    type: object
+  request.UpdateUserRequest:
+    properties:
+      name:
+        example: some name
+        type: string
+      password:
+        example: supersecret
+        type: string
+      phone:
+        example: "0822222222"
+        type: string
+    type: object
+  response.BasicBrandResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicBrandSuccessResponse:
+    properties:
+      status:
+        example: success
+        type: string
+    type: object
+  response.BasicCategoryResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicCategorySuccessResponse:
+    properties:
+      status:
+        example: success
+        type: string
+    type: object
+  response.BasicProductResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicProductSuccessResponse:
+    properties:
+      status:
+        example: success
+        type: string
+    type: object
+  response.BasicUserResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicUserSuccessResponse:
+    properties:
+      status:
+        example: success
+        type: string
+    type: object
+  response.SuccessLoginResponse:
+    properties:
+      status:
+        example: success
+        type: string
+      token:
+        example: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx.eyJjcmVhdGVkX2F0IjoiMjAyMi0wNy0wxxxxxxxxxxxxxxxxxxxxxxxxxxxxF9hdCI6IjIwMjItMDctMDNUMTA6MjA6NDYuMzAzNDA1OSswNzowMCIsImlkIjoiYWZjNxxxxxxxxxxxxxxxxxxxxxxxxxxxxbmFtZSI6Iml6YXFpIiwicm9xxxxxxxxxxxxxxxxxxxxxxxxxxxxJ9.-VKi0DWLKT1SxxxxxxxxxxxxxY2UbxbtFOj7cPA
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/admin_register:
+    post:
+      consumes:
+      - application/json
+      description: Create new admin
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterAdminRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Admin register
+      tags:
+      - admins
+  /v1/auth:
+    post:
+      consumes:
+      - application/json
+      description: Delete user data from database
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user data by id
+      tags:
+      - users
+  /v1/product_brands:
+    get:
+      description: Get product brand by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ProductBrand'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get brand
+      tags:
+      - product_brands
+    post:
+      consumes:
+      - application/json
+      description: Create new product brand
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateBrandRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ProductBrand'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create brand
+      tags:
+      - product_brands
+  /v1/product_brands/{id}:
+    delete:
+      description: Delete brand data from database
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicBrandSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete brand data by id
+      tags:
+      - product_brands
+    get:
+      description: Get product brand by id
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductBrand'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get brand
+      tags:
+      - product_brands
+    put:
+      consumes:
+      - application/json
+      description: Update brand data
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateBrandRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductBrand'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update brand
+      tags:
+      - product_brands
+  /v1/product_brands/{id}/categories/{category_id}:
+    delete:
+      description: Remove category from brand
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: category_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicBrandSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Remove category from brand
+      tags:
+      - product_brands
+    post:
+      description: Add category to brand
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: category_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicBrandSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add category to brand
+      tags:
+      - product_brands
+  /v1/product_categories:
+    post:
+      consumes:
+      - application/json
+      description: Create new product category
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ProductCategory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create category
+      tags:
+      - product_categories
+  /v1/product_categories/{id}:
+    delete:
+      description: Delete category data from database
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicCategorySuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete category data by id
+      tags:
+      - product_categories
+    get:
+      description: Get product category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductCategory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get category
+      tags:
+      - product_categories
+    put:
+      consumes:
+      - application/json
+      description: Update category data
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductCategory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update category
+      tags:
+      - product_categories
+  /v1/products:
+    get:
+      description: Get product product by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ProductBrand'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get product
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Create new product product
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create product
+      tags:
+      - products
+  /v1/products/{id}:
+    delete:
+      description: Delete product data from database
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicProductSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete product data by id
+      tags:
+      - products
+    get:
+      description: Get product product by id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get product
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: Update product data
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update product
+      tags:
+      - products
+  /v1/user_register:
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: User register
+      tags:
+      - users
+  /v1/users/{id}:
+    delete:
+      description: Delete user data from database
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicUserSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user data by id
+      tags:
+      - users
+    get:
+      description: Get detailed user data by id from database
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user data by id
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user data
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user
+      tags:
+      - users
+swagger: "2.0"
