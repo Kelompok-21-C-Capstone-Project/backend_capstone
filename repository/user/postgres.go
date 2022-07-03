@@ -17,7 +17,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id string) (user *models.User, err error) {
+func (repo *PostgresRepository) FindById(id string) (user *models.UserResponse, err error) {
 	log.Print(id)
 	err = repo.db.Debug().First(&user, &id).Error
 	if err != nil {
@@ -32,22 +32,26 @@ func (repo *PostgresRepository) FindByIdentifier(identifier string) (user *model
 	}
 	return
 }
-func (repo *PostgresRepository) FindAll() (users *[]models.User, err error) {
+func (repo *PostgresRepository) FindAll() (users *[]models.UserResponse, err error) {
 	err = repo.db.Find(&users).Error
 	if err != nil {
 		return
 	}
 	return
 }
-func (repo *PostgresRepository) Insert(data *models.User) (user *models.User, err error) {
-	err = repo.db.Create(data).Error
+func (repo *PostgresRepository) Insert(data *models.User) (user *models.UserResponse, err error) {
+	err = repo.db.Create(data).First(&user, &data.Id).Error
 	if err != nil {
 		return
 	}
-	return data, err
+	return
 }
-func (repo *PostgresRepository) Update(id string, data *models.User) (user *models.User, err error) {
-	err = repo.db.First(user, &id).Select("name", "phone", "password").UpdateColumns(data).Error
+func (repo *PostgresRepository) Update(id string, data *models.User) (user *models.UserResponse, err error) {
+	err = repo.db.First(&models.User{}, &id).Select("name", "phone", "password").UpdateColumns(&data).Error
+	if err != nil {
+		return
+	}
+	err = repo.db.First(&user, &id).Error
 	if err != nil {
 		return
 	}

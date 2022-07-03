@@ -2,6 +2,8 @@ package modules
 
 import (
 	"backend_capstone/api"
+	AdminMiddleware "backend_capstone/api/middleware/admin"
+	UserMiddleware "backend_capstone/api/middleware/user"
 	paymentController "backend_capstone/api/payment"
 	methodController "backend_capstone/api/paymentmethod"
 	vendorController "backend_capstone/api/paymentvendor"
@@ -26,13 +28,13 @@ import (
 	"backend_capstone/utils"
 	"backend_capstone/utils/midtransdriver"
 	"backend_capstone/utils/security"
-
 	"log"
 )
 
 func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdriver.MidtransDriver, configs *configs.AppConfig) api.Controller {
 	log.Print("Enter RegisterModules")
 
+	jwtPermitUtils := security.NewJwtService(configs.App.JWT)
 	passwordHashPermitUtils := security.NewPasswordHash()
 
 	paymentPermitService := paymentService.NewService(nil, midtransDriver)
@@ -59,17 +61,22 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 	vendorPermitController := vendorController.NewController(vendorPermitService)
 
 	userPermitRepository := userRepo.RepositoryFactory(dbCon)
-	userPermitService := userService.NewService(userPermitRepository, passwordHashPermitUtils)
+	userPermitService := userService.NewService(userPermitRepository, passwordHashPermitUtils, jwtPermitUtils)
 	userPermitController := user.NewController(userPermitService)
 
+	middlewarePermitUser := UserMiddleware.NewJwtUserMiddleware(configs.App.JWT)
+	middlewarePermitAdmin := AdminMiddleware.NewJwtAdminMiddleware(configs.App.JWT)
+
 	controllers := api.Controller{
-		ProductCategory: categoryPermitController,
-		ProductBrand:    brandPermitController,
-		Product:         productPermitController,
-		PaymentMethod:   methodPermitController,
-		PaymentVendor:   vendorPermitController,
-		Payment:         paymentV1PermitController,
-		User:            userPermitController,
+		ProductCategory:    categoryPermitController,
+		ProductBrand:       brandPermitController,
+		Product:            productPermitController,
+		PaymentMethod:      methodPermitController,
+		PaymentVendor:      vendorPermitController,
+		Payment:            paymentV1PermitController,
+		User:               userPermitController,
+		MiddlewareUserJWT:  middlewarePermitUser,
+		MiddlewareAdminJWT: middlewarePermitAdmin,
 	}
 
 	return controllers
