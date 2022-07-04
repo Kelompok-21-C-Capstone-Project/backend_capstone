@@ -2,6 +2,7 @@ package api
 
 import (
 	AdminMiddleware "backend_capstone/api/middleware/admin"
+	GlobalMiddleware "backend_capstone/api/middleware/global"
 	UserMiddleware "backend_capstone/api/middleware/user"
 	"backend_capstone/api/payment"
 	"backend_capstone/api/paymentmethod"
@@ -28,6 +29,7 @@ type Controller struct {
 
 	MiddlewareAdminJWT AdminMiddleware.JwtService
 	MiddlewareUserJWT  UserMiddleware.JwtService
+	MiddlewareJWT      GlobalMiddleware.JwtService
 }
 
 func RegistrationPath(e *echo.Echo, controller Controller) {
@@ -83,4 +85,8 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 
 	clientV1 := e.Group("v1/clients")
 	clientV1.GET("/products", controller.Product.ClientGetAll)
+
+	tokenV1 := e.Group("v1/tokens/")
+	tokenV1.Use(controller.MiddlewareJWT.JwtMiddleware())
+	tokenV1.GET("", controller.User.ParseToken)
 }

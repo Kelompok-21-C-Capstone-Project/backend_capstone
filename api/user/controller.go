@@ -6,6 +6,7 @@ import (
 	"backend_capstone/services/user"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -238,5 +239,43 @@ func (controller *Controller) AuthUser(c echo.Context) (err error) {
 	return c.JSON(http.StatusAccepted, &response.SuccessLoginResponse{
 		Status: "success",
 		Token:  token,
+	})
+}
+
+// GetSingleData godoc
+// @Summary Get token payload
+// @Description  Get detailed token data
+// @Tags         tokens
+// @Produce      json
+// @Success      200  {object}  response.JwtPayload
+// @Failure      400  {object}  response.BasicUserResponse
+// @Failure      403  {object}  response.BasicUserResponse
+// @Failure      500  {object}  response.BasicUserResponse
+// @Security ApiKeyAuth
+// @Router       /v1/tokens [get]
+func (controller *Controller) ParseToken(c echo.Context) (err error) {
+	signature := strings.Split(c.Request().Header.Get("Authorization"), " ")
+	if len(signature) < 2 {
+		log.Print("fail")
+		return c.JSON(http.StatusForbidden, response.BasicUserResponse{
+			Status:  "fail",
+			Message: "invalid token",
+		})
+	}
+
+	if signature[0] != "Bearer" {
+		log.Print("fail 2")
+		return c.JSON(http.StatusForbidden, response.BasicUserResponse{
+			Status:  "fail",
+			Message: "invalid token",
+		})
+	}
+	return c.JSON(200, &response.JwtPayload{
+		Id:       c.Get("payload").(string),
+		Username: c.Get("username").(string),
+		Name:     c.Get("name").(string),
+		Role:     []string{c.Get("role").(string)},
+		Email:    c.Get("email").(string),
+		Phone:    c.Get("phone").(string),
 	})
 }

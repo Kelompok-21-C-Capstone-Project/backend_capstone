@@ -1,7 +1,7 @@
-package admin
+package middleware
 
 import (
-	"backend_capstone/api/middleware/admin/response"
+	"backend_capstone/api/middleware/user/response"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,28 +13,28 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type jwtAdminMiddleware struct {
+type jwtMiddleware struct {
 	key string
 }
 
 type JwtService interface {
-	JwtAdminMiddleware() echo.MiddlewareFunc
+	JwtMiddleware() echo.MiddlewareFunc
 }
 
 var (
 	jwtSignedMethod = jwt.SigningMethodHS256
 )
 
-func NewJwtAdminMiddleware(secretKey string) JwtService {
-	return &jwtAdminMiddleware{
+func NewJwtMiddleware(secretKey string) JwtService {
+	return &jwtMiddleware{
 		key: secretKey,
 	}
 }
 
-func (s *jwtAdminMiddleware) JwtAdminMiddleware() echo.MiddlewareFunc {
+func (s *jwtMiddleware) JwtMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			log.Print("enter middleware.JwtAdminMiddleware")
+			log.Print("enter middleware.JwtMiddleware")
 
 			signature := strings.Split(c.Request().Header.Get("Authorization"), " ")
 			if len(signature) < 2 {
@@ -67,12 +67,6 @@ func (s *jwtAdminMiddleware) JwtAdminMiddleware() echo.MiddlewareFunc {
 
 			method, ok := token.Method.(*jwt.SigningMethodHMAC)
 			if !ok || method != jwtSignedMethod {
-				return c.JSON(http.StatusForbidden, response.FailResponse{
-					Status:  "fail",
-					Message: "invalid token",
-				})
-			}
-			if reflect.ValueOf(claim["role"]).Index(0).Interface().(string) != "admin" {
 				return c.JSON(http.StatusForbidden, response.FailResponse{
 					Status:  "fail",
 					Message: "invalid token",

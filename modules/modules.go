@@ -3,6 +3,7 @@ package modules
 import (
 	"backend_capstone/api"
 	AdminMiddleware "backend_capstone/api/middleware/admin"
+	GlobalMiddleware "backend_capstone/api/middleware/global"
 	UserMiddleware "backend_capstone/api/middleware/user"
 	paymentController "backend_capstone/api/payment"
 	methodController "backend_capstone/api/paymentmethod"
@@ -73,6 +74,7 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 
 	middlewarePermitUser := UserMiddleware.NewJwtUserMiddleware(configs.App.JWT)
 	middlewarePermitAdmin := AdminMiddleware.NewJwtAdminMiddleware(configs.App.JWT)
+	middlewarePermitGlobal := GlobalMiddleware.NewJwtMiddleware(configs.App.JWT)
 
 	controllers := api.Controller{
 		ProductCategory:    categoryPermitController,
@@ -85,6 +87,7 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 		MiddlewareUserJWT:  middlewarePermitUser,
 		MiddlewareAdminJWT: middlewarePermitAdmin,
 		Transaction:        transactionPermitController,
+		MiddlewareJWT:      middlewarePermitGlobal,
 	}
 
 	return controllers

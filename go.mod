@@ -1,4 +1,5 @@
 module backend_capstone
+
 // +heroku goVersion go1.17
 go 1.17
 
@@ -30,6 +31,7 @@ require (
 	github.com/jackc/pgtype v1.11.0 // indirect
 	github.com/jackc/pgx/v4 v4.16.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 )
 
 require (
