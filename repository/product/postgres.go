@@ -33,6 +33,16 @@ func (repo *PostgresRepository) FindAll() (products *[]models.Product, err error
 	}
 	return
 }
+func (repo *PostgresRepository) ClientFindAllBySlug(slug string) (products *dto.ProductCategory, err error) {
+	err = repo.db.Table("product_categories").Select("product_categories.id, product_categories.name, product_categories.slug").Find(&products, "slug = ?", &slug).Error
+	if err != nil {
+		return
+	}
+	if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as group, products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.product_category_id = ?", products.Id).Find(&products.Products).Error; err != nil {
+		return
+	}
+	return
+}
 func (repo *PostgresRepository) ClientFindAll() (products *[]dto.ProductCategory, err error) {
 	err = repo.db.Table("product_categories").Select("product_categories.id, product_categories.name, product_categories.slug").Find(&products).Error
 	if err != nil {
