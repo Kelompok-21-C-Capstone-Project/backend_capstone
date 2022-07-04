@@ -18,11 +18,6 @@ const docTemplate = `{
     "paths": {
         "/v1/admin_register": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Create new admin",
                 "consumes": [
                     "application/json"
@@ -1038,6 +1033,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/tokens": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get detailed token data",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tokens"
+                ],
+                "summary": "Get token payload",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.JwtPayload"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicUserResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicUserResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicUserResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/transactions": {
             "get": {
                 "security": [
@@ -1305,11 +1343,6 @@ const docTemplate = `{
         },
         "/v1/user_register": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Create new user",
                 "consumes": [
                     "application/json"
@@ -1582,7 +1615,7 @@ const docTemplate = `{
                 },
                 "slug": {
                     "type": "string",
-                    "example": "some category"
+                    "example": "some-category"
                 }
             }
         },
@@ -2136,6 +2169,32 @@ const docTemplate = `{
                 "status": {
                     "type": "string",
                     "example": "success"
+                }
+            }
+        },
+        "response.JwtPayload": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },

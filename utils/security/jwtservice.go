@@ -25,6 +25,8 @@ func (service *jwtService) CreateJWT(data models.User) (tokenString string, err 
 			"id":         data.Id,
 			"username":   data.Username,
 			"name":       data.Name,
+			"email":      data.Email,
+			"phone":      data.Phone,
 			"role":       []string{data.Role},
 			"created_at": timeNow,
 			"expired_at": timeNow.Add(1 * time.Hour),

@@ -14,6 +14,7 @@ import (
 	"os"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
@@ -21,6 +22,7 @@ func main() {
 
 	// Initialize echo
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{}))
 
 	// Get server config variable
 	config := configs.GetConfig()

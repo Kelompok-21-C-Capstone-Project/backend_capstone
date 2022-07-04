@@ -39,7 +39,7 @@ definitions:
           $ref: '#/definitions/dto.ClientProduct'
         type: array
       slug:
-        example: some category
+        example: some-category
         type: string
     type: object
   models.Payment:
@@ -435,6 +435,23 @@ definitions:
         example: success
         type: string
     type: object
+  response.JwtPayload:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      role:
+        items:
+          type: string
+        type: array
+      username:
+        type: string
+    type: object
   response.SuccessLoginResponse:
     properties:
       status:
@@ -478,8 +495,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/response.BasicUserResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Admin register
       tags:
       - admins
@@ -1100,6 +1115,33 @@ paths:
       summary: Update product
       tags:
       - products
+  /v1/tokens:
+    get:
+      description: Get detailed token data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JwtPayload'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get token payload
+      tags:
+      - tokens
   /v1/transactions:
     get:
       description: Get product product by id
@@ -1300,8 +1342,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/response.BasicUserResponse'
-      security:
-      - ApiKeyAuth: []
       summary: User register
       tags:
       - users
