@@ -103,6 +103,7 @@ func (controller *Controller) ClientGetAll(c echo.Context) (err error) {
 // @Description  Get product by specific category for frontend from database
 // @Tags         clients
 // @Produce      json
+// @Param slug   path  string  true  "Slug category"
 // @Success      200  {object}  dto.ProductCategory
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
