@@ -4,6 +4,7 @@ import (
 	"backend_capstone/api/product/request"
 	"backend_capstone/api/product/response"
 	productUseCase "backend_capstone/services/product"
+	_ "backend_capstone/services/product/dto"
 	"log"
 	"net/http"
 
@@ -54,7 +55,7 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 
 // GetAll godoc
 // @Summary Get product
-// @Description  Get product product by id
+// @Description  Get product data from database
 // @Tags         products
 // @Produce      json
 // @Success      200  {array}  models.ProductBrand
@@ -74,6 +75,17 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, datas)
 }
+
+// ClientGetAll godoc
+// @Summary Get product for frontned
+// @Description  Get product for frontned from database
+// @Tags         clients
+// @Produce      json
+// @Success      200  {array}  dto.ProductCategory
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Router       /v1/clients/products [get]
 func (controller *Controller) ClientGetAll(c echo.Context) (err error) {
 	log.Print("enter controller.product.GetAll")
 	datas, err := controller.service.ClientGetAll()
