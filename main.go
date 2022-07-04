@@ -3,6 +3,7 @@ package main
 import (
 	"backend_capstone/api"
 	"backend_capstone/configs"
+	_ "backend_capstone/docs"
 	"backend_capstone/modules"
 	"backend_capstone/utils"
 	"backend_capstone/utils/gormdriver"
