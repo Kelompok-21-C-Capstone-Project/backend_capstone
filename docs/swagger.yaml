@@ -543,7 +543,7 @@ paths:
       - users
   /v1/clients/products:
     get:
-      description: Get product for frontned from database
+      description: Get all products by all category frontned from database
       produces:
       - application/json
       responses:
@@ -565,7 +565,32 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/response.BasicProductResponse'
-      summary: Get product for frontned
+      summary: Get products by all category for frontned
+      tags:
+      - clients
+  /v1/clients/products/:slug:
+    get:
+      description: Get product by specific category for frontend from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ProductCategory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      summary: Get product by specific category for frontend
       tags:
       - clients
   /v1/product_brands:

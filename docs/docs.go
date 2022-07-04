@@ -127,14 +127,14 @@ const docTemplate = `{
         },
         "/v1/clients/products": {
             "get": {
-                "description": "Get product for frontned from database",
+                "description": "Get all products by all category frontned from database",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "clients"
                 ],
-                "summary": "Get product for frontned",
+                "summary": "Get products by all category for frontned",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -143,6 +143,44 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/dto.ProductCategory"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/clients/products/:slug": {
+            "get": {
+                "description": "Get product by specific category for frontend from database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Get product by specific category for frontend",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProductCategory"
                         }
                     },
                     "400": {

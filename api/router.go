@@ -85,6 +85,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 
 	clientV1 := e.Group("v1/clients")
 	clientV1.GET("/products", controller.Product.ClientGetAll)
+	clientV1.GET("/products/:slug", controller.Product.ClientGetAllBySlug)
 
 	tokenV1 := e.Group("v1/tokens")
 	tokenV1.Use(controller.MiddlewareJWT.JwtMiddleware())

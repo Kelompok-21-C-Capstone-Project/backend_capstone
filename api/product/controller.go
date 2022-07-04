@@ -77,8 +77,8 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 }
 
 // ClientGetAll godoc
-// @Summary Get product for frontned
-// @Description  Get product for frontned from database
+// @Summary Get products by all category for frontned
+// @Description  Get all products by all category frontned from database
 // @Tags         clients
 // @Produce      json
 // @Success      200  {array}  dto.ProductCategory
@@ -89,6 +89,29 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 func (controller *Controller) ClientGetAll(c echo.Context) (err error) {
 	log.Print("enter controller.product.GetAll")
 	datas, err := controller.service.ClientGetAll()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicProductResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusCreated, datas)
+}
+
+// ClientGetAllBySlug godoc
+// @Summary Get product by specific category for frontend
+// @Description  Get product by specific category for frontend from database
+// @Tags         clients
+// @Produce      json
+// @Success      200  {object}  dto.ProductCategory
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Router       /v1/clients/products/:slug [get]
+func (controller *Controller) ClientGetAllBySlug(c echo.Context) (err error) {
+	log.Print("enter controller.product.GetAll")
+	slug := c.Param("slug")
+	datas, err := controller.service.ClientGetAllBySlug(slug)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicProductResponse{
 			Status:  "fail",
