@@ -1,52 +1,163 @@
 package transaction
 
 import (
-	"backend_capstone/models"
+	"backend_capstone/api/transaction/request"
+	"backend_capstone/api/transaction/response"
+	transactionUseCase "backend_capstone/services/transaction"
+	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
-//> fungsi get (read) koreksi
-func GetAllTransaction(c echo.Context) error {
-	var transaction []models.Transaction
-	var error error
-	if error != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": error.Error()})
-	}
-	return c.JSON(http.StatusOK, transaction)
+type Controller struct {
+	service transactionUseCase.Service
 }
 
-//> fungsi post(create) koreksi
-func CreateTransaction(c echo.Context) error {
-	var input []models.Transaction
-	err := c.Bind(&input)
+// Create godoc
+// @Summary Create product
+// @Description  Create new product product
+// @Tags         products
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
+// @Success      201  {object}  models.Product
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products [post]
+func NewController(service transactionUseCase.Service) *Controller {
+	return &Controller{
+		service: service,
+	}
+}
+func (controller *Controller) Create(c echo.Context) (err error) {
+	log.Print("enter controller.transaction.Create")
+	payloadId := c.Get("payload").(string)
+	createProductReq := new(request.CreateTransactionRequest)
+	if err := c.Bind(createProductReq); err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	data, err := controller.service.Create(payloadId, createProductReq.DtoReq())
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
 	}
-
-	return c.JSON(http.StatusOK, input)
+	return c.JSON(http.StatusCreated, data)
 }
 
-//> fungsi delete msh butuh koreksi dibagian return
-func DeleteTransaction(c echo.Context) error {
-	var transaction map[int]*models.Transaction
-	id, _ := strconv.Atoi(c.Param("id"))
-	delete(transaction, id)
-	return c.NoContent(http.StatusNoContent)
+// GetAll godoc
+// @Summary Get product
+// @Description  Get product product by id
+// @Tags         products
+// @Produce      json
+// @Success      200  {array}  models.ProductBrand
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products [get]
+func (controller *Controller) GetAll(c echo.Context) (err error) {
+	log.Print("enter controller.transaction.GetAll")
+	datas, err := controller.service.GetAll()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusCreated, datas)
 }
 
-//>fungsi put(update) msh butuh koreksi
-func UpdateTransaction(c echo.Context) error {
-	var transaction map[int]*models.Transaction
-	n := new(models.Transaction)
-	if err := c.Bind(n); err != nil {
-		return err
+// GetById godoc
+// @Summary Get product
+// @Description  Get product product by id
+// @Tags         products
+// @Produce      json
+// @Param id   path  string  true  "Product ID" minLength:"32"
+// @Success      200  {object}  models.Product
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products/{id} [get]
+func (controller *Controller) GetById(c echo.Context) (err error) {
+	log.Print("enter controller.transaction.GetById")
+	id := c.Param("id")
+	data, err := controller.service.GetById(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
 	}
-	id, _ := strconv.Atoi(c.Param("id"))
-	transaction[id].Description = n.Description
-	transaction[id].CreatedAt = n.CreatedAt
-	// transaction[id].TransactionDetail = n.TransactionDetail
-	return c.JSON(http.StatusOK, transaction[id])
+	return c.JSON(http.StatusCreated, data)
+}
+
+// Modify godoc
+// @Summary Update product
+// @Description  Update product data
+// @Tags         products
+// @Accept       json
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Param Payload body request.UpdateProductRequest true "Payload format" SchemaExample(request.UpdateProductRequest)
+// @Success      200  {object}  models.Product
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products/{id} [put]
+func (controller *Controller) Modify(c echo.Context) (err error) {
+	// log.Print("enter controller.transaction.Modify")
+	// id := c.Param("id")
+	// updateProductCategoryReq := new(request.UpdateProductRequest)
+	// if err = c.Bind(updateProductCategoryReq); err != nil {
+	// 	return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+	// 		Status:  "fail",
+	// 		Message: err.Error(),
+	// 	})
+	// }
+	// data, err := controller.service.Modify(id, *updateProductCategoryReq.DtoReq())
+	// if err != nil {
+	// 	return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+	// 		Status:  "fail",
+	// 		Message: err.Error(),
+	// 	})
+	// }
+	// return c.JSON(http.StatusCreated, data)
+	return
+}
+
+// Remove godoc
+// @Summary Delete product data by id
+// @Description  Delete product data from database
+// @Tags         products
+// @Produce      json
+// @Param id   path  string  true  "Brand ID" minLength:"32"
+// @Success      200  {object}  response.BasicProductSuccessResponse
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products/{id} [delete]
+func (controller *Controller) Remove(c echo.Context) (err error) {
+	// log.Print("enter controller.transaction.Remove")
+	// id := c.Param("id")
+	// if err = controller.service.Remove(id); err != nil {
+	// 	return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+	// 		Status:  "fail",
+	// 		Message: err.Error(),
+	// 	})
+	// }
+	// return c.JSON(http.StatusAccepted, response.BasicTransactionSuccessResponse{
+	// 	Status: "success",
+	// })
+	return
 }

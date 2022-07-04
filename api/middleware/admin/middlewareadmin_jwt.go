@@ -79,7 +79,7 @@ func (s *jwtAdminMiddleware) JwtAdminMiddleware() echo.MiddlewareFunc {
 				})
 			}
 
-			c.Set("payload", fmt.Sprintf("%v:%s", claim["id"], claim["username"].(string)))
+			c.Set("payload", fmt.Sprintf("%s", claim["id"]))
 
 			return next(c)
 		}

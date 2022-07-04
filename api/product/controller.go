@@ -14,6 +14,12 @@ type Controller struct {
 	service productUseCase.Service
 }
 
+func NewController(service productUseCase.Service) *Controller {
+	return &Controller{
+		service: service,
+	}
+}
+
 // Create godoc
 // @Summary Create product
 // @Description  Create new product product
@@ -27,11 +33,6 @@ type Controller struct {
 // @Failure      500  {object}  response.BasicProductResponse
 // @Security ApiKeyAuth
 // @Router       /v1/products [post]
-func NewController(service productUseCase.Service) *Controller {
-	return &Controller{
-		service: service,
-	}
-}
 func (controller *Controller) Create(c echo.Context) (err error) {
 	log.Print("enter controller.product.Create")
 	createProductReq := new(request.CreateProductRequest)

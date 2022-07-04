@@ -760,19 +760,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     }
                 }
@@ -815,19 +815,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     }
                 }
@@ -867,19 +867,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     }
                 }
@@ -929,19 +929,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     }
                 }
@@ -979,19 +979,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductResponse"
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     }
                 }
@@ -1735,6 +1735,19 @@ const docTemplate = `{
                 "status": {
                     "type": "string",
                     "example": "success"
+                }
+            }
+        },
+        "response.BasicTransactionResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "error message"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "fail"
                 }
             }
         },
