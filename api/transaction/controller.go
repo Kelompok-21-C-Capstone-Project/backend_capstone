@@ -26,7 +26,7 @@ type Controller struct {
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/products [post]
+// @Router       /v1/transactions [post]
 func NewController(service transactionUseCase.Service) *Controller {
 	return &Controller{
 		service: service,
@@ -62,7 +62,7 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/products [get]
+// @Router       /v1/transactions [get]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.GetAll")
 	datas, err := controller.service.GetAll()
@@ -86,7 +86,7 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/products/{id} [get]
+// @Router       /v1/transactions/{id} [get]
 func (controller *Controller) GetById(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.GetById")
 	id := c.Param("id")
@@ -113,7 +113,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/products/{id} [put]
+// @Router       /v1/transactions/{id} [put]
 func (controller *Controller) Modify(c echo.Context) (err error) {
 	// log.Print("enter controller.transaction.Modify")
 	// id := c.Param("id")
@@ -146,7 +146,7 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/products/{id} [delete]
+// @Router       /v1/transactions/{id} [delete]
 func (controller *Controller) Remove(c echo.Context) (err error) {
 	// log.Print("enter controller.transaction.Remove")
 	// id := c.Param("id")

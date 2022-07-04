@@ -49,6 +49,7 @@ func initConfig() *AppConfig {
 	var defaultConfig AppConfig
 
 	defaultConfig.App.PORT, _ = strconv.Atoi(os.Getenv("PORT"))
+	defaultConfig.App.NAME = os.Getenv("APP_NAME")
 	defaultConfig.App.JWT = os.Getenv("JWT")
 	defaultConfig.App.ADMIN_KEY = os.Getenv("ADMIN_KEY")
 

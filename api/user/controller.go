@@ -51,7 +51,6 @@ func (controller *Controller) GetAllData(c echo.Context) (err error) {
 // @Failure      400  {object}  response.BasicUserResponse
 // @Failure      403  {object}  response.BasicUserResponse
 // @Failure      500  {object}  response.BasicUserResponse
-// @Security ApiKeyAuth
 // @Router       /v1/user_register [post]
 func (controller *Controller) Create(c echo.Context) (err error) {
 	log.Print("enter controller.user.Create")
@@ -87,7 +86,6 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // @Failure      400  {object}  response.BasicUserResponse
 // @Failure      403  {object}  response.BasicUserResponse
 // @Failure      500  {object}  response.BasicUserResponse
-// @Security ApiKeyAuth
 // @Router       /v1/admin_register [post]
 func (controller *Controller) CreateAdmin(c echo.Context) (err error) {
 	log.Print("enter controller.user.Create")

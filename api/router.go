@@ -70,7 +70,6 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	productV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
 	productV1.POST("", controller.Product.Create)
 	productV1.GET("", controller.Product.GetAll)
-	productV1.GET("/clients", controller.Product.ClientGetAll)
 	productV1.GET("/:id", controller.Product.GetById)
 	productV1.PUT("/:id", controller.Product.Modify)
 	productV1.DELETE("/:id", controller.Product.Remove)
@@ -81,4 +80,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	userV1.PUT("/:id", controller.User.UpdateUserData)
 	userV1.DELETE("/:id", controller.User.DeleteData)
 	// e.GET("/user", controller.User.GetAllData, middleware.IsAuthenticated)
+
+	clientV1 := e.Group("v1/clients")
+	clientV1.GET("/products", controller.Product.ClientGetAll)
 }
