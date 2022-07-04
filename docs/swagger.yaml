@@ -438,18 +438,25 @@ definitions:
   response.JwtPayload:
     properties:
       email:
+        example: somemail@mail.com
         type: string
       id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
       name:
+        example: some name
         type: string
       phone:
+        example: 08XXXXXXXX
         type: string
       role:
+        example:
+        - admin
         items:
           type: string
         type: array
       username:
+        example: username
         type: string
     type: object
   response.SuccessLoginResponse:

@@ -2176,25 +2176,33 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "somemail@mail.com"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "some name"
                 },
                 "phone": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "08XXXXXXXX"
                 },
                 "role": {
                     "type": "array",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "example": [
+                        "admin"
+                    ]
                 },
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "username"
                 }
             }
         },
