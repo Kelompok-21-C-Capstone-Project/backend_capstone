@@ -1,11 +1,14 @@
 package dto
 
-import "backend_capstone/models"
+import (
+	"backend_capstone/models"
+	"backend_capstone/utils/midtransdriver/dto"
+)
 
 type CreateTransactionDTO struct {
 	ProductId       string `validate:"uuid,required"`
 	PaymentMethod   string `validate:"required"`
-	MethodDetails   string `validate:"uuid,required"`
+	MethodDetails   string `validate:"required"`
 	PaymentData     string `validate:"alphanum,min=8,max=32"`
 	TransactionData string `validate:"alphanum,min=8,max=32"`
 	Email           string `validate:"required,email"`
@@ -30,5 +33,16 @@ func (data *CreateTransactionDTO) GeneratePaymentModel(id string, transactionId 
 		Method:        data.PaymentMethod,
 		MethodDetails: data.MethodDetails,
 		Description:   data.PaymentData,
+	}
+}
+
+func (data *CreateTransactionDTO) GenerateMidtransPayment(orderId string) dto.MidtransPaymentDTO {
+	return dto.MidtransPaymentDTO{
+		MethodDetails: data.MethodDetails,
+		OrderId:       orderId,
+		Paid:          int64(data.Price),
+		ItemPrice:     int64(data.Price),
+		ItemId:        data.ProductId,
+		ItemName:      data.ProductId,
 	}
 }

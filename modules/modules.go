@@ -10,6 +10,7 @@ import (
 	productController "backend_capstone/api/product"
 	brandController "backend_capstone/api/productbrand"
 	categoryController "backend_capstone/api/productcategory"
+	transactionController "backend_capstone/api/transaction"
 	"backend_capstone/api/user"
 	"backend_capstone/configs"
 	methodRepo "backend_capstone/repository/paymentmethod"
@@ -17,6 +18,7 @@ import (
 	productRepo "backend_capstone/repository/product"
 	brandRepo "backend_capstone/repository/productbrand"
 	categoryRepo "backend_capstone/repository/productcategory"
+	transactionRepo "backend_capstone/repository/transaction"
 	userRepo "backend_capstone/repository/user"
 	paymentService "backend_capstone/services/payment"
 	methodService "backend_capstone/services/paymentmethod"
@@ -24,6 +26,7 @@ import (
 	productService "backend_capstone/services/product"
 	brandService "backend_capstone/services/productbrand"
 	categoryService "backend_capstone/services/productcategory"
+	transactionService "backend_capstone/services/transaction"
 	userService "backend_capstone/services/user"
 	"backend_capstone/utils"
 	"backend_capstone/utils/midtransdriver"
@@ -36,6 +39,10 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 
 	jwtPermitUtils := security.NewJwtService(configs.App.JWT)
 	passwordHashPermitUtils := security.NewPasswordHash()
+
+	transactionPermitRepository := transactionRepo.RepositoryFactory(dbCon)
+	transactionPermitService := transactionService.NewService(transactionPermitRepository, midtransDriver)
+	transactionPermitController := transactionController.NewController(transactionPermitService)
 
 	paymentPermitService := paymentService.NewService(nil, midtransDriver)
 	paymentV1PermitController := paymentController.NewController(paymentPermitService)
@@ -77,6 +84,7 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 		User:               userPermitController,
 		MiddlewareUserJWT:  middlewarePermitUser,
 		MiddlewareAdminJWT: middlewarePermitAdmin,
+		Transaction:        transactionPermitController,
 	}
 
 	return controllers

@@ -9,6 +9,7 @@ import (
 	"backend_capstone/api/product"
 	"backend_capstone/api/productbrand"
 	"backend_capstone/api/productcategory"
+	"backend_capstone/api/transaction"
 	"backend_capstone/api/user"
 	"net/http"
 
@@ -23,6 +24,7 @@ type Controller struct {
 	PaymentMethod   *paymentmethod.Controller
 	PaymentVendor   *paymentvendor.Controller
 	User            *user.Controller
+	Transaction     *transaction.Controller
 
 	MiddlewareAdminJWT AdminMiddleware.JwtService
 	MiddlewareUserJWT  UserMiddleware.JwtService
@@ -41,7 +43,9 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	authV1.POST("", controller.User.AuthUser)
 
 	paymentV1 := e.Group("/v1/payments")
-	paymentV1.POST("/:method/:vendor", controller.Payment.Create)
+	paymentV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
+	paymentV1.POST("", controller.Transaction.Create)
+	// paymentV1.POST("/:method/:vendor", controller.Payment.Create)
 	paymentV1.PUT("/:id", controller.Payment.Modify)
 
 	categoryV1 := e.Group("v1/product_categories")

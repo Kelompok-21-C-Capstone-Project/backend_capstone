@@ -4,8 +4,6 @@ import (
 	"time"
 )
 
-// TODO: PENETAPAN ATRIBUT ENTITAS
-
 type Payment struct {
 	Id            string `gorm:"type:varchar(50)"`
 	TransactionId string `gorm:"type:varchar(50)"`
@@ -13,7 +11,7 @@ type Payment struct {
 	Method        string `grom:"type:text"`
 	MethodDetails string `grom:"type:text"`
 	Description   string `grom:"type:text"`
-	Status        string `gorm:"type:varchar(30);default:'mengunggu'"`
+	Status        string `gorm:"type:varchar(30);default:'pending'"`
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 }

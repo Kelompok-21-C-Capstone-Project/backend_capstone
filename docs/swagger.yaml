@@ -368,6 +368,15 @@ definitions:
         example: success
         type: string
     type: object
+  response.BasicTransactionResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
   response.BasicUserResponse:
     properties:
       message:
@@ -867,15 +876,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
       security:
       - ApiKeyAuth: []
       summary: Get product
@@ -902,15 +911,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
       security:
       - ApiKeyAuth: []
       summary: Create product
@@ -935,15 +944,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
       security:
       - ApiKeyAuth: []
       summary: Delete product data by id
@@ -967,15 +976,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
       security:
       - ApiKeyAuth: []
       summary: Get product
@@ -1007,15 +1016,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.BasicProductResponse'
+            $ref: '#/definitions/response.BasicTransactionResponse'
       security:
       - ApiKeyAuth: []
       summary: Update product
