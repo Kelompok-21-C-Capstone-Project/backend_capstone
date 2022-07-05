@@ -45,8 +45,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	authV1.POST("", controller.User.AuthUser)
 
 	transactionV1 := e.Group("/v1/transactions")
-	transactionV1.Use(controller.MiddlewareJWT.JwtMiddleware())
-	transactionV1.POST("", controller.Transaction.Create)
+	transactionV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
 	transactionV1.GET("/:id", controller.Transaction.GetById)
 	// paymentV1.POST("/:method/:vendor", controller.Payment.Create)
 	transactionV1.PUT("/:id", controller.Transaction.Modify)
@@ -79,6 +78,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 
 	userV1 := e.Group("v1/users")
 	userV1.Use(controller.MiddlewareUserJWT.JwtUserMiddleware())
+	userV1.POST("/transaction", controller.Transaction.Create)
 	userV1.GET("/:id", controller.User.GetSingleData)
 	userV1.PUT("/:id", controller.User.UpdateUserData)
 	userV1.DELETE("/:id", controller.User.DeleteData)
@@ -87,6 +87,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	clientV1 := e.Group("v1/clients")
 	clientV1.GET("/products", controller.Product.ClientGetAll)
 	clientV1.GET("/products/:slug", controller.Product.ClientGetAllBySlug)
+	clientV1.GET("/products/categories", controller.ProductCategory.GetAll)
 
 	tokenV1 := e.Group("v1/tokens")
 	tokenV1.Use(controller.MiddlewareJWT.JwtMiddleware())

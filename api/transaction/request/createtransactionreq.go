@@ -3,13 +3,13 @@ package request
 import "backend_capstone/services/transaction/dto"
 
 type CreateTransactionRequest struct {
-	ProductId       string `json:"product_id"`
-	PaymentMethod   string `json:"payment_method"`
-	MethodDetails   string `json:"payment_details"`
-	PaymentData     string `json:"payment_data"`
-	TransactionData string `json:"transaction_data"`
-	Email           string `json:"email"`
-	Price           uint32 `json:"price"`
+	ProductId       string `json:"product_id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx"`
+	PaymentMethod   string `json:"payment_method" example:"Virtual Account"`
+	MethodDetails   string `json:"payment_details" example:"Mandiri Virtual Account"`
+	PaymentData     string `json:"payment_data,omitempty" example:"Misal nomer yang akan ditagih (nomer hp untuk gopay)"`
+	TransactionData string `json:"transaction_data,omitempty" example:"Data seperti nomer hp/nomer padam yg menerima produk pembelian"`
+	Email           string `json:"email" example:"testmail@mail.com"`
+	Price           uint32 `json:"price" example:"300000"`
 }
 
 func (data *CreateTransactionRequest) DtoReq() dto.CreateTransactionDTO {

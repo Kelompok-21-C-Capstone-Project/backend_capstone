@@ -51,6 +51,30 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusCreated, data)
 }
+
+// ClientGetAll godoc
+// @Summary Get all category
+// @Description  Get product category for client side
+// @Tags         clients
+// @Produce      json
+// @Success      200  {array}  models.ProductCategory
+// @Failure      400  {object}  response.BasicCategoryResponse
+// @Failure      403  {object}  response.BasicCategoryResponse
+// @Failure      500  {object}  response.BasicCategoryResponse
+// @Router       /v1/clients/products/categories [get]
+func ClientGetAll() {}
+
+// GetAll godoc
+// @Summary Get all category
+// @Description  Get product category for admin side
+// @Tags         product_categories
+// @Produce      json
+// @Success      200  {array}  models.ProductCategory
+// @Failure      400  {object}  response.BasicCategoryResponse
+// @Failure      403  {object}  response.BasicCategoryResponse
+// @Failure      500  {object}  response.BasicCategoryResponse
+// @Security ApiKeyAuth
+// @Router       /v1/product_categories [get]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.productcategory.GetAll")
 	datas, err := controller.service.GetAll()

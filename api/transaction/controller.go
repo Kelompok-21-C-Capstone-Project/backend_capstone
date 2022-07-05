@@ -26,7 +26,7 @@ func NewController(service transactionUseCase.Service) *Controller {
 // @Tags         transactions
 // @Accept       json
 // @Produce      json
-// @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
+// @Param Payload body request.CreateTransactionRequest true "Payload format" SchemaExample(request.CreateTransactionRequest)
 // @Success      201  {object}  dto.BillClient
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
@@ -55,14 +55,14 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 
 // @Summary Get transaction
 // @Description  Get transaction transaction by id
-// @Tags         transactions
+// @Tags         users
 // @Produce      json
 // @Success      200  {array}  models.Transaction
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/transactions [get]
+// @Router       /v1/users/transactions [post]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.GetAll")
 	datas, err := controller.service.GetAll()

@@ -213,6 +213,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/clients/products/categories": {
+            "get": {
+                "description": "Get product category for client side",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Get all category",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ProductCategory"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicCategoryResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicCategoryResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicCategoryResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/product_brands": {
             "get": {
                 "security": [
@@ -595,6 +636,50 @@ const docTemplate = `{
             }
         },
         "/v1/product_categories": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get product category for admin side",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product_categories"
+                ],
+                "summary": "Get all category",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ProductCategory"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicCategoryResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicCategoryResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicCategoryResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -1124,50 +1209,6 @@ const docTemplate = `{
             }
         },
         "/v1/transactions": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get transaction transaction by id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "transactions"
-                ],
-                "summary": "Get transaction",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Transaction"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.BasicTransactionResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/response.BasicTransactionResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/response.BasicTransactionResponse"
-                        }
-                    }
-                }
-            },
             "post": {
                 "security": [
                     {
@@ -1192,7 +1233,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateProductRequest"
+                            "$ref": "#/definitions/request.CreateTransactionRequest"
                         }
                     }
                 ],
@@ -1435,6 +1476,52 @@ const docTemplate = `{
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.BasicUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/transactions": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get transaction transaction by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get transaction",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Transaction"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
                         }
                     }
                 }
@@ -1995,6 +2082,39 @@ const docTemplate = `{
                 "stock": {
                     "type": "integer",
                     "example": 20
+                }
+            }
+        },
+        "request.CreateTransactionRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "testmail@mail.com"
+                },
+                "payment_data": {
+                    "type": "string",
+                    "example": "Misal nomer yang akan ditagih (nomer hp untuk gopay)"
+                },
+                "payment_details": {
+                    "type": "string",
+                    "example": "Mandiri Virtual Account"
+                },
+                "payment_method": {
+                    "type": "string",
+                    "example": "Virtual Account"
+                },
+                "price": {
+                    "type": "integer",
+                    "example": 300000
+                },
+                "product_id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx"
+                },
+                "transaction_data": {
+                    "type": "string",
+                    "example": "Data seperti nomer hp/nomer padam yg menerima produk pembelian"
                 }
             }
         },

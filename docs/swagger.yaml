@@ -277,6 +277,30 @@ definitions:
         example: 20
         type: integer
     type: object
+  request.CreateTransactionRequest:
+    properties:
+      email:
+        example: testmail@mail.com
+        type: string
+      payment_data:
+        example: Misal nomer yang akan ditagih (nomer hp untuk gopay)
+        type: string
+      payment_details:
+        example: Mandiri Virtual Account
+        type: string
+      payment_method:
+        example: Virtual Account
+        type: string
+      price:
+        example: 300000
+        type: integer
+      product_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
+        type: string
+      transaction_data:
+        example: Data seperti nomer hp/nomer padam yg menerima produk pembelian
+        type: string
+    type: object
   request.LoginUserRequest:
     properties:
       identifier:
@@ -633,6 +657,33 @@ paths:
       summary: Get product by specific category for frontend
       tags:
       - clients
+  /v1/clients/products/categories:
+    get:
+      description: Get product category for client side
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ProductCategory'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      summary: Get all category
+      tags:
+      - clients
   /v1/product_brands:
     get:
       description: Get product brand by id
@@ -878,6 +929,34 @@ paths:
       tags:
       - product_brands
   /v1/product_categories:
+    get:
+      description: Get product category for admin side
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ProductCategory'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all category
+      tags:
+      - product_categories
     post:
       consumes:
       - application/json
@@ -1215,34 +1294,6 @@ paths:
       tags:
       - tokens
   /v1/transactions:
-    get:
-      description: Get transaction transaction by id
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.Transaction'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.BasicTransactionResponse'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/response.BasicTransactionResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.BasicTransactionResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Get transaction
-      tags:
-      - transactions
     post:
       consumes:
       - application/json
@@ -1253,7 +1304,7 @@ paths:
         name: Payload
         required: true
         schema:
-          $ref: '#/definitions/request.CreateProductRequest'
+          $ref: '#/definitions/request.CreateTransactionRequest'
       produces:
       - application/json
       responses:
@@ -1520,6 +1571,35 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Update user
+      tags:
+      - users
+  /v1/users/transactions:
+    post:
+      description: Get transaction transaction by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Transaction'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get transaction
       tags:
       - users
 swagger: "2.0"

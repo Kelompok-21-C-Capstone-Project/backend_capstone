@@ -27,6 +27,7 @@ type Service interface {
 	GetById(id string) (transaction models.Transaction, err error)
 	GetByUserId(id string) (transaction models.Transaction, err error)
 	GetAll() (transactions []models.Transaction, err error)
+	GetUsersAll(uid string) (transactions []models.Transaction, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	Modify() (transaction models.Transaction, err error)
 	Remove() (err error)
@@ -47,12 +48,16 @@ func NewService(repository Repository, midtransApi *midtransdriver.MidtransDrive
 }
 
 func (s *service) GetById(id string) (transaction models.Transaction, err error) {
+
 	return
 }
 func (s *service) GetByUserId(id string) (transaction models.Transaction, err error) {
 	return
 }
 func (s *service) GetAll() (transactions []models.Transaction, err error) {
+	return
+}
+func (s *service) GetUsersAll(uid string) (transactions []models.Transaction, err error) {
 	return
 }
 func (s *service) Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error) {
