@@ -1192,7 +1192,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateProductRequest"
+                            "$ref": "#/definitions/request.CreateTransactionRequest"
                         }
                     }
                 ],
@@ -1995,6 +1995,39 @@ const docTemplate = `{
                 "stock": {
                     "type": "integer",
                     "example": 20
+                }
+            }
+        },
+        "request.CreateTransactionRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "testmail@mail.com"
+                },
+                "payment_data": {
+                    "type": "string",
+                    "example": "Misal nomer yang akan ditagih (nomer hp untuk gopay)"
+                },
+                "payment_details": {
+                    "type": "string",
+                    "example": "Mandiri Virtual Account"
+                },
+                "payment_method": {
+                    "type": "string",
+                    "example": "Virtual Account"
+                },
+                "price": {
+                    "type": "integer",
+                    "example": 300000
+                },
+                "product_id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx"
+                },
+                "transaction_data": {
+                    "type": "string",
+                    "example": "Data seperti nomer hp/nomer padam yg menerima produk pembelian"
                 }
             }
         },

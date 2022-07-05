@@ -277,6 +277,30 @@ definitions:
         example: 20
         type: integer
     type: object
+  request.CreateTransactionRequest:
+    properties:
+      email:
+        example: testmail@mail.com
+        type: string
+      payment_data:
+        example: Misal nomer yang akan ditagih (nomer hp untuk gopay)
+        type: string
+      payment_details:
+        example: Mandiri Virtual Account
+        type: string
+      payment_method:
+        example: Virtual Account
+        type: string
+      price:
+        example: 300000
+        type: integer
+      product_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
+        type: string
+      transaction_data:
+        example: Data seperti nomer hp/nomer padam yg menerima produk pembelian
+        type: string
+    type: object
   request.LoginUserRequest:
     properties:
       identifier:
@@ -1253,7 +1277,7 @@ paths:
         name: Payload
         required: true
         schema:
-          $ref: '#/definitions/request.CreateProductRequest'
+          $ref: '#/definitions/request.CreateTransactionRequest'
       produces:
       - application/json
       responses:

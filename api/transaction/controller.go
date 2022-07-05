@@ -26,7 +26,7 @@ func NewController(service transactionUseCase.Service) *Controller {
 // @Tags         transactions
 // @Accept       json
 // @Produce      json
-// @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
+// @Param Payload body request.CreateTransactionRequest true "Payload format" SchemaExample(request.CreateTransactionRequest)
 // @Success      201  {object}  dto.BillClient
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
