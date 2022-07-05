@@ -6,6 +6,7 @@ type UpdateCategoryRequest struct {
 	Name        string `json:"name" example:"some name"`
 	IsAvailable bool   `json:"status" example:"true"`
 	Description string `json:"description" example:"some description"`
+	Icon        string `json:"icon" example:"mdi-some-category"`
 }
 
 func (req *UpdateCategoryRequest) DtoReq() *dto.UpdateCategoryDTO {
@@ -13,5 +14,6 @@ func (req *UpdateCategoryRequest) DtoReq() *dto.UpdateCategoryDTO {
 		Name:        req.Name,
 		IsAvailable: req.IsAvailable,
 		Description: req.Description,
+		Icon:        req.Icon,
 	}
 }
