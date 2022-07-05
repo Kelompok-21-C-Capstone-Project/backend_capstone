@@ -92,7 +92,6 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.UsersGetAll")
 	id := c.Param("id")
-	log.Print(c.Get("payload").(string), " ", id)
 	if id != c.Get("payload").(string) {
 		err = errors.New("Tidak berizin")
 		return
