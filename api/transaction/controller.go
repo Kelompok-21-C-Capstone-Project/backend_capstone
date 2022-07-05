@@ -14,24 +14,25 @@ type Controller struct {
 	service transactionUseCase.Service
 }
 
-// Create godoc
-// @Summary Create product
-// @Description  Create new product product
-// @Tags         products
-// @Accept       json
-// @Produce      json
-// @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
-// @Success      201  {object}  models.Product
-// @Failure      400  {object}  response.BasicTransactionResponse
-// @Failure      403  {object}  response.BasicTransactionResponse
-// @Failure      500  {object}  response.BasicTransactionResponse
-// @Security ApiKeyAuth
-// @Router       /v1/transactions [post]
 func NewController(service transactionUseCase.Service) *Controller {
 	return &Controller{
 		service: service,
 	}
 }
+
+// Create godoc
+// @Summary Create transaction
+// @Description  Create new transaction for users
+// @Tags         transactions
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
+// @Success      201  {object}  dto.BillClient
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/transactions [post]
 func (controller *Controller) Create(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.Create")
 	payloadId := c.Get("payload").(string)
@@ -52,12 +53,11 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, data)
 }
 
-// GetAll godoc
-// @Summary Get product
-// @Description  Get product product by id
-// @Tags         products
+// @Summary Get transaction
+// @Description  Get transaction transaction by id
+// @Tags         transactions
 // @Produce      json
-// @Success      200  {array}  models.ProductBrand
+// @Success      200  {array}  models.Transaction
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
@@ -75,13 +75,12 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, datas)
 }
 
-// GetById godoc
-// @Summary Get product
-// @Description  Get product product by id
-// @Tags         products
+// @Summary Get transaction
+// @Description  Get transaction transaction by id
+// @Tags         transactions
 // @Produce      json
-// @Param id   path  string  true  "Product ID" minLength:"32"
-// @Success      200  {object}  models.Product
+// @Param id   path  string  true  "transaction ID" minLength:"32"
+// @Success      200  {object}  models.Transaction
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
@@ -100,15 +99,14 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, data)
 }
 
-// Modify godoc
-// @Summary Update product
-// @Description  Update product data
-// @Tags         products
+// @Summary Update transaction
+// @Description  Update transaction data
+// @Tags         transactions
 // @Accept       json
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
 // @Param Payload body request.UpdateProductRequest true "Payload format" SchemaExample(request.UpdateProductRequest)
-// @Success      200  {object}  models.Product
+// @Success      200  {object}  models.Transaction
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
@@ -131,14 +129,21 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 	// 		Message: err.Error(),
 	// 	})
 	// }
-	// return c.JSON(http.StatusCreated, data)
+	data := new(interface{})
+	if err := c.Bind(data); err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	log.Print(data)
+	// return c.JSON(http.StatusOK, data)
 	return
 }
 
-// Remove godoc
-// @Summary Delete product data by id
-// @Description  Delete product data from database
-// @Tags         products
+// @Summary Delete transaction data by id
+// @Description  Delete transaction data from database
+// @Tags         transactions
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
 // @Success      200  {object}  response.BasicProductSuccessResponse

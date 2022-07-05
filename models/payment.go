@@ -8,6 +8,8 @@ type Payment struct {
 	Id            string `gorm:"type:varchar(50)"`
 	TransactionId string `gorm:"type:varchar(50)"`
 	Amount        uint32 `gorm:"default:0;not null"`
+	Billed        uint32 `gorm:"default:0;not null"`
+	Charged       uint32 `gorm:"default:0;not null"`
 	Method        string `grom:"type:text"`
 	MethodDetails string `grom:"type:text"`
 	Description   string `grom:"type:text"`
