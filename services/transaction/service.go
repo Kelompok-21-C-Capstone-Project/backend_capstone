@@ -14,7 +14,7 @@ import (
 type Repository interface {
 	FindById(id string) (transaction *models.Transaction, err error)
 	FindByQuery(key string, value interface{}) (transactions *[]models.Transaction, err error)
-	FindAll() (transactions *[]models.Transaction, err error)
+	FindAll() (transactions *[]dto.ClientTransactionsResponse, err error)
 	UsersFindAll(uip string) (transactions *[]dto.ClientTransactionsResponse, err error)
 	CheckProductStock(pid string) (product *models.Product, err error)
 	ProductReStock(pid string) (err error)
@@ -26,7 +26,6 @@ type Repository interface {
 
 type Service interface {
 	GetById(id string) (transaction models.Transaction, err error)
-	GetByUserId(id string) (transaction models.Transaction, err error)
 	GetAll() (transactions []models.Transaction, err error)
 	UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
@@ -50,9 +49,6 @@ func NewService(repository Repository, midtransApi *midtransdriver.MidtransDrive
 
 func (s *service) GetById(id string) (transaction models.Transaction, err error) {
 
-	return
-}
-func (s *service) GetByUserId(id string) (transaction models.Transaction, err error) {
 	return
 }
 func (s *service) GetAll() (transactions []models.Transaction, err error) {
