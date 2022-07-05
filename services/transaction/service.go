@@ -26,7 +26,7 @@ type Repository interface {
 
 type Service interface {
 	GetById(id string) (transaction models.Transaction, err error)
-	GetAll() (transactions []models.Transaction, err error)
+	GetAll() (transactions []dto.ClientTransactionsResponse, err error)
 	UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	Modify() (transaction models.Transaction, err error)
@@ -51,7 +51,15 @@ func (s *service) GetById(id string) (transaction models.Transaction, err error)
 
 	return
 }
-func (s *service) GetAll() (transactions []models.Transaction, err error) {
+func (s *service) GetAll() (transactions []dto.ClientTransactionsResponse, err error) {
+	data, err := s.repository.FindAll()
+	for in := range *data {
+		(*data)[in].CreatedAt = (*data)[in].CreatedAt.Round(60 * time.Minute)
+	}
+	if err != nil {
+		return
+	}
+	transactions = *data
 	return
 }
 func (s *service) UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error) {
