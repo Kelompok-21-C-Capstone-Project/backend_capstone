@@ -56,6 +56,33 @@ definitions:
         example: 30
         type: integer
     type: object
+  dto.ClientTransactionsResponse:
+    properties:
+      created_at:
+        example: 2022-07-05T14:32:46.996074+07
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      label:
+        example: Telkomsel 5GB Super Tiktok
+        type: string
+      payment_method:
+        example: Virtual Account
+        type: string
+      phone_number:
+        example: "2312312412523"
+        type: string
+      price:
+        example: 11500
+        type: integer
+      status:
+        example: Pending
+        type: string
+      type:
+        example: paket-data
+        type: string
+    type: object
   dto.ProductCategory:
     properties:
       id:
@@ -184,7 +211,7 @@ definitions:
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
-      isAvailable:
+      is_available:
         example: true
         type: boolean
       name:
@@ -1293,42 +1320,6 @@ paths:
       summary: Get token payload
       tags:
       - tokens
-  /v1/transactions:
-    post:
-      consumes:
-      - application/json
-      description: Create new transaction for users
-      parameters:
-      - description: Payload format
-        in: body
-        name: Payload
-        required: true
-        schema:
-          $ref: '#/definitions/request.CreateTransactionRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.BillClient'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.BasicTransactionResponse'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/response.BasicTransactionResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.BasicTransactionResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Create transaction
-      tags:
-      - transactions
   /v1/transactions/{id}:
     delete:
       description: Delete transaction data from database
@@ -1468,6 +1459,41 @@ paths:
       summary: User register
       tags:
       - users
+  /v1/users/:id/transactions:
+    get:
+      description: Get all transaction from specific user
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ClientTransactionsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all transaction from specific user
+      tags:
+      - users
   /v1/users/{id}:
     delete:
       description: Delete user data from database
@@ -1575,16 +1601,23 @@ paths:
       - users
   /v1/users/transactions:
     post:
-      description: Get transaction transaction by id
+      consumes:
+      - application/json
+      description: Create new transaction for users
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateTransactionRequest'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            items:
-              $ref: '#/definitions/models.Transaction'
-            type: array
+            $ref: '#/definitions/dto.BillClient'
         "400":
           description: Bad Request
           schema:
@@ -1599,7 +1632,7 @@ paths:
             $ref: '#/definitions/response.BasicTransactionResponse'
       security:
       - ApiKeyAuth: []
-      summary: Get transaction
+      summary: User create transaction
       tags:
       - users
 swagger: "2.0"

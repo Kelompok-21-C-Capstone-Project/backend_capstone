@@ -32,3 +32,18 @@ type BillClient struct {
 func (BillClient) TableName() string {
 	return "transactions"
 }
+
+type ClientTransactionsResponse struct {
+	Id                 string    `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Category           string    `json:"type" example:"paket-data"`
+	Status             string    `json:"status" example:"Pending"`
+	Product            string    `json:"label" example:"Telkomsel 5GB Super Tiktok"`
+	TransactionDetails string    `json:"phone_number" example:"2312312412523"`
+	Charged            uint32    `json:"price" example:"11500"`
+	CreatedAt          time.Time `json:"created_at" example:"2022-07-05T14:32:46.996074+07"`
+	PaymentMethod      string    `json:"payment_method" example:"Virtual Account"`
+}
+
+func (ClientTransactionsResponse) TableName() string {
+	return ""
+}

@@ -4,6 +4,7 @@ import (
 	"backend_capstone/api/transaction/request"
 	"backend_capstone/api/transaction/response"
 	transactionUseCase "backend_capstone/services/transaction"
+	"errors"
 	"log"
 	"net/http"
 
@@ -21,9 +22,9 @@ func NewController(service transactionUseCase.Service) *Controller {
 }
 
 // Create godoc
-// @Summary Create transaction
+// @Summary User create transaction
 // @Description  Create new transaction for users
-// @Tags         transactions
+// @Tags         users
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.CreateTransactionRequest true "Payload format" SchemaExample(request.CreateTransactionRequest)
@@ -32,7 +33,7 @@ func NewController(service transactionUseCase.Service) *Controller {
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/transactions [post]
+// @Router       /v1/users/transactions [post]
 func (controller *Controller) Create(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.Create")
 	payloadId := c.Get("payload").(string)
@@ -62,10 +63,40 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/users/transactions [post]
+
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.GetAll")
 	datas, err := controller.service.GetAll()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusCreated, datas)
+}
+
+// UsersGetAll godoc
+// @Summary Get all transaction from specific user
+// @Description  Get all transaction from specific user
+// @Param id   path  string  true  "user ID" minLength:"32"
+// @Tags         users
+// @Produce      json
+// @Success      200  {array}  dto.ClientTransactionsResponse
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/users/:id/transactions [get]
+func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
+	log.Print("enter controller.transaction.UsersGetAll")
+	id := c.Param("id")
+	log.Print(c.Get("payload").(string), " ", id)
+	if id != c.Get("payload").(string) {
+		err = errors.New("Tidak berizin")
+		return
+	}
+	datas, err := controller.service.UsersGetAll(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
 			Status:  "fail",
