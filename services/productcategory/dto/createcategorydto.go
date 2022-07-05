@@ -7,6 +7,7 @@ import (
 type CreateCategoryDTO struct {
 	Name        string `validate:"required"`
 	Description string `validate:"required"`
+	Icon        string
 }
 
 func (data *CreateCategoryDTO) GenerateModel(id string, slug string) *models.ProductCategory {
@@ -16,5 +17,6 @@ func (data *CreateCategoryDTO) GenerateModel(id string, slug string) *models.Pro
 		Name:        data.Name,
 		IsAvailable: false,
 		Description: data.Description,
+		Icon:        data.Icon,
 	}
 }

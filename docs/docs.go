@@ -2034,6 +2034,10 @@ const docTemplate = `{
                     "type": "string",
                     "example": "some description"
                 },
+                "icon": {
+                    "type": "string",
+                    "example": "mdi-some-category"
+                },
                 "id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -2132,6 +2136,10 @@ const docTemplate = `{
                 "description": {
                     "type": "string",
                     "example": "some description"
+                },
+                "icon": {
+                    "type": "string",
+                    "example": "mdi-data-icon"
                 },
                 "name": {
                     "type": "string",
@@ -2303,6 +2311,10 @@ const docTemplate = `{
                 "description": {
                     "type": "string",
                     "example": "some description"
+                },
+                "icon": {
+                    "type": "string",
+                    "example": "mdi-some-category"
                 },
                 "name": {
                     "type": "string",

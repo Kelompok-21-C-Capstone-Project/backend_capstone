@@ -208,6 +208,9 @@ definitions:
       description:
         example: some description
         type: string
+      icon:
+        example: mdi-some-category
+        type: string
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
@@ -278,6 +281,9 @@ definitions:
     properties:
       description:
         example: some description
+        type: string
+      icon:
+        example: mdi-data-icon
         type: string
       name:
         example: soma name
@@ -404,6 +410,9 @@ definitions:
     properties:
       description:
         example: some description
+        type: string
+      icon:
+        example: mdi-some-category
         type: string
       name:
         example: some name
