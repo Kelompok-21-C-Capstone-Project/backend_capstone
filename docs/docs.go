@@ -1208,63 +1208,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/transactions": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Create new transaction for users",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "transactions"
-                ],
-                "summary": "Create transaction",
-                "parameters": [
-                    {
-                        "description": "Payload format",
-                        "name": "Payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.CreateTransactionRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.BillClient"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.BasicTransactionResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/response.BasicTransactionResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/response.BasicTransactionResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/transactions/{id}": {
             "get": {
                 "security": [
@@ -1481,6 +1424,61 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/users/:id/transactions": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all transaction from specific user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get all transaction from specific user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.ClientTransactionsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/users/transactions": {
             "post": {
                 "security": [
@@ -1488,22 +1486,33 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get transaction transaction by id",
+                "description": "Create new transaction for users",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "users"
                 ],
-                "summary": "Get transaction",
-                "responses": {
-                    "200": {
-                        "description": "OK",
+                "summary": "User create transaction",
+                "parameters": [
+                    {
+                        "description": "Payload format",
+                        "name": "Payload",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Transaction"
-                            }
+                            "$ref": "#/definitions/request.CreateTransactionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.BillClient"
                         }
                     },
                     "400": {
@@ -1771,6 +1780,43 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.ClientTransactionsResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2022-07-05T14:32:46.996074+07"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "label": {
+                    "type": "string",
+                    "example": "Telkomsel 5GB Super Tiktok"
+                },
+                "payment_method": {
+                    "type": "string",
+                    "example": "Virtual Account"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "2312312412523"
+                },
+                "price": {
+                    "type": "integer",
+                    "example": 11500
+                },
+                "status": {
+                    "type": "string",
+                    "example": "Pending"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "paket-data"
+                }
+            }
+        },
         "dto.ProductCategory": {
             "type": "object",
             "properties": {
@@ -1955,7 +2001,7 @@ const docTemplate = `{
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                 },
-                "isAvailable": {
+                "is_available": {
                     "type": "boolean",
                     "example": true
                 },

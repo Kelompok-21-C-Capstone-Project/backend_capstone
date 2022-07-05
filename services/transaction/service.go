@@ -15,6 +15,7 @@ type Repository interface {
 	FindById(id string) (transaction *models.Transaction, err error)
 	FindByQuery(key string, value interface{}) (transactions *[]models.Transaction, err error)
 	FindAll() (transactions *[]models.Transaction, err error)
+	UsersFindAll(uip string) (transactions *[]dto.ClientTransactionsResponse, err error)
 	CheckProductStock(pid string) (product *models.Product, err error)
 	ProductReStock(pid string) (err error)
 	Insert(data *models.Transaction) (transaction *models.Transaction, err error)
@@ -27,7 +28,7 @@ type Service interface {
 	GetById(id string) (transaction models.Transaction, err error)
 	GetByUserId(id string) (transaction models.Transaction, err error)
 	GetAll() (transactions []models.Transaction, err error)
-	GetUsersAll(uid string) (transactions []models.Transaction, err error)
+	UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	Modify() (transaction models.Transaction, err error)
 	Remove() (err error)
@@ -57,7 +58,12 @@ func (s *service) GetByUserId(id string) (transaction models.Transaction, err er
 func (s *service) GetAll() (transactions []models.Transaction, err error) {
 	return
 }
-func (s *service) GetUsersAll(uid string) (transactions []models.Transaction, err error) {
+func (s *service) UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error) {
+	data, err := s.repository.UsersFindAll(uid)
+	if err != nil {
+		return
+	}
+	transactions = *data
 	return
 }
 func (s *service) Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error) {

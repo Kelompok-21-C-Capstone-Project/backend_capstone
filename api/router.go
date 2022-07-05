@@ -77,8 +77,9 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	productV1.DELETE("/:id", controller.Product.Remove)
 
 	userV1 := e.Group("v1/users")
-	userV1.Use(controller.MiddlewareUserJWT.JwtUserMiddleware())
-	userV1.POST("/transaction", controller.Transaction.Create)
+	userV1.Use(controller.MiddlewareJWT.JwtMiddleware())
+	userV1.POST("/transactions", controller.Transaction.Create)
+	userV1.GET("/:id/transactions", controller.Transaction.UsersGetAll)
 	userV1.GET("/:id", controller.User.GetSingleData)
 	userV1.PUT("/:id", controller.User.UpdateUserData)
 	userV1.DELETE("/:id", controller.User.DeleteData)
