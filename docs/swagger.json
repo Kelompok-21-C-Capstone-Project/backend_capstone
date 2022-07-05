@@ -164,6 +164,15 @@
                     "clients"
                 ],
                 "summary": "Get product by specific category for frontend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Slug category",
+                        "name": "slug",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1109,21 +1118,21 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get product product by id",
+                "description": "Get transaction transaction by id",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "transactions"
                 ],
-                "summary": "Get product",
+                "summary": "Get transaction",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.ProductBrand"
+                                "$ref": "#/definitions/models.Transaction"
                             }
                         }
                     },
@@ -1153,7 +1162,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create new product product",
+                "description": "Create new transaction for users",
                 "consumes": [
                     "application/json"
                 ],
@@ -1161,9 +1170,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "transactions"
                 ],
-                "summary": "Create product",
+                "summary": "Create transaction",
                 "parameters": [
                     {
                         "description": "Payload format",
@@ -1179,7 +1188,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/dto.BillClient"
                         }
                     },
                     "400": {
@@ -1210,18 +1219,18 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get product product by id",
+                "description": "Get transaction transaction by id",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "transactions"
                 ],
-                "summary": "Get product",
+                "summary": "Get transaction",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Product ID",
+                        "description": "transaction ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1231,7 +1240,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/models.Transaction"
                         }
                     },
                     "400": {
@@ -1260,7 +1269,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Update product data",
+                "description": "Update transaction data",
                 "consumes": [
                     "application/json"
                 ],
@@ -1268,9 +1277,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "transactions"
                 ],
-                "summary": "Update product",
+                "summary": "Update transaction",
                 "parameters": [
                     {
                         "type": "string",
@@ -1293,7 +1302,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/models.Transaction"
                         }
                     },
                     "400": {
@@ -1322,14 +1331,14 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Delete product data from database",
+                "description": "Delete transaction data from database",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "transactions"
                 ],
-                "summary": "Delete product data by id",
+                "summary": "Delete transaction data by id",
                 "parameters": [
                     {
                         "type": "string",
@@ -1585,6 +1594,47 @@
         }
     },
     "definitions": {
+        "dto.BillClient": {
+            "type": "object",
+            "properties": {
+                "bill": {
+                    "type": "integer",
+                    "example": 11500
+                },
+                "charged": {
+                    "type": "integer",
+                    "example": 1500
+                },
+                "dead_line": {
+                    "type": "string",
+                    "example": "2022-07-05T14:32:46.996074+07"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "payment_method": {
+                    "type": "string",
+                    "example": "Mandiri Virtual Account"
+                },
+                "product_name": {
+                    "type": "string",
+                    "example": "Telkomsel 5GB Super Tiktok"
+                },
+                "product_price": {
+                    "type": "integer",
+                    "example": 10000
+                },
+                "transaction_id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "va_number": {
+                    "type": "string",
+                    "example": "2312312412523"
+                }
+            }
+        },
         "dto.ClientProduct": {
             "type": "object",
             "properties": {
@@ -1649,6 +1699,12 @@
             "type": "object",
             "properties": {
                 "amount": {
+                    "type": "integer"
+                },
+                "billed": {
+                    "type": "integer"
+                },
+                "charged": {
                     "type": "integer"
                 },
                 "createdAt": {

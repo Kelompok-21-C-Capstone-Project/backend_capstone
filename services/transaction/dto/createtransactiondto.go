@@ -9,8 +9,8 @@ type CreateTransactionDTO struct {
 	ProductId       string `validate:"uuid,required"`
 	PaymentMethod   string `validate:"required"`
 	MethodDetails   string `validate:"required"`
-	PaymentData     string `validate:"alphanum,min=8,max=32"`
-	TransactionData string `validate:"alphanum,min=8,max=32"`
+	PaymentData     string
+	TransactionData string
 	Email           string `validate:"required,email"`
 	Price           uint32 `validate:"required"`
 }

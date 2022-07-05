@@ -179,7 +179,8 @@ func (d *MidtransDriver) DoPayment(method string, midtranspaymentDTO dto.Midtran
 	case "virtual account":
 		chargeReq = d.CreateBankTransferPayment(midtranspaymentDTO)
 		coreApiRes, coreApiErr = d.MidtransOperation.ChargeTransaction(chargeReq)
-		if midtranspaymentDTO.MethodDetails == "mandiri" || midtranspaymentDTO.MethodDetails == "permata" {
+		bank := strings.ToLower(midtranspaymentDTO.MethodDetails)
+		if strings.Contains(bank, "mandiri") || strings.Contains(bank, "permata") {
 			va_number = coreApiRes.PermataVaNumber
 		} else {
 			va_number = reflect.ValueOf(coreApiRes.VaNumbers).Index(0).FieldByName("VANumber").Interface().(string)
@@ -206,12 +207,12 @@ func (d *MidtransDriver) DoPayment(method string, midtranspaymentDTO dto.Midtran
 	}
 
 	log.Print("Response :", coreApiRes)
-
+	var status string
 	switch coreApiRes.TransactionStatus {
 	case "pending":
-		midtranspaymentDTO.MethodDetails = "Pending"
+		status = "Pending"
 	case "deny":
-		midtranspaymentDTO.MethodDetails = "Rejected"
+		status = "Rejected"
 	}
 
 	data = &models.Payment{
@@ -221,7 +222,7 @@ func (d *MidtransDriver) DoPayment(method string, midtranspaymentDTO dto.Midtran
 		Charged:       uint32(1500),
 		Method:        method,
 		MethodDetails: midtranspaymentDTO.MethodDetails,
-		Status:        coreApiRes.TransactionStatus,
+		Status:        status,
 		Description:   va_number, //nomer hp atau nomer virtual account bank
 	}
 	return

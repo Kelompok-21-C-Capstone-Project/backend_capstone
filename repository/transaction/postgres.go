@@ -2,6 +2,7 @@ package transaction
 
 import (
 	"backend_capstone/models"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -40,6 +41,29 @@ func (repo *PostgresRepository) InsertPayment(data *models.Payment) (transaction
 func (repo *PostgresRepository) Update() (transaction *models.Transaction, err error) {
 	return
 }
-func (repo *PostgresRepository) Delete() (transaction *models.Transaction, err error) {
+func (repo *PostgresRepository) Delete(id string) (err error) {
 	return
+}
+
+func (repo *PostgresRepository) CheckProductStock(pid string) (product *models.Product, err error) {
+	data := new(models.Product)
+	if err = repo.db.First(&data, &pid).Error; err != nil {
+		return
+	}
+	if data.Stock < 1 {
+		err = errors.New("barang habis")
+		return
+	} else {
+		if err = repo.db.First(&data, &pid).Update("stock", data.Stock-1).Error; err != nil {
+			return
+		}
+	}
+	return data, err
+}
+func (repo *PostgresRepository) ProductReStock(pid string) (err error) {
+	data := new(models.Product)
+	if err = repo.db.First(&data, &pid).Update("stock", data.Stock+1).Error; err != nil {
+		return
+	}
+	return err
 }
