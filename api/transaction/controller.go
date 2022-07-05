@@ -14,10 +14,16 @@ type Controller struct {
 	service transactionUseCase.Service
 }
 
+func NewController(service transactionUseCase.Service) *Controller {
+	return &Controller{
+		service: service,
+	}
+}
+
 // Create godoc
 // @Summary Create product
 // @Description  Create new product product
-// @Tags         products
+// @Tags         transactions
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
@@ -27,11 +33,6 @@ type Controller struct {
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
 // @Router       /v1/transactions [post]
-func NewController(service transactionUseCase.Service) *Controller {
-	return &Controller{
-		service: service,
-	}
-}
 func (controller *Controller) Create(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.Create")
 	payloadId := c.Get("payload").(string)
@@ -55,7 +56,7 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // GetAll godoc
 // @Summary Get product
 // @Description  Get product product by id
-// @Tags         products
+// @Tags         transactions
 // @Produce      json
 // @Success      200  {array}  models.ProductBrand
 // @Failure      400  {object}  response.BasicTransactionResponse
@@ -78,7 +79,7 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // GetById godoc
 // @Summary Get product
 // @Description  Get product product by id
-// @Tags         products
+// @Tags         transactions
 // @Produce      json
 // @Param id   path  string  true  "Product ID" minLength:"32"
 // @Success      200  {object}  models.Product
@@ -103,7 +104,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // Modify godoc
 // @Summary Update product
 // @Description  Update product data
-// @Tags         products
+// @Tags         transactions
 // @Accept       json
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
@@ -131,14 +132,22 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 	// 		Message: err.Error(),
 	// 	})
 	// }
-	// return c.JSON(http.StatusCreated, data)
+	data := new(interface{})
+	if err := c.Bind(data); err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	log.Print(data)
+	// return c.JSON(http.StatusOK, data)
 	return
 }
 
 // Remove godoc
 // @Summary Delete product data by id
 // @Description  Delete product data from database
-// @Tags         products
+// @Tags         transactions
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
 // @Success      200  {object}  response.BasicProductSuccessResponse

@@ -90,4 +90,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	tokenV1 := e.Group("v1/tokens")
 	tokenV1.Use(controller.MiddlewareJWT.JwtMiddleware())
 	tokenV1.GET("", controller.User.ParseToken)
+
+	midtransV1 := e.Group("v1/midtrans")
+	midtransV1.POST("/bababoe", controller.Transaction.Modify)
 }

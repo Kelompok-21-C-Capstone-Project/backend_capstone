@@ -64,10 +64,18 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 	if err != nil {
 		return
 	}
-	s.midtrans.DoPayment(createtransactionDTO.PaymentMethod, createtransactionDTO.GenerateMidtransPayment(tid))
-
-	// pid := uuid.New().String()
+	payment, err := s.midtrans.DoPayment(createtransactionDTO.PaymentMethod, createtransactionDTO.GenerateMidtransPayment(tid))
+	if err != nil {
+		return
+	}
+	pid := uuid.New().String()
+	payment.Id = pid
+	// dataPayment, err := s.repository.InsertPayment(payment)
+	// if err != nil {
+	// 	return
+	// }
 	// s.repository.InsertPayment(createtransactionDTO.GeneratePaymentModel(pid, tid, "pending", "", "", ""))
+	// send bill using mail jet
 	return
 }
 func (s *service) Modify() (transaction models.Transaction, err error) {
