@@ -55,14 +55,14 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 
 // @Summary Get transaction
 // @Description  Get transaction transaction by id
-// @Tags         transactions
+// @Tags         users
 // @Produce      json
 // @Success      200  {array}  models.Transaction
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-// @Router       /v1/transactions [get]
+// @Router       /v1/users/transactions [post]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.GetAll")
 	datas, err := controller.service.GetAll()
