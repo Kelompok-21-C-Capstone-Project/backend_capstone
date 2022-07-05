@@ -54,16 +54,17 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, data)
 }
 
+// GetAll GoDoc
 // @Summary Get transaction
-// @Description  Get transaction transaction by id
-// @Tags         users
+// @Description  Get transaction data
+// @Tags         transactions
 // @Produce      json
-// @Success      200  {array}  models.Transaction
+// @Success      200  {array}  dto.BillClient
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
 // @Security ApiKeyAuth
-
+// @Router       /v1/transactions [get]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.GetAll")
 	datas, err := controller.service.GetAll()
@@ -91,7 +92,6 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.UsersGetAll")
 	id := c.Param("id")
-	log.Print(c.Get("payload").(string), " ", id)
 	if id != c.Get("payload").(string) {
 		err = errors.New("Tidak berizin")
 		return
@@ -106,12 +106,13 @@ func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, datas)
 }
 
+// GetById Godoc
 // @Summary Get transaction
 // @Description  Get transaction transaction by id
 // @Tags         transactions
 // @Produce      json
 // @Param id   path  string  true  "transaction ID" minLength:"32"
-// @Success      200  {object}  models.Transaction
+// @Success      200  {object}  dto.BillClient
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
@@ -136,7 +137,6 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Accept       json
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
-// @Param Payload body request.UpdateProductRequest true "Payload format" SchemaExample(request.UpdateProductRequest)
 // @Success      200  {object}  models.Transaction
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
