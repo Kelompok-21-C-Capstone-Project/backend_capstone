@@ -1,26 +1,78 @@
 package payment
 
 import (
+	"backend_capstone/api/payment/response"
 	paymentUsease "backend_capstone/services/payment"
 	"net/http"
-	"strconv"
-	"time"
 
 	"github.com/labstack/echo/v4"
 )
 
-//> model tipe data
-type Payment struct {
-	PaymentId   int       `gorm:"primaryKey" json:"id"`
-	Description string    `json:"description"`
-	Email       string    `json:"email"`
-	PaymentBy   string    `json:"payment"`
-	UpdatedAt   time.Time `json:"updated"`
-}
-
 type Controller struct {
 	service paymentUsease.Service
 }
+
+var (
+	paymentMethods = []response.PaymentMethods{
+		{
+			Id:   1,
+			Type: "Virtual Account",
+			Services: []response.PaymentService{
+				{
+					Id:    1,
+					Label: "BCA Virtual Account",
+					Icon:  "BCA",
+				},
+				{
+					Id:    2,
+					Label: "BNI Virtual Account",
+					Icon:  "BNI",
+				},
+				{
+					Id:    3,
+					Label: "BNI Virtual Account",
+					Icon:  "BNI",
+				},
+				{
+					Id:    4,
+					Label: "CIMB Virtual Account",
+					Icon:  "CIMB",
+				},
+				{
+					Id:    5,
+					Label: "BRI Virtual Account",
+					Icon:  "BRI",
+				},
+				{
+					Id:    6,
+					Label: "Maybank Virtual Account",
+					Icon:  "Maybank",
+				},
+				{
+					Id:    7,
+					Label: "Permata Virtual Account",
+					Icon:  "Permata",
+				},
+				{
+					Id:    8,
+					Label: "Mega Virtual Account",
+					Icon:  "Mega",
+				},
+			},
+		},
+		{
+			Id:   2,
+			Type: "Gopay",
+			Services: []response.PaymentService{
+				{
+					Id:    1,
+					Label: "Gopay",
+					Icon:  "GoPay",
+				},
+			},
+		},
+	}
+)
 
 func NewController(service paymentUsease.Service) *Controller {
 	return &Controller{
@@ -37,43 +89,13 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 	return
 }
 
-//> fungsi get (read) koreksi
-func GetAllPayment(c echo.Context) error {
-	var payment []Payment
-	var error error
-	if error != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": error.Error()})
-	}
-	return c.JSON(http.StatusOK, payment)
-}
-
-//> fungsi post(create) koreksi
-func CreatePayment(c echo.Context) error {
-	var input []Payment
-	err := c.Bind(&input)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
-	}
-
-	return c.JSON(http.StatusOK, input)
-}
-
-//> fungsi delete msh butuh koreksi dibagian return
-func DeletePayment(c echo.Context) error {
-	var payment map[int]*Payment
-	id, _ := strconv.Atoi(c.Param("id"))
-	delete(payment, id)
-	return c.NoContent(http.StatusNoContent)
-}
-
-//>fungsi put(update) msh butuh koreksi
-func UpdatePayment(c echo.Context) error {
-	var payment map[int]*Payment
-	n := new(Payment)
-	if err := c.Bind(n); err != nil {
-		return err
-	}
-	id, _ := strconv.Atoi(c.Param("id"))
-	payment[id].Description = n.Description
-	return c.JSON(http.StatusOK, payment[id])
+// GetAll godoc
+// @Summary Get all payment
+// @Description  Get all payment methods and services
+// @Tags         clients
+// @Produce      json
+// @Success      200  {object}  response.PaymentMethods
+// @Router       /v1/clients/payments [get]
+func (controller *Controller) GetAll(c echo.Context) (err error) {
+	return c.JSON(http.StatusOK, paymentMethods)
 }

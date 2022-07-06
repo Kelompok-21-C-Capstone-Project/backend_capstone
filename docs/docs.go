@@ -125,6 +125,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/clients/payments": {
+            "get": {
+                "description": "Get all payment methods and services",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Get all payment",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.PaymentMethods"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/clients/products": {
             "get": {
                 "description": "Get all products by all category frontned from database",
@@ -2512,6 +2532,42 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "example": "username"
+                }
+            }
+        },
+        "response.PaymentMethods": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "services": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.PaymentService"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "example": "Virtual Account"
+                }
+            }
+        },
+        "response.PaymentService": {
+            "type": "object",
+            "properties": {
+                "icon": {
+                    "type": "string",
+                    "example": "mdi-va-mandiri"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "label": {
+                    "type": "string",
+                    "example": "Mandiri Virtual Account"
                 }
             }
         },

@@ -553,6 +553,31 @@ definitions:
         example: username
         type: string
     type: object
+  response.PaymentMethods:
+    properties:
+      id:
+        example: 1
+        type: integer
+      services:
+        items:
+          $ref: '#/definitions/response.PaymentService'
+        type: array
+      type:
+        example: Virtual Account
+        type: string
+    type: object
+  response.PaymentService:
+    properties:
+      icon:
+        example: mdi-va-mandiri
+        type: string
+      id:
+        example: 1
+        type: integer
+      label:
+        example: Mandiri Virtual Account
+        type: string
+    type: object
   response.SuccessLoginResponse:
     properties:
       status:
@@ -635,6 +660,19 @@ paths:
       summary: Delete user data by id
       tags:
       - users
+  /v1/clients/payments:
+    get:
+      description: Get all payment methods and services
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.PaymentMethods'
+      summary: Get all payment
+      tags:
+      - clients
   /v1/clients/products:
     get:
       description: Get all products by all category frontned from database

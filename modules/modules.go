@@ -6,24 +6,18 @@ import (
 	GlobalMiddleware "backend_capstone/api/middleware/global"
 	UserMiddleware "backend_capstone/api/middleware/user"
 	paymentController "backend_capstone/api/payment"
-	methodController "backend_capstone/api/paymentmethod"
-	vendorController "backend_capstone/api/paymentvendor"
 	productController "backend_capstone/api/product"
 	brandController "backend_capstone/api/productbrand"
 	categoryController "backend_capstone/api/productcategory"
 	transactionController "backend_capstone/api/transaction"
 	"backend_capstone/api/user"
 	"backend_capstone/configs"
-	methodRepo "backend_capstone/repository/paymentmethod"
-	vendorRepo "backend_capstone/repository/paymentvendor"
 	productRepo "backend_capstone/repository/product"
 	brandRepo "backend_capstone/repository/productbrand"
 	categoryRepo "backend_capstone/repository/productcategory"
 	transactionRepo "backend_capstone/repository/transaction"
 	userRepo "backend_capstone/repository/user"
 	paymentService "backend_capstone/services/payment"
-	methodService "backend_capstone/services/paymentmethod"
-	vendorService "backend_capstone/services/paymentvendor"
 	productService "backend_capstone/services/product"
 	brandService "backend_capstone/services/productbrand"
 	categoryService "backend_capstone/services/productcategory"
@@ -60,13 +54,13 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 	productPermitService := productService.NewService(productPermitRepository)
 	productPermitController := productController.NewController(productPermitService)
 
-	methodPermitRepository := methodRepo.RepositoryFactory(dbCon)
-	methodPermitService := methodService.NewService(methodPermitRepository)
-	methodPermitController := methodController.NewController(methodPermitService)
+	// methodPermitRepository := methodRepo.RepositoryFactory(dbCon)
+	// methodPermitService := methodService.NewService(methodPermitRepository)
+	// methodPermitController := methodController.NewController(methodPermitService)
 
-	vendorPermitRepository := vendorRepo.RepositoryFactory(dbCon)
-	vendorPermitService := vendorService.NewService(vendorPermitRepository)
-	vendorPermitController := vendorController.NewController(vendorPermitService)
+	// vendorPermitRepository := vendorRepo.RepositoryFactory(dbCon)
+	// vendorPermitService := vendorService.NewService(vendorPermitRepository)
+	// vendorPermitController := vendorController.NewController(vendorPermitService)
 
 	userPermitRepository := userRepo.RepositoryFactory(dbCon)
 	userPermitService := userService.NewService(userPermitRepository, passwordHashPermitUtils, jwtPermitUtils, configs.App.ADMIN_KEY)
@@ -77,11 +71,11 @@ func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdr
 	middlewarePermitGlobal := GlobalMiddleware.NewJwtMiddleware(configs.App.JWT)
 
 	controllers := api.Controller{
-		ProductCategory:    categoryPermitController,
-		ProductBrand:       brandPermitController,
-		Product:            productPermitController,
-		PaymentMethod:      methodPermitController,
-		PaymentVendor:      vendorPermitController,
+		ProductCategory: categoryPermitController,
+		ProductBrand:    brandPermitController,
+		Product:         productPermitController,
+		// PaymentMethod:      methodPermitController,
+		// PaymentVendor:      vendorPermitController,
 		Payment:            paymentV1PermitController,
 		User:               userPermitController,
 		MiddlewareUserJWT:  middlewarePermitUser,
