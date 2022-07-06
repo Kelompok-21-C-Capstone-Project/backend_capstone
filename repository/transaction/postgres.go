@@ -31,6 +31,12 @@ func (repo *PostgresRepository) UsersFindAll(uid string) (transactions *[]dto.Cl
 	}
 	return
 }
+func (repo *PostgresRepository) UsersFindById(uid string, tid string) (transaction *dto.ClientTransactionsResponse, err error) {
+	if err = repo.db.Order("created_at asc").Table("transactions").Select("transactions.id, product_categories.slug as category, payments.status as status, products.name as product, transactions.description as transaction_details, payments.charged as charged, payments.created_at, payments.method as payment_method").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on transactions.product_id = products.id").Joins("left join product_brand_categories on products.product_brand_category_id = product_brand_categories.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("transactions.user_id = ? and transactions.id = ?", uid, tid).Scan(&transaction).Error; err != nil {
+		return
+	}
+	return
+}
 func (repo *PostgresRepository) FindAll() (transactions *[]dto.ClientTransactionsResponse, err error) {
 	if err = repo.db.Order("created_at asc").Table("transactions").Select("transactions.id, product_categories.slug as category, payments.status as status, products.name as product, transactions.description as transaction_details, payments.charged as charged, payments.created_at, payments.method as payment_method").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on transactions.product_id = products.id").Joins("left join product_brand_categories on products.product_brand_category_id = product_brand_categories.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Scan(&transactions).Error; err != nil {
 		return

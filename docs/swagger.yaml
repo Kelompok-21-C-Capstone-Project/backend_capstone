@@ -1570,6 +1570,46 @@ paths:
       summary: Get all transaction from specific user
       tags:
       - users
+  /v1/users/:id/transactions/:transaction_id:
+    get:
+      description: Get all transaction from specific user
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: transaction ID
+        in: path
+        name: transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ClientTransactionsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all transaction from specific user
+      tags:
+      - users
   /v1/users/{id}:
     delete:
       description: Delete user data from database

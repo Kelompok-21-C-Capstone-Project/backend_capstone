@@ -16,6 +16,7 @@ type Repository interface {
 	FindByQuery(key string, value interface{}) (transactions *[]models.Transaction, err error)
 	FindAll() (transactions *[]dto.ClientTransactionsResponse, err error)
 	UsersFindAll(uip string) (transactions *[]dto.ClientTransactionsResponse, err error)
+	UsersFindById(uid string, tid string) (transaction *dto.ClientTransactionsResponse, err error)
 	CheckProductStock(pid string) (product *models.Product, err error)
 	ProductReStock(pid string) (err error)
 	Insert(data *models.Transaction) (transaction *models.Transaction, err error)
@@ -28,6 +29,7 @@ type Service interface {
 	GetById(id string) (transaction models.Transaction, err error)
 	GetAll() (transactions []dto.ClientTransactionsResponse, err error)
 	UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error)
+	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	Modify() (transaction models.Transaction, err error)
 	Remove() (err error)
@@ -68,6 +70,22 @@ func (s *service) UsersGetAll(uid string) (transactions []dto.ClientTransactions
 		return
 	}
 	transactions = *data
+	return
+}
+func (s *service) UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error) {
+	_, err = uuid.Parse(uid)
+	if err != nil {
+		return
+	}
+	_, err = uuid.Parse(tid)
+	if err != nil {
+		return
+	}
+	data, err := s.repository.UsersFindById(uid, tid)
+	if err != nil {
+		return
+	}
+	transaction = *data
 	return
 }
 func (s *service) Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error) {
