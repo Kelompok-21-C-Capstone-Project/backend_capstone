@@ -88,6 +88,10 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 	controller.service.Modify()
 	return
 }
+func (controller *Controller) MidtransOperation(c echo.Context) (err error) {
+	controller.service.Modify()
+	return
+}
 
 // GetAll godoc
 // @Summary Get all payment

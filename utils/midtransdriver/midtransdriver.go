@@ -206,7 +206,6 @@ func (d *MidtransDriver) DoPayment(method string, midtranspaymentDTO dto.Midtran
 		return
 	}
 
-	log.Print("Response :", coreApiRes)
 	var status string
 	switch coreApiRes.TransactionStatus {
 	case "pending":
