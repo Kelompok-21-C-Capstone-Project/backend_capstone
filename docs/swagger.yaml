@@ -534,6 +534,12 @@ definitions:
       email:
         example: somemail@mail.com
         type: string
+      ext:
+        example: 1257894000000
+        type: integer
+      iat:
+        example: 1257894000000
+        type: integer
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
