@@ -67,7 +67,7 @@ var (
 				{
 					Id:    1,
 					Label: "Gopay",
-					Icon:  "GoPay",
+					Icon:  "Gopay",
 				},
 			},
 		},
