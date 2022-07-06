@@ -102,9 +102,15 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 	}
 	// send bill using mail jet
 
-	log.Print(dataPayment)
-	log.Print(dataProduct)
-	log.Print(dataTransaction)
+	log.Print("Id", dataPayment.Id)
+	log.Print("TransactionId", dataTransaction.Id)
+	log.Print("VaNumber", dataPayment.Description)
+	log.Print("PaymentDetails", dataPayment.MethodDetails)
+	log.Print("Billed", dataPayment.Billed)
+	log.Print("Product", dataProduct.Name)
+	log.Print("ProductPrice", dataProduct.Price)
+	log.Print("Charger", dataPayment.Billed)
+	log.Print("Deadline", dataPayment.CreatedAt)
 
 	bill = dto.BillClient{
 		Id:             dataPayment.Id,
