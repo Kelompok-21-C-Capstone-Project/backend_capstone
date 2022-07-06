@@ -79,6 +79,8 @@ func (s *jwtMiddleware) JwtMiddleware() echo.MiddlewareFunc {
 			c.Set("email", fmt.Sprintf("%s", claim["email"]))
 			c.Set("phone", fmt.Sprintf("%s", claim["phone"]))
 			c.Set("role", fmt.Sprintf("%s", reflect.ValueOf(claim["role"]).Index(0).Interface().(string)))
+			c.Set("created_at", fmt.Sprintf("%s", claim["created_at"]))
+			c.Set("expired_at", fmt.Sprintf("%s", claim["expired_at"]))
 
 			return next(c)
 		}

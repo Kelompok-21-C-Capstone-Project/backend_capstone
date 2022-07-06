@@ -2508,6 +2508,14 @@ const docTemplate = `{
                     "type": "string",
                     "example": "somemail@mail.com"
                 },
+                "ext": {
+                    "type": "integer",
+                    "example": 1257894000000
+                },
+                "iat": {
+                    "type": "integer",
+                    "example": 1257894000000
+                },
                 "id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"

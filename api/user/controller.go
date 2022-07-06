@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -254,6 +255,7 @@ func (controller *Controller) AuthUser(c echo.Context) (err error) {
 // @Security ApiKeyAuth
 // @Router       /v1/tokens [get]
 func (controller *Controller) ParseToken(c echo.Context) (err error) {
+	log.Print("enter controller.user.ParseToken")
 	signature := strings.Split(c.Request().Header.Get("Authorization"), " ")
 	if len(signature) < 2 {
 		log.Print("fail")
@@ -270,6 +272,8 @@ func (controller *Controller) ParseToken(c echo.Context) (err error) {
 			Message: "invalid token",
 		})
 	}
+	iatTime, _ := time.Parse(time.RFC3339, c.Get("created_at").(string))
+	expTime, _ := time.Parse(time.RFC3339, c.Get("expired_at").(string))
 	return c.JSON(200, &response.JwtPayload{
 		Id:       c.Get("payload").(string),
 		Username: c.Get("username").(string),
@@ -277,5 +281,7 @@ func (controller *Controller) ParseToken(c echo.Context) (err error) {
 		Role:     []string{c.Get("role").(string)},
 		Email:    c.Get("email").(string),
 		Phone:    c.Get("phone").(string),
+		Iat:      iatTime.UnixMilli(),
+		Exp:      expTime.UnixMilli(),
 	})
 }
