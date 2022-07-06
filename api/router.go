@@ -5,8 +5,6 @@ import (
 	GlobalMiddleware "backend_capstone/api/middleware/global"
 	UserMiddleware "backend_capstone/api/middleware/user"
 	"backend_capstone/api/payment"
-	"backend_capstone/api/paymentmethod"
-	"backend_capstone/api/paymentvendor"
 	"backend_capstone/api/product"
 	"backend_capstone/api/productbrand"
 	"backend_capstone/api/productcategory"
@@ -22,10 +20,10 @@ type Controller struct {
 	ProductCategory *productcategory.Controller
 	ProductBrand    *productbrand.Controller
 	Product         *product.Controller
-	PaymentMethod   *paymentmethod.Controller
-	PaymentVendor   *paymentvendor.Controller
-	User            *user.Controller
-	Transaction     *transaction.Controller
+	// PaymentMethod   *paymentmethod.Controller
+	// PaymentVendor   *paymentvendor.Controller
+	User        *user.Controller
+	Transaction *transaction.Controller
 
 	MiddlewareAdminJWT AdminMiddleware.JwtService
 	MiddlewareUserJWT  UserMiddleware.JwtService
@@ -89,6 +87,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	clientV1.GET("/products", controller.Product.ClientGetAll)
 	clientV1.GET("/products/:slug", controller.Product.ClientGetAllBySlug)
 	clientV1.GET("/products/categories", controller.ProductCategory.GetAll)
+	clientV1.GET("/payments", controller.Payment.GetAll)
 
 	tokenV1 := e.Group("v1/tokens")
 	tokenV1.Use(controller.MiddlewareJWT.JwtMiddleware())
