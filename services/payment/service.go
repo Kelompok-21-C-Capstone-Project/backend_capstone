@@ -47,6 +47,10 @@ func NewService(paymentRepository PaymentRepository, midtransApi *midtransdriver
 	}
 }
 
+func (s *service) MidtransOperation() (err error) {
+	return
+}
+
 func (s *service) GetById(id string) (payment models.Payment, err error) {
 	return
 }
