@@ -54,18 +54,12 @@ func (d *MidtransDriver) CreateBankTransferPayment(midtranspaymentDTO dto.Midtra
 		bank = "bni"
 	case strings.Contains(bank, "mandiri"):
 		bank = "mandiri"
-	case strings.Contains(bank, "cimb"):
-		bank = "cimb"
 	case strings.Contains(bank, "bca"):
 		bank = "bca"
 	case strings.Contains(bank, "bri"):
 		bank = "bri"
-	case strings.Contains(bank, "maybank"):
-		bank = "maybank"
 	case strings.Contains(bank, "permata"):
 		bank = "permata"
-	case strings.Contains(bank, "mega"):
-		bank = "mega"
 	}
 	return &coreapi.ChargeReq{
 		PaymentType: coreapi.PaymentTypeBankTransfer,

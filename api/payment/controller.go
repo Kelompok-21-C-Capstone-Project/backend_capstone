@@ -35,29 +35,29 @@ var (
 				},
 				{
 					Id:    4,
-					Label: "CIMB Virtual Account",
-					Icon:  "CIMB",
-				},
-				{
-					Id:    5,
 					Label: "BRI Virtual Account",
 					Icon:  "BRI",
 				},
 				{
-					Id:    6,
-					Label: "Maybank Virtual Account",
-					Icon:  "Maybank",
-				},
-				{
-					Id:    7,
+					Id:    5,
 					Label: "Permata Virtual Account",
 					Icon:  "Permata",
 				},
-				{
-					Id:    8,
-					Label: "Mega Virtual Account",
-					Icon:  "Mega",
-				},
+				// {
+				// 	Id:    4,
+				// 	Label: "CIMB Virtual Account",
+				// 	Icon:  "CIMB",
+				// },
+				// {
+				// 	Id:    6,
+				// 	Label: "Maybank Virtual Account",
+				// 	Icon:  "Maybank",
+				// },
+				// {
+				// 	Id:    8,
+				// 	Label: "Mega Virtual Account",
+				// 	Icon:  "Mega",
+				// },
 			},
 		},
 		{
