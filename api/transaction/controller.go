@@ -122,7 +122,7 @@ func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 func (controller *Controller) UsersGetById(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.UsersGetAll")
 	id := c.Param("id")
-	tid := c.Param("transactions_id")
+	tid := c.Param("transaction_id")
 	if id != c.Get("payload").(string) {
 		err = errors.New("Tidak berizin")
 		return
