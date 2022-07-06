@@ -30,8 +30,8 @@ var (
 				},
 				{
 					Id:    3,
-					Label: "BNI Virtual Account",
-					Icon:  "BNI",
+					Label: "Mandiri Virtual Account",
+					Icon:  "Mandiri",
 				},
 				{
 					Id:    4,
