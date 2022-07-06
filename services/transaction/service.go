@@ -5,6 +5,7 @@ import (
 	"backend_capstone/services/transaction/dto"
 	"backend_capstone/utils/midtransdriver"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -100,6 +101,11 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 		return
 	}
 	// send bill using mail jet
+
+	log.Print(dataPayment)
+	log.Print(dataProduct)
+	log.Print(dataTransaction)
+
 	bill = dto.BillClient{
 		Id:             dataPayment.Id,
 		TransactionId:  dataTransaction.Id,
