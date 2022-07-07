@@ -77,7 +77,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	userV1.POST("/transactions", controller.Transaction.Create)
 	userV1.GET("/:id/transactions", controller.Transaction.UsersGetAll)
 	userV1.GET("/:id/transactions/:transaction_id", controller.Transaction.UsersGetById)
-	userV1.GET("/:id/transactions/:transaction_id/bills", controller.Transaction.UsersGetById)
+	userV1.GET("/:id/transactions/:transaction_id/bills", controller.Transaction.GetBill)
 	userV1.GET("/:id", controller.User.GetSingleData)
 	userV1.PUT("/:id", controller.User.UpdateUserData)
 	userV1.DELETE("/:id", controller.User.DeleteData)

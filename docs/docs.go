@@ -1947,6 +1947,10 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 10000
                 },
+                "status": {
+                    "type": "string",
+                    "example": "Pending"
+                },
                 "transaction_id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
