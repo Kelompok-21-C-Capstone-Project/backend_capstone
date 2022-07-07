@@ -34,7 +34,7 @@ type Service interface {
 	UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error)
 	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
-	GetBill(tid string) (bills dto.BillClient, err error)
+	GetBill(uid string, tid string) (bills dto.BillClient, err error)
 	Modify() (transaction models.Transaction, err error)
 	Remove() (err error)
 	MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error)
@@ -140,7 +140,7 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 	}
 	return
 }
-func (s *service) GetBill(tid string) (bills dto.BillClient, err error) {
+func (s *service) GetBill(uid string, tid string) (bills dto.BillClient, err error) {
 	_, err = uuid.Parse(tid)
 	if err != nil {
 		return

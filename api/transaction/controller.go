@@ -232,7 +232,7 @@ func (controller *Controller) Remove(c echo.Context) (err error) {
 // GetBill Godoc
 // @Summary Get transactions bill
 // @Description  Get transaction transactions nill by id & user id
-// @Tags         transactions
+// @Tags         users
 // @Produce      json
 // @Param id   path  string  true  "transaction ID" minLength:"32"
 // @Param transaction_id   path  string  true  "transaction ID" minLength:"32"

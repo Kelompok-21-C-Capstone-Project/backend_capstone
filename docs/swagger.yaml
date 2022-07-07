@@ -1769,7 +1769,7 @@ paths:
       - ApiKeyAuth: []
       summary: Get transactions bill
       tags:
-      - transactions
+      - users
   /v1/users/transactions:
     post:
       consumes:

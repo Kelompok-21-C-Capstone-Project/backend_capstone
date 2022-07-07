@@ -1867,7 +1867,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "transactions"
+                    "users"
                 ],
                 "summary": "Get transactions bill",
                 "parameters": [
