@@ -4,7 +4,7 @@ import "backend_capstone/services/transaction/dto"
 
 type MidtransReq struct {
 	Code          string `json:"status_code,omitempty"`
-	TranasctionId string `json:"transaction_id,omitempty"`
+	TranasctionId string `json:"order_id,omitempty"`
 	Status        string `json:"transaction_status,omitempty"`
 }
 

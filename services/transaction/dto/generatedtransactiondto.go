@@ -50,7 +50,7 @@ func (ClientTransactionsResponse) TableName() string {
 }
 
 type MidtransAfterPayment struct {
-	TransactionId string `json:"transaction_id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	TransactionId string `json:"order_id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Status        string `json:"transaction_status,omitempty" example:"Pending"`
 	Code          string `json:"status_code,omitempty"`
 }
