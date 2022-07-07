@@ -255,6 +255,7 @@ func (controller *Controller) GetBill(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, data)
 }
 func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
+	log.Print(c.Request().Body)
 	reqMidtrans := new(request.MidtransReq)
 	if err = c.Bind(reqMidtrans); err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
