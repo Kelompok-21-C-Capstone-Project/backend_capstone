@@ -3,7 +3,7 @@ package transaction
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/transaction/dto"
-	"backend_capstone/utils/midtransdriver"
+	dtoMidtrans "backend_capstone/utils/midtransdriver/dto"
 	"errors"
 	"log"
 	"time"
@@ -11,6 +11,15 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
+
+type Mailjet interface {
+	SendBill() (err error)
+	SendInvoice() (err error)
+}
+
+type Midtrans interface {
+	DoPayment(method string, midtranspaymentDTO dtoMidtrans.MidtransPaymentDTO) (data *models.Payment, err error)
+}
 
 type Repository interface {
 	FindById(id string) (transaction *models.Transaction, err error)
@@ -43,10 +52,10 @@ type Service interface {
 type service struct {
 	repository Repository
 	validate   *validator.Validate
-	midtrans   *midtransdriver.MidtransDriver
+	midtrans   Midtrans
 }
 
-func NewService(repository Repository, midtransApi *midtransdriver.MidtransDriver) Service {
+func NewService(repository Repository, midtransApi Midtrans) Service {
 	return &service{
 		repository: repository,
 		validate:   validator.New(),
@@ -130,6 +139,7 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 	bill = dto.BillClient{
 		Id:             dataPayment.Id,
 		TransactionId:  dataTransaction.Id,
+		Status:         dataPayment.Status,
 		VaNumber:       dataPayment.Description,
 		PaymentDetails: dataPayment.MethodDetails,
 		Billed:         dataPayment.Billed,
@@ -158,6 +168,7 @@ func (s *service) GetBill(uid string, tid string) (bills dto.BillClient, err err
 	bills = dto.BillClient{
 		Id:             dataTransaction.Payment.Id,
 		TransactionId:  dataTransaction.Id,
+		Status:         dataTransaction.Payment.Status,
 		VaNumber:       dataTransaction.Payment.Description,
 		PaymentDetails: dataTransaction.Payment.MethodDetails,
 		Billed:         dataTransaction.Payment.Billed,

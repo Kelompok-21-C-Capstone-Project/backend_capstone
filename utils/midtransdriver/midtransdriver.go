@@ -3,6 +3,7 @@ package midtransdriver
 import (
 	"backend_capstone/configs"
 	"backend_capstone/models"
+	"backend_capstone/services/transaction"
 	"backend_capstone/utils/midtransdriver/dto"
 	"errors"
 	"log"
@@ -19,9 +20,9 @@ type MidtransDriver struct {
 	MidtransOperation coreapi.Client
 }
 
-func NewMidtransService(configs *configs.AppConfig) *MidtransDriver {
+func NewMidtransService(configs *configs.AppConfig) transaction.Midtrans {
 	log.Print("Enter NewMidtransService")
-	var api MidtransDriver
+	var api *MidtransDriver
 
 	// 1. Set you ServerKey with globally
 	midtrans.ServerKey = configs.API_Midtrans.SERVER_KEY
@@ -32,11 +33,13 @@ func NewMidtransService(configs *configs.AppConfig) *MidtransDriver {
 
 	switch configs.API_Midtrans.ENV {
 	case "sandbox":
-		api.ServerKey = configs.API_Midtrans.SERVER_KEY
-		api.Env = midtrans.Sandbox
-		api.MidtransOperation = c
+		api = &MidtransDriver{
+			ServerKey:         configs.API_Midtrans.SERVER_KEY,
+			Env:               midtrans.Sandbox,
+			MidtransOperation: c,
+		}
 	}
-	return &api
+	return api
 }
 
 func (d *MidtransDriver) PutApprovePaymentMethod() interface{} {

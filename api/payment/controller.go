@@ -80,19 +80,6 @@ func NewController(service paymentUsease.Service) *Controller {
 	}
 }
 
-func (controller *Controller) Create(c echo.Context) (err error) {
-	controller.service.Create()
-	return
-}
-func (controller *Controller) Modify(c echo.Context) (err error) {
-	controller.service.Modify()
-	return
-}
-func (controller *Controller) MidtransOperation(c echo.Context) (err error) {
-	controller.service.Modify()
-	return
-}
-
 // GetAll godoc
 // @Summary Get all payment
 // @Description  Get all payment methods and services

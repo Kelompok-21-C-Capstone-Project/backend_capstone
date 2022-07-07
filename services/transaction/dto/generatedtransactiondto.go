@@ -20,6 +20,7 @@ type TransactionDetails struct {
 type BillClient struct {
 	Id             string    `json:"id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	TransactionId  string    `json:"transaction_id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Status         string    `json:"status" example:"Pending"`
 	VaNumber       string    `json:"va_number,omitempty" example:"2312312412523"`
 	PaymentDetails string    `json:"payment_method,omitempty" example:"Mandiri Virtual Account"`
 	Billed         uint32    `json:"bill,omitempty" example:"11500"`
