@@ -182,11 +182,12 @@ func (s *service) GetBill(uid string, tid string) (bills dto.BillClient, err err
 func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error) {
 	_, err = uuid.Parse(midtransData.TransactionId)
 	if err != nil {
-		log.Print("Transaction Id ", midtransData.TransactionId, " Is Invalid")
+		err = errors.New("Transaction Id " + midtransData.TransactionId + " Is Invalid")
 		return
 	}
 	if midtransData.Code == "200" {
 		log.Print("Update transaction skipped")
+		err = errors.New("Update transaction skipped")
 		return
 	}
 	switch midtransData.Status {
@@ -198,7 +199,7 @@ func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (e
 		midtransData.Status = "Cancelled"
 	}
 	if err = s.repository.MidtransUpdate(midtransData.TransactionId, midtransData.Status); err != nil {
-		log.Print("Midtrans Transaction Id ", midtransData.TransactionId, " Fail To Update")
+		err = errors.New("Midtrans Transaction Id " + midtransData.TransactionId + " Fail To Update")
 	}
 	return
 }

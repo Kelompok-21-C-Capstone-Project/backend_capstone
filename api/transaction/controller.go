@@ -275,5 +275,5 @@ func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
 		log.Print(err)
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	return c.JSON(http.StatusOK, err.Error())
+	return c.JSON(http.StatusOK, errors.New("success"))
 }
