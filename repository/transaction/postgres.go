@@ -19,6 +19,9 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 }
 
 func (repo *PostgresRepository) FindById(id string) (transaction *models.Transaction, err error) {
+	if err = repo.db.Preload("Payment").First(&transaction, &id).Error; err != nil {
+		return
+	}
 	return
 }
 func (repo *PostgresRepository) FindByQuery(key string, value interface{}) (transactions *[]models.Transaction, err error) {
@@ -55,6 +58,12 @@ func (repo *PostgresRepository) InsertPayment(data *models.Payment) (transaction
 	}
 	return data, err
 }
+func (repo *PostgresRepository) MidtransUpdate(tid string, status string) (err error) {
+	if err = repo.db.First(&models.Payment{}, "transaction_id = ?", &tid).Update("status", status).Error; err != nil {
+		return
+	}
+	return
+}
 func (repo *PostgresRepository) Update() (transaction *models.Transaction, err error) {
 	return
 }
@@ -83,4 +92,10 @@ func (repo *PostgresRepository) ProductReStock(pid string) (err error) {
 		return
 	}
 	return err
+}
+func (repo *PostgresRepository) GetTransactionProduct(pid string) (product *models.Product, err error) {
+	if err = repo.db.First(&product, &pid).Where("deleted is null").Error; err != nil {
+		return
+	}
+	return
 }

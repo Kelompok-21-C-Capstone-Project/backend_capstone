@@ -228,3 +228,45 @@ func (controller *Controller) Remove(c echo.Context) (err error) {
 	// })
 	return
 }
+
+// GetBill Godoc
+// @Summary Get transactions bill
+// @Description  Get transaction transactions nill by id & user id
+// @Tags         transactions
+// @Produce      json
+// @Param id   path  string  true  "transaction ID" minLength:"32"
+// @Param transaction_id   path  string  true  "transaction ID" minLength:"32"
+// @Success      200  {object}  dto.BillClient
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/users/{id}/transactions/{transaction_id}/bills [get]
+func (controller *Controller) GetBill(c echo.Context) (err error) {
+	id := c.Param("id")
+	tid := c.Param("transaction_id")
+	data, err := controller.service.GetBill(id, tid)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusCreated, data)
+}
+func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
+	reqMidtrans := new(request.MidtransReq)
+	if err = c.Bind(reqMidtrans); err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	if err = controller.service.MidtransAfterPayment(reqMidtrans.DtoReq()); err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return
+}

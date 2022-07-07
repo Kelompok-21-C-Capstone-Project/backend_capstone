@@ -5,6 +5,7 @@ import (
 	"backend_capstone/services/transaction/dto"
 	"backend_capstone/utils/midtransdriver"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -22,6 +23,8 @@ type Repository interface {
 	Insert(data *models.Transaction) (transaction *models.Transaction, err error)
 	InsertPayment(data *models.Payment) (transaction *models.Payment, err error)
 	Update() (transaction *models.Transaction, err error)
+	MidtransUpdate(tid string, status string) (err error)
+	GetTransactionProduct(pid string) (product *models.Product, err error)
 	Delete(id string) (err error)
 }
 
@@ -34,6 +37,7 @@ type Service interface {
 	GetBill(tid string) (bills dto.BillClient, err error)
 	Modify() (transaction models.Transaction, err error)
 	Remove() (err error)
+	MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error)
 }
 
 type service struct {
@@ -137,24 +141,49 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 	return
 }
 func (s *service) GetBill(tid string) (bills dto.BillClient, err error) {
-	// _, err = uuid.Parse(tid)
-	// if err != nil {
-	// 	return
-	// }
+	_, err = uuid.Parse(tid)
+	if err != nil {
+		return
+	}
 	// ngambil data transaksi dari repo pake tid : transaction
-	// ngabmil data payment dari repo pake tid : payment
+	dataTransaction, err := s.repository.FindById(tid)
+	if err != nil {
+		return
+	}
 	// ngambil data product dari repo pake data `transaction.product_id` : product
-	// bills = dto.BillClient{
-	// 	Id:             dataPayment.Id,
-	// 	TransactionId:  dataTransaction.Id,
-	// 	VaNumber:       dataPayment.Description,
-	// 	PaymentDetails: dataPayment.MethodDetails,
-	// 	Billed:         dataPayment.Billed,
-	// 	Product:        dataProduct.Name,
-	// 	ProductPrice:   dataProduct.Price,
-	// 	Charger:        dataPayment.Billed - dataProduct.Price,
-	// 	Deadline:       dataPayment.CreatedAt.Add(time.Hour * time.Duration(1)),
-	// }
+	dataProduct, err := s.repository.GetTransactionProduct(dataTransaction.ProductId)
+	if err != nil {
+		return
+	}
+	bills = dto.BillClient{
+		Id:             dataTransaction.Payment.Id,
+		TransactionId:  dataTransaction.Id,
+		VaNumber:       dataTransaction.Payment.Description,
+		PaymentDetails: dataTransaction.Payment.MethodDetails,
+		Billed:         dataTransaction.Payment.Billed,
+		Product:        dataProduct.Name,
+		ProductPrice:   dataProduct.Price,
+		Charger:        dataTransaction.Payment.Billed - dataProduct.Price,
+		Deadline:       dataTransaction.Payment.CreatedAt.Add(time.Hour * time.Duration(1)),
+	}
+	return
+}
+func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error) {
+	_, err = uuid.Parse(midtransData.TransactionId)
+	if err != nil {
+		log.Fatal("Transaction Id ", midtransData.TransactionId, " Is Invalid")
+	}
+	switch midtransData.Status {
+	case "capture":
+		midtransData.Status = "Success"
+	case "settlement":
+		midtransData.Status = "Success"
+	default:
+		midtransData.Status = "Cancelled"
+	}
+	if err = s.repository.MidtransUpdate(midtransData.TransactionId, midtransData.Status); err != nil {
+		log.Fatal("Midtrans Transaction Id ", midtransData.TransactionId, " Fail To Update")
+	}
 	return
 }
 func (s *service) Modify() (transaction models.Transaction, err error) {

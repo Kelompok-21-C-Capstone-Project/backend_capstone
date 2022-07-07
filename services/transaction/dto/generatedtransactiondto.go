@@ -47,3 +47,8 @@ type ClientTransactionsResponse struct {
 func (ClientTransactionsResponse) TableName() string {
 	return ""
 }
+
+type MidtransAfterPayment struct {
+	TransactionId string `json:"transaction_id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Status        string `json:"transaction_status" example:"Pending"`
+}

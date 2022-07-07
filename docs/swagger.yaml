@@ -130,6 +130,8 @@ definitions:
         $ref: '#/definitions/models.ProductBrandCategory'
       category_id:
         type: string
+      deleted:
+        type: string
       description:
         example: some description
         type: string
@@ -1223,7 +1225,12 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.Product'
+            allOf:
+            - $ref: '#/definitions/models.Product'
+            - properties:
+                deleted:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1288,7 +1295,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Product'
+            allOf:
+            - $ref: '#/definitions/models.Product'
+            - properties:
+                deleted:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1328,7 +1340,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Product'
+            allOf:
+            - $ref: '#/definitions/models.Product'
+            - properties:
+                deleted:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1715,6 +1732,44 @@ paths:
       summary: Update user
       tags:
       - users
+  /v1/users/{id}/transactions/{transaction_id}/bills:
+    get:
+      description: Get transaction transactions nill by id & user id
+      parameters:
+      - description: transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: transaction ID
+        in: path
+        name: transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.BillClient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get transactions bill
+      tags:
+      - transactions
   /v1/users/transactions:
     post:
       consumes:

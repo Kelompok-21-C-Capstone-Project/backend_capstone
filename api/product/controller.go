@@ -28,7 +28,7 @@ func NewController(service productUseCase.Service) *Controller {
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
-// @Success      201  {object}  models.Product
+// @Success      201  {object}  models.Product{deleted=string}
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -128,7 +128,7 @@ func (controller *Controller) ClientGetAllBySlug(c echo.Context) (err error) {
 // @Tags         products
 // @Produce      json
 // @Param id   path  string  true  "Product ID" minLength:"32"
-// @Success      200  {object}  models.Product
+// @Success      200  {object}  models.Product{deleted=string}
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -155,7 +155,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
 // @Param Payload body request.UpdateProductRequest true "Payload format" SchemaExample(request.UpdateProductRequest)
-// @Success      200  {object}  models.Product
+// @Success      200  {object}  models.Product{deleted=string}
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse

@@ -19,5 +19,5 @@ type Product struct {
 	ProductBrandCategoryId string               `json:"category_id,omitempty"`
 	ProductBrandCategory   ProductBrandCategory `json:"category,omitempty"`
 	UpdatedAt              time.Time            `json:"updated_at,omitempty"`
-	Deleted                gorm.DeletedAt
+	Deleted                gorm.DeletedAt       `json:"deleted,omitempty"`
 }
