@@ -31,6 +31,7 @@ type Service interface {
 	UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error)
 	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
+	GetBill(tid string) (bills dto.BillClient, err error)
 	Modify() (transaction models.Transaction, err error)
 	Remove() (err error)
 }
@@ -133,6 +134,27 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 		Charger:        dataPayment.Billed - dataProduct.Price,
 		Deadline:       dataPayment.CreatedAt.Add(time.Hour * time.Duration(1)),
 	}
+	return
+}
+func (s *service) GetBill(tid string) (bills dto.BillClient, err error) {
+	// _, err = uuid.Parse(tid)
+	// if err != nil {
+	// 	return
+	// }
+	// ngambil data transaksi dari repo pake tid : transaction
+	// ngabmil data payment dari repo pake tid : payment
+	// ngambil data product dari repo pake data `transaction.product_id` : product
+	// bills = dto.BillClient{
+	// 	Id:             dataPayment.Id,
+	// 	TransactionId:  dataTransaction.Id,
+	// 	VaNumber:       dataPayment.Description,
+	// 	PaymentDetails: dataPayment.MethodDetails,
+	// 	Billed:         dataPayment.Billed,
+	// 	Product:        dataProduct.Name,
+	// 	ProductPrice:   dataProduct.Price,
+	// 	Charger:        dataPayment.Billed - dataProduct.Price,
+	// 	Deadline:       dataPayment.CreatedAt.Add(time.Hour * time.Duration(1)),
+	// }
 	return
 }
 func (s *service) Modify() (transaction models.Transaction, err error) {
