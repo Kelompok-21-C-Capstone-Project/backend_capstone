@@ -265,6 +265,7 @@ func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
 		// 	Message: err.Error(),
 		// })
 		log.Print(err)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 	if err := controller.service.MidtransAfterPayment(reqMidtrans.DtoReq()); err != nil {
 		// return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
@@ -272,6 +273,7 @@ func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
 		// 	Message: err.Error(),
 		// })
 		log.Print(err)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	return
+	return c.JSON(http.StatusOK, err.Error())
 }
