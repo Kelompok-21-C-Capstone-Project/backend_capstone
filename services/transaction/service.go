@@ -185,7 +185,7 @@ func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (e
 		err = errors.New("Transaction Id " + midtransData.TransactionId + " Is Invalid")
 		return
 	}
-	if midtransData.Code == "200" || midtransData.Code == "201" {
+	if midtransData.Code == "201" {
 		log.Print("Update transaction skipped")
 		err = errors.New("Update transaction skipped")
 		return
