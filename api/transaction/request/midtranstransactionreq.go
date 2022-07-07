@@ -12,5 +12,6 @@ func (req *MidtransReq) DtoReq() dto.MidtransAfterPayment {
 	return dto.MidtransAfterPayment{
 		TransactionId: req.TranasctionId,
 		Status:        req.Status,
+		Code:          req.Code,
 	}
 }

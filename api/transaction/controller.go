@@ -92,6 +92,8 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.UsersGetAll")
 	id := c.Param("id")
+	// page := c.QueryParam("pages")
+	// limit := c.QueryParam("limits")
 	if id != c.Get("payload").(string) {
 		err = errors.New("Tidak berizin")
 		return
@@ -257,17 +259,19 @@ func (controller *Controller) GetBill(c echo.Context) (err error) {
 func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
 	log.Print(c.Request().Body)
 	reqMidtrans := new(request.MidtransReq)
-	if err = c.Bind(reqMidtrans); err != nil {
-		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
-			Status:  "fail",
-			Message: err.Error(),
-		})
+	if err := c.Bind(reqMidtrans); err != nil {
+		// return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+		// 	Status:  "fail",
+		// 	Message: err.Error(),
+		// })
+		log.Print(err)
 	}
-	if err = controller.service.MidtransAfterPayment(reqMidtrans.DtoReq()); err != nil {
-		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
-			Status:  "fail",
-			Message: err.Error(),
-		})
+	if err := controller.service.MidtransAfterPayment(reqMidtrans.DtoReq()); err != nil {
+		// return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+		// 	Status:  "fail",
+		// 	Message: err.Error(),
+		// })
+		log.Print(err)
 	}
 	return
 }
