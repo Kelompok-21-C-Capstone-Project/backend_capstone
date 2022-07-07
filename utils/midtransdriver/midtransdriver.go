@@ -68,7 +68,7 @@ func (d *MidtransDriver) CreateBankTransferPayment(midtranspaymentDTO dto.Midtra
 		PaymentType: coreapi.PaymentTypeBankTransfer,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  midtranspaymentDTO.OrderId,
-			GrossAmt: midtranspaymentDTO.Paid,
+			GrossAmt: midtranspaymentDTO.Paid + 1500,
 		},
 		BankTransfer: &coreapi.BankTransferDetails{
 			Bank: midtrans.Bank(bank),
@@ -76,7 +76,7 @@ func (d *MidtransDriver) CreateBankTransferPayment(midtranspaymentDTO dto.Midtra
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    midtranspaymentDTO.ItemId,
-				Price: midtranspaymentDTO.ItemPrice,
+				Price: midtranspaymentDTO.ItemPrice + 1500,
 				Qty:   1,
 				Name:  midtranspaymentDTO.ItemName,
 			},
@@ -95,13 +95,13 @@ func (d *MidtransDriver) CreateShopeePayPayment(midtranspaymentDTO dto.MidtransP
 		PaymentType: coreapi.PaymentTypeShopeepay,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  midtranspaymentDTO.OrderId,
-			GrossAmt: midtranspaymentDTO.Paid,
+			GrossAmt: midtranspaymentDTO.Paid + 1500,
 		},
 		ShopeePay: &coreapi.ShopeePayDetails{},
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    midtranspaymentDTO.ItemId,
-				Price: midtranspaymentDTO.ItemPrice,
+				Price: midtranspaymentDTO.ItemPrice + 1500,
 				Qty:   1,
 				Name:  midtranspaymentDTO.ItemName,
 			},
@@ -120,13 +120,13 @@ func (d *MidtransDriver) CreateGopayPayment(midtranspaymentDTO dto.MidtransPayme
 		PaymentType: coreapi.PaymentTypeGopay,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  midtranspaymentDTO.OrderId,
-			GrossAmt: midtranspaymentDTO.Paid,
+			GrossAmt: midtranspaymentDTO.Paid + 1500,
 		},
 		Gopay: &coreapi.GopayDetails{},
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    midtranspaymentDTO.ItemId,
-				Price: midtranspaymentDTO.ItemPrice,
+				Price: midtranspaymentDTO.ItemPrice + 1500,
 				Qty:   1,
 				Name:  midtranspaymentDTO.ItemName,
 			},
@@ -145,13 +145,13 @@ func (d *MidtransDriver) CreateQrisPayment(midtranspaymentDTO dto.MidtransPaymen
 		PaymentType: coreapi.PaymentTypeQris,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  midtranspaymentDTO.OrderId,
-			GrossAmt: midtranspaymentDTO.Paid,
+			GrossAmt: midtranspaymentDTO.Paid + 1500,
 		},
 		Qris: &coreapi.QrisDetails{},
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    midtranspaymentDTO.ItemId,
-				Price: midtranspaymentDTO.ItemPrice,
+				Price: midtranspaymentDTO.ItemPrice + 1500,
 				Qty:   1,
 				Name:  midtranspaymentDTO.ItemName,
 			},
