@@ -20,10 +20,8 @@ type Controller struct {
 	ProductCategory *productcategory.Controller
 	ProductBrand    *productbrand.Controller
 	Product         *product.Controller
-	// PaymentMethod   *paymentmethod.Controller
-	// PaymentVendor   *paymentvendor.Controller
-	User        *user.Controller
-	Transaction *transaction.Controller
+	User            *user.Controller
+	Transaction     *transaction.Controller
 
 	MiddlewareAdminJWT AdminMiddleware.JwtService
 	MiddlewareUserJWT  UserMiddleware.JwtService
