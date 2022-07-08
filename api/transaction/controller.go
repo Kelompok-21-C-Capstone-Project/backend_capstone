@@ -83,11 +83,11 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // @Param id   path  string  true  "user ID" minLength:"32"
 // @Param query   query  string  false  "search data by query"
 // @Param date   query  string  false  "search data by date"
-// @Param dateRange   query  string  false  "search data by dateRange"
+// @Param date_range   query  string  false  "search data by date range"
 // @Param status   query  string  false  "search data by status"
 // @Param category   query  string  false  "search data by category"
 // @Param page   query  string  false  "search data by page"
-// @Param pageSize   query  string  false  "search data by pageSize"
+// @Param page_size   query  string  false  "search data by page size"
 // @Tags         users
 // @Produce      json
 // @Success      200  {array}  dto.ClientTransactionsResponse
@@ -101,7 +101,7 @@ func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 	id := c.Param("id")
 	query := c.QueryParam("query")
 	date := c.QueryParam("date")
-	dateRange := c.QueryParam("dateRange")
+	dateRange := c.QueryParam("date_range")
 	status := c.QueryParam("status")
 	category := c.QueryParam("category")
 	page := c.QueryParam("page")

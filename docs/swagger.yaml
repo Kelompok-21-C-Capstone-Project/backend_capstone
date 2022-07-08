@@ -1575,9 +1575,9 @@ paths:
         in: query
         name: date
         type: string
-      - description: search data by dateRange
+      - description: search data by date range
         in: query
-        name: dateRange
+        name: date_range
         type: string
       - description: search data by status
         in: query
@@ -1591,9 +1591,9 @@ paths:
         in: query
         name: page
         type: string
-      - description: search data by pageSize
+      - description: search data by page size
         in: query
-        name: pageSize
+        name: page_size
         type: string
       produces:
       - application/json

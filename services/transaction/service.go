@@ -7,6 +7,7 @@ import (
 	"errors"
 	"log"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -79,28 +80,34 @@ func (s *service) GetAll() (transactions []dto.ClientTransactionsResponse, err e
 	return
 }
 func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.ClientTransactionsResponse, err error) {
-	if params[1] != "" {
+	if params[2] != "" {
 		regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
 		if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {
 			return
 		}
-	} else if params[2] != "" {
+	} else if params[1] != "" {
 		regexDate := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
 		if resR, _ := regexp.MatchString(regexDate, params[1]); !resR {
 			return
 		}
 	}
 	for in, el := range params {
-		params[in] = "%" + el + "%"
+		if in == 0 || in == 3 || in == 4 {
+			params[in] = "%" + el + "%"
+		}
 	}
-	if params[5] == "%%" {
+	if params[5] == "" {
 		log.Print("hadop")
 		params[5] = "1"
 	}
-	if params[6] == "%%" {
+	if params[6] == "" {
 		log.Print("hadup")
 		params[6] = "5"
 	}
+	date := strings.Split(params[2], "_")
+	dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
+	date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
+	params = append(params, date...)
 	data, err := s.repository.UsersFindAll(uid, params...)
 	if err != nil {
 		return

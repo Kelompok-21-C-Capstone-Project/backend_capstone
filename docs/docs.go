@@ -1554,8 +1554,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "search data by dateRange",
-                        "name": "dateRange",
+                        "description": "search data by date range",
+                        "name": "date_range",
                         "in": "query"
                     },
                     {
@@ -1578,8 +1578,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "search data by pageSize",
-                        "name": "pageSize",
+                        "description": "search data by page size",
+                        "name": "page_size",
                         "in": "query"
                     }
                 ],
