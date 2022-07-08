@@ -97,11 +97,9 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.
 		}
 	}
 	if params[5] == "" {
-		log.Print("hadop")
 		params[5] = "1"
 	}
 	if params[6] == "" {
-		log.Print("hadup")
 		params[6] = "5"
 	}
 	date := strings.Split(params[2], "_")
