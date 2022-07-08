@@ -6,6 +6,7 @@ import (
 	dtoMidtrans "backend_capstone/utils/midtransdriver/dto"
 	"errors"
 	"log"
+	"regexp"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -23,9 +24,8 @@ type Midtrans interface {
 
 type Repository interface {
 	FindById(id string) (transaction *models.Transaction, err error)
-	FindByQuery(key string, value interface{}) (transactions *[]models.Transaction, err error)
 	FindAll() (transactions *[]dto.ClientTransactionsResponse, err error)
-	UsersFindAll(uip string) (transactions *[]dto.ClientTransactionsResponse, err error)
+	UsersFindAll(uip string, params ...string) (transactions *[]dto.ClientTransactionsResponse, err error)
 	UsersFindById(uid string, tid string) (transaction *dto.ClientTransactionsResponse, err error)
 	CheckProductStock(pid string) (product *models.Product, err error)
 	ProductReStock(pid string) (err error)
@@ -40,7 +40,7 @@ type Repository interface {
 type Service interface {
 	GetById(id string) (transaction models.Transaction, err error)
 	GetAll() (transactions []dto.ClientTransactionsResponse, err error)
-	UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error)
+	UsersGetAll(uid string, params ...string) (transactions []dto.ClientTransactionsResponse, err error)
 	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	GetBill(uid string, tid string) (bills dto.BillClient, err error)
@@ -78,8 +78,30 @@ func (s *service) GetAll() (transactions []dto.ClientTransactionsResponse, err e
 	transactions = *data
 	return
 }
-func (s *service) UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error) {
-	data, err := s.repository.UsersFindAll(uid)
+func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.ClientTransactionsResponse, err error) {
+	if params[1] != "" {
+		regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
+		if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {
+			return
+		}
+	} else if params[2] != "" {
+		regexDate := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
+		if resR, _ := regexp.MatchString(regexDate, params[1]); !resR {
+			return
+		}
+	}
+	for in, el := range params {
+		params[in] = "%" + el + "%"
+	}
+	if params[5] == "%%" {
+		log.Print("hadop")
+		params[5] = "1"
+	}
+	if params[6] == "%%" {
+		log.Print("hadup")
+		params[6] = "5"
+	}
+	data, err := s.repository.UsersFindAll(uid, params...)
 	if err != nil {
 		return
 	}
