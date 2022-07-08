@@ -2005,6 +2005,10 @@ const docTemplate = `{
                     "type": "string",
                     "example": "2022-07-05T14:32:46.996074+07"
                 },
+                "icon": {
+                    "type": "string",
+                    "example": "paket-data"
+                },
                 "id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -2031,7 +2035,7 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string",
-                    "example": "paket-data"
+                    "example": "Paket Data"
                 }
             }
         },

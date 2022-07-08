@@ -64,6 +64,9 @@ definitions:
       created_at:
         example: 2022-07-05T14:32:46.996074+07
         type: string
+      icon:
+        example: paket-data
+        type: string
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
@@ -83,7 +86,7 @@ definitions:
         example: Pending
         type: string
       type:
-        example: paket-data
+        example: Paket Data
         type: string
     type: object
   dto.ProductCategory:
