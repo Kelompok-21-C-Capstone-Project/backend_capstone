@@ -65,7 +65,7 @@ definitions:
         example: 2022-07-05T14:32:46.996074+07
         type: string
       icon:
-        example: paket-data
+        example: mdi-paket-data
         type: string
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
@@ -86,7 +86,7 @@ definitions:
         example: Pending
         type: string
       type:
-        example: Paket Data
+        example: paket-data
         type: string
     type: object
   dto.ProductCategory:

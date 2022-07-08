@@ -2007,7 +2007,7 @@ const docTemplate = `{
                 },
                 "icon": {
                     "type": "string",
-                    "example": "paket-data"
+                    "example": "mdi-paket-data"
                 },
                 "id": {
                     "type": "string",
@@ -2035,7 +2035,7 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string",
-                    "example": "Paket Data"
+                    "example": "paket-data"
                 }
             }
         },

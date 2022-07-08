@@ -1995,7 +1995,7 @@
                 },
                 "icon": {
                     "type": "string",
-                    "example": "paket-data"
+                    "example": "mdi-paket-data"
                 },
                 "id": {
                     "type": "string",
@@ -2023,7 +2023,7 @@
                 },
                 "type": {
                     "type": "string",
-                    "example": "Paket Data"
+                    "example": "paket-data"
                 }
             }
         },
