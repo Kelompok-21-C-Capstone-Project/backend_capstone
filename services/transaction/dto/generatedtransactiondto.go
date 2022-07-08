@@ -36,7 +36,8 @@ func (BillClient) TableName() string {
 
 type ClientTransactionsResponse struct {
 	Id                 string    `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
-	Category           string    `json:"type" example:"paket-data"`
+	Category           string    `json:"type" example:"Paket Data"`
+	Icon               string    `json:"icon" example:"paket-data"`
 	Status             string    `json:"status" example:"Pending"`
 	Product            string    `json:"label" example:"Telkomsel 5GB Super Tiktok"`
 	TransactionDetails string    `json:"phone_number" example:"2312312412523"`
