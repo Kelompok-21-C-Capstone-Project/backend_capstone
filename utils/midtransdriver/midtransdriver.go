@@ -3,6 +3,7 @@ package midtransdriver
 import (
 	"backend_capstone/configs"
 	"backend_capstone/models"
+	"backend_capstone/services/transaction"
 	"backend_capstone/utils/midtransdriver/dto"
 	"errors"
 	"log"
@@ -19,9 +20,9 @@ type MidtransDriver struct {
 	MidtransOperation coreapi.Client
 }
 
-func NewMidtransService(configs *configs.AppConfig) *MidtransDriver {
+func NewMidtransService(configs *configs.AppConfig) transaction.Midtrans {
 	log.Print("Enter NewMidtransService")
-	var api MidtransDriver
+	var api *MidtransDriver
 
 	// 1. Set you ServerKey with globally
 	midtrans.ServerKey = configs.API_Midtrans.SERVER_KEY
@@ -32,11 +33,13 @@ func NewMidtransService(configs *configs.AppConfig) *MidtransDriver {
 
 	switch configs.API_Midtrans.ENV {
 	case "sandbox":
-		api.ServerKey = configs.API_Midtrans.SERVER_KEY
-		api.Env = midtrans.Sandbox
-		api.MidtransOperation = c
+		api = &MidtransDriver{
+			ServerKey:         configs.API_Midtrans.SERVER_KEY,
+			Env:               midtrans.Sandbox,
+			MidtransOperation: c,
+		}
 	}
-	return &api
+	return api
 }
 
 func (d *MidtransDriver) PutApprovePaymentMethod() interface{} {
@@ -54,24 +57,18 @@ func (d *MidtransDriver) CreateBankTransferPayment(midtranspaymentDTO dto.Midtra
 		bank = "bni"
 	case strings.Contains(bank, "mandiri"):
 		bank = "mandiri"
-	case strings.Contains(bank, "cimb"):
-		bank = "cimb"
 	case strings.Contains(bank, "bca"):
 		bank = "bca"
 	case strings.Contains(bank, "bri"):
 		bank = "bri"
-	case strings.Contains(bank, "maybank"):
-		bank = "maybank"
 	case strings.Contains(bank, "permata"):
 		bank = "permata"
-	case strings.Contains(bank, "mega"):
-		bank = "mega"
 	}
 	return &coreapi.ChargeReq{
 		PaymentType: coreapi.PaymentTypeBankTransfer,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  midtranspaymentDTO.OrderId,
-			GrossAmt: midtranspaymentDTO.Paid,
+			GrossAmt: midtranspaymentDTO.Paid + 1500,
 		},
 		BankTransfer: &coreapi.BankTransferDetails{
 			Bank: midtrans.Bank(bank),
@@ -79,7 +76,7 @@ func (d *MidtransDriver) CreateBankTransferPayment(midtranspaymentDTO dto.Midtra
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    midtranspaymentDTO.ItemId,
-				Price: midtranspaymentDTO.ItemPrice,
+				Price: midtranspaymentDTO.ItemPrice + 1500,
 				Qty:   1,
 				Name:  midtranspaymentDTO.ItemName,
 			},
@@ -98,13 +95,13 @@ func (d *MidtransDriver) CreateShopeePayPayment(midtranspaymentDTO dto.MidtransP
 		PaymentType: coreapi.PaymentTypeShopeepay,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  midtranspaymentDTO.OrderId,
-			GrossAmt: midtranspaymentDTO.Paid,
+			GrossAmt: midtranspaymentDTO.Paid + 1500,
 		},
 		ShopeePay: &coreapi.ShopeePayDetails{},
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    midtranspaymentDTO.ItemId,
-				Price: midtranspaymentDTO.ItemPrice,
+				Price: midtranspaymentDTO.ItemPrice + 1500,
 				Qty:   1,
 				Name:  midtranspaymentDTO.ItemName,
 			},
@@ -123,13 +120,13 @@ func (d *MidtransDriver) CreateGopayPayment(midtranspaymentDTO dto.MidtransPayme
 		PaymentType: coreapi.PaymentTypeGopay,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  midtranspaymentDTO.OrderId,
-			GrossAmt: midtranspaymentDTO.Paid,
+			GrossAmt: midtranspaymentDTO.Paid + 1500,
 		},
 		Gopay: &coreapi.GopayDetails{},
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    midtranspaymentDTO.ItemId,
-				Price: midtranspaymentDTO.ItemPrice,
+				Price: midtranspaymentDTO.ItemPrice + 1500,
 				Qty:   1,
 				Name:  midtranspaymentDTO.ItemName,
 			},
@@ -148,13 +145,13 @@ func (d *MidtransDriver) CreateQrisPayment(midtranspaymentDTO dto.MidtransPaymen
 		PaymentType: coreapi.PaymentTypeQris,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  midtranspaymentDTO.OrderId,
-			GrossAmt: midtranspaymentDTO.Paid,
+			GrossAmt: midtranspaymentDTO.Paid + 1500,
 		},
 		Qris: &coreapi.QrisDetails{},
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    midtranspaymentDTO.ItemId,
-				Price: midtranspaymentDTO.ItemPrice,
+				Price: midtranspaymentDTO.ItemPrice + 1500,
 				Qty:   1,
 				Name:  midtranspaymentDTO.ItemName,
 			},
@@ -206,7 +203,6 @@ func (d *MidtransDriver) DoPayment(method string, midtranspaymentDTO dto.Midtran
 		return
 	}
 
-	log.Print("Response :", coreApiRes)
 	var status string
 	switch coreApiRes.TransactionStatus {
 	case "pending":

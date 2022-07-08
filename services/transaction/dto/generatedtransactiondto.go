@@ -18,15 +18,16 @@ type TransactionDetails struct {
 }
 
 type BillClient struct {
-	Id             string    `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
-	TransactionId  string    `json:"transaction_id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
-	VaNumber       string    `json:"va_number" example:"2312312412523"`
-	PaymentDetails string    `json:"payment_method" example:"Mandiri Virtual Account"`
-	Billed         uint32    `json:"bill" example:"11500"`
-	Charger        uint32    `json:"charged" example:"1500"`
-	Product        string    `json:"product_name" example:"Telkomsel 5GB Super Tiktok"`
-	ProductPrice   uint32    `json:"product_price" example:"10000"`
-	Deadline       time.Time `json:"dead_line" example:"2022-07-05T14:32:46.996074+07"`
+	Id             string    `json:"id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	TransactionId  string    `json:"transaction_id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Status         string    `json:"status" example:"Pending"`
+	VaNumber       string    `json:"va_number,omitempty" example:"2312312412523"`
+	PaymentDetails string    `json:"payment_method,omitempty" example:"Mandiri Virtual Account"`
+	Billed         uint32    `json:"bill,omitempty" example:"11500"`
+	Charger        uint32    `json:"charged,omitempty" example:"1500"`
+	Product        string    `json:"product_name,omitempty" example:"Telkomsel 5GB Super Tiktok"`
+	ProductPrice   uint32    `json:"product_price,omitempty" example:"10000"`
+	Deadline       time.Time `json:"dead_line,omitempty" example:"2022-07-05T14:32:46.996074+07"`
 }
 
 func (BillClient) TableName() string {
@@ -36,6 +37,7 @@ func (BillClient) TableName() string {
 type ClientTransactionsResponse struct {
 	Id                 string    `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Category           string    `json:"type" example:"paket-data"`
+	Icon               string    `json:"icon" example:"mdi-paket-data"`
 	Status             string    `json:"status" example:"Pending"`
 	Product            string    `json:"label" example:"Telkomsel 5GB Super Tiktok"`
 	TransactionDetails string    `json:"phone_number" example:"2312312412523"`
@@ -46,4 +48,10 @@ type ClientTransactionsResponse struct {
 
 func (ClientTransactionsResponse) TableName() string {
 	return ""
+}
+
+type MidtransAfterPayment struct {
+	TransactionId string `json:"order_id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Status        string `json:"transaction_status,omitempty" example:"Pending"`
+	Code          string `json:"status_code,omitempty"`
 }

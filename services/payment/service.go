@@ -2,8 +2,6 @@ package payment
 
 import (
 	"backend_capstone/models"
-	"backend_capstone/utils/midtransdriver"
-	utilsdto "backend_capstone/utils/midtransdriver/dto"
 	"log"
 
 	"github.com/go-playground/validator/v10"
@@ -27,23 +25,19 @@ type TransactionRepository interface {
 type Service interface {
 	GetById(id string) (payment models.Payment, err error)
 	GetAll() (payments []models.Payment, err error)
-	Create() (payment models.Payment, err error)
-	Modify() (payment models.Payment, err error)
 	Remove() (err error)
 }
 
 type service struct {
 	paymentRepository PaymentRepository
 	validate          *validator.Validate
-	midtrans          *midtransdriver.MidtransDriver
 }
 
-func NewService(paymentRepository PaymentRepository, midtransApi *midtransdriver.MidtransDriver) Service {
+func NewService(paymentRepository PaymentRepository) Service {
 	log.Print("Enter NewService")
 	return &service{
 		paymentRepository: paymentRepository,
 		validate:          validator.New(),
-		midtrans:          midtransApi,
 	}
 }
 
@@ -51,16 +45,6 @@ func (s *service) GetById(id string) (payment models.Payment, err error) {
 	return
 }
 func (s *service) GetAll() (payments []models.Payment, err error) {
-	return
-}
-func (s *service) Create() (payment models.Payment, err error) {
-	log.Print("Enter PaymentService.Create")
-	s.midtrans.DoPayment("bank_transfer", utilsdto.MidtransPaymentDTO{})
-	return
-}
-func (s *service) Modify() (payment models.Payment, err error) {
-	log.Print("Enter PaymentService.Modify")
-	s.midtrans.PutApprovePaymentMethod()
 	return
 }
 func (s *service) Remove() (err error) {

@@ -3,24 +3,37 @@ package transaction
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/transaction/dto"
-	"backend_capstone/utils/midtransdriver"
+	dtoMidtrans "backend_capstone/utils/midtransdriver/dto"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
 
+type Mailjet interface {
+	SendBill() (err error)
+	SendInvoice() (err error)
+}
+
+type Midtrans interface {
+	DoPayment(method string, midtranspaymentDTO dtoMidtrans.MidtransPaymentDTO) (data *models.Payment, err error)
+}
+
 type Repository interface {
 	FindById(id string) (transaction *models.Transaction, err error)
 	FindByQuery(key string, value interface{}) (transactions *[]models.Transaction, err error)
 	FindAll() (transactions *[]dto.ClientTransactionsResponse, err error)
 	UsersFindAll(uip string) (transactions *[]dto.ClientTransactionsResponse, err error)
+	UsersFindById(uid string, tid string) (transaction *dto.ClientTransactionsResponse, err error)
 	CheckProductStock(pid string) (product *models.Product, err error)
 	ProductReStock(pid string) (err error)
 	Insert(data *models.Transaction) (transaction *models.Transaction, err error)
 	InsertPayment(data *models.Payment) (transaction *models.Payment, err error)
 	Update() (transaction *models.Transaction, err error)
+	MidtransUpdate(tid string, status string) (err error)
+	GetTransactionProduct(pid string) (product *models.Product, err error)
 	Delete(id string) (err error)
 }
 
@@ -28,18 +41,21 @@ type Service interface {
 	GetById(id string) (transaction models.Transaction, err error)
 	GetAll() (transactions []dto.ClientTransactionsResponse, err error)
 	UsersGetAll(uid string) (transactions []dto.ClientTransactionsResponse, err error)
+	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
+	GetBill(uid string, tid string) (bills dto.BillClient, err error)
 	Modify() (transaction models.Transaction, err error)
 	Remove() (err error)
+	MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error)
 }
 
 type service struct {
 	repository Repository
 	validate   *validator.Validate
-	midtrans   *midtransdriver.MidtransDriver
+	midtrans   Midtrans
 }
 
-func NewService(repository Repository, midtransApi *midtransdriver.MidtransDriver) Service {
+func NewService(repository Repository, midtransApi Midtrans) Service {
 	return &service{
 		repository: repository,
 		validate:   validator.New(),
@@ -70,12 +86,31 @@ func (s *service) UsersGetAll(uid string) (transactions []dto.ClientTransactions
 	transactions = *data
 	return
 }
+func (s *service) UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error) {
+	_, err = uuid.Parse(uid)
+	if err != nil {
+		return
+	}
+	_, err = uuid.Parse(tid)
+	if err != nil {
+		return
+	}
+	data, err := s.repository.UsersFindById(uid, tid)
+	if err != nil {
+		return
+	}
+	transaction = *data
+	return
+}
 func (s *service) Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error) {
 	if err = s.validate.Struct(createtransactionDTO); err != nil {
 		return
 	}
 	// check stock barang
 	dataProduct, err := s.repository.CheckProductStock(createtransactionDTO.ProductId)
+	if err != nil {
+		return
+	}
 	_, err = uuid.Parse(userId)
 	if err != nil {
 		return
@@ -100,9 +135,11 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 		return
 	}
 	// send bill using mail jet
+
 	bill = dto.BillClient{
 		Id:             dataPayment.Id,
 		TransactionId:  dataTransaction.Id,
+		Status:         dataPayment.Status,
 		VaNumber:       dataPayment.Description,
 		PaymentDetails: dataPayment.MethodDetails,
 		Billed:         dataPayment.Billed,
@@ -110,6 +147,59 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 		ProductPrice:   dataProduct.Price,
 		Charger:        dataPayment.Billed - dataProduct.Price,
 		Deadline:       dataPayment.CreatedAt.Add(time.Hour * time.Duration(1)),
+	}
+	return
+}
+func (s *service) GetBill(uid string, tid string) (bills dto.BillClient, err error) {
+	_, err = uuid.Parse(tid)
+	if err != nil {
+		return
+	}
+	// ngambil data transaksi dari repo pake tid : transaction
+	dataTransaction, err := s.repository.FindById(tid)
+	if err != nil {
+		return
+	}
+	// ngambil data product dari repo pake data `transaction.product_id` : product
+	dataProduct, err := s.repository.GetTransactionProduct(dataTransaction.ProductId)
+	if err != nil {
+		return
+	}
+	bills = dto.BillClient{
+		Id:             dataTransaction.Payment.Id,
+		TransactionId:  dataTransaction.Id,
+		Status:         dataTransaction.Payment.Status,
+		VaNumber:       dataTransaction.Payment.Description,
+		PaymentDetails: dataTransaction.Payment.MethodDetails,
+		Billed:         dataTransaction.Payment.Billed,
+		Product:        dataProduct.Name,
+		ProductPrice:   dataProduct.Price,
+		Charger:        dataTransaction.Payment.Billed - dataProduct.Price,
+		Deadline:       dataTransaction.Payment.CreatedAt.Add(time.Hour * time.Duration(1)),
+	}
+	return
+}
+func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error) {
+	_, err = uuid.Parse(midtransData.TransactionId)
+	if err != nil {
+		err = errors.New("Transaction Id " + midtransData.TransactionId + " Is Invalid")
+		return
+	}
+	if midtransData.Code == "201" {
+		log.Print("Update transaction skipped")
+		err = errors.New("Update transaction skipped")
+		return
+	}
+	switch midtransData.Status {
+	case "capture":
+		midtransData.Status = "Success"
+	case "settlement":
+		midtransData.Status = "Success"
+	default:
+		midtransData.Status = "Cancelled"
+	}
+	if err = s.repository.MidtransUpdate(midtransData.TransactionId, midtransData.Status); err != nil {
+		err = errors.New("Midtrans Transaction Id " + midtransData.TransactionId + " Fail To Update")
 	}
 	return
 }

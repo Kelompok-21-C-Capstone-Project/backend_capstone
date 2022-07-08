@@ -92,6 +92,8 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.UsersGetAll")
 	id := c.Param("id")
+	// page := c.QueryParam("pages")
+	// limit := c.QueryParam("limits")
 	if id != c.Get("payload").(string) {
 		err = errors.New("Tidak berizin")
 		return
@@ -104,6 +106,37 @@ func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 		})
 	}
 	return c.JSON(http.StatusCreated, datas)
+}
+
+// UsersGetById godoc
+// @Summary Get all transaction from specific user
+// @Description  Get all transaction from specific user
+// @Param id   path  string  true  "user ID" minLength:"32"
+// @Param transaction_id   path  string  true  "transaction ID" minLength:"32"
+// @Tags         users
+// @Produce      json
+// @Success      200  {array}  dto.ClientTransactionsResponse
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/users/:id/transactions/:transaction_id [get]
+func (controller *Controller) UsersGetById(c echo.Context) (err error) {
+	log.Print("enter controller.transaction.UsersGetAll")
+	id := c.Param("id")
+	tid := c.Param("transaction_id")
+	if id != c.Get("payload").(string) {
+		err = errors.New("Tidak berizin")
+		return
+	}
+	data, err := controller.service.UsersGetById(id, tid)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusCreated, data)
 }
 
 // GetById Godoc
@@ -196,4 +229,51 @@ func (controller *Controller) Remove(c echo.Context) (err error) {
 	// 	Status: "success",
 	// })
 	return
+}
+
+// GetBill Godoc
+// @Summary Get transactions bill
+// @Description  Get transaction transactions nill by id & user id
+// @Tags         users
+// @Produce      json
+// @Param id   path  string  true  "transaction ID" minLength:"32"
+// @Param transaction_id   path  string  true  "transaction ID" minLength:"32"
+// @Success      200  {object}  dto.BillClient
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/users/{id}/transactions/{transaction_id}/bills [get]
+func (controller *Controller) GetBill(c echo.Context) (err error) {
+	id := c.Param("id")
+	tid := c.Param("transaction_id")
+	data, err := controller.service.GetBill(id, tid)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusCreated, data)
+}
+func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
+	log.Print(c.Request().Body)
+	reqMidtrans := new(request.MidtransReq)
+	if err := c.Bind(reqMidtrans); err != nil {
+		// return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+		// 	Status:  "fail",
+		// 	Message: err.Error(),
+		// })
+		log.Print(err)
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	if err := controller.service.MidtransAfterPayment(reqMidtrans.DtoReq()); err != nil {
+		// return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+		// 	Status:  "fail",
+		// 	Message: err.Error(),
+		// })
+		log.Print(err)
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, errors.New("success"))
 }

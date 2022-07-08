@@ -29,17 +29,18 @@ import (
 	"log"
 )
 
-func RegisterModules(dbCon *utils.DatabaseConnection, midtransDriver *midtransdriver.MidtransDriver, configs *configs.AppConfig) api.Controller {
+func RegisterModules(dbCon *utils.DatabaseConnection, configs *configs.AppConfig) api.Controller {
 	log.Print("Enter RegisterModules")
 
 	jwtPermitUtils := security.NewJwtService(configs.App.JWT)
 	passwordHashPermitUtils := security.NewPasswordHash()
+	midtransPermitUtils := midtransdriver.NewMidtransService(configs)
 
 	transactionPermitRepository := transactionRepo.RepositoryFactory(dbCon)
-	transactionPermitService := transactionService.NewService(transactionPermitRepository, midtransDriver)
+	transactionPermitService := transactionService.NewService(transactionPermitRepository, midtransPermitUtils)
 	transactionPermitController := transactionController.NewController(transactionPermitService)
 
-	paymentPermitService := paymentService.NewService(nil, midtransDriver)
+	paymentPermitService := paymentService.NewService(nil)
 	paymentV1PermitController := paymentController.NewController(paymentPermitService)
 
 	categoryPermitRepository := categoryRepo.RepositoryFactory(dbCon)

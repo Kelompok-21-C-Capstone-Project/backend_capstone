@@ -997,7 +997,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Product"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "deleted": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1049,7 +1061,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Product"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "deleted": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1111,7 +1135,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Product"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "deleted": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1536,6 +1572,68 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/users/:id/transactions/:transaction_id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all transaction from specific user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get all transaction from specific user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "transaction ID",
+                        "name": "transaction_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.ClientTransactionsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/users/transactions": {
             "post": {
                 "security": [
@@ -1756,6 +1854,65 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/users/{id}/transactions/{transaction_id}/bills": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get transaction transactions nill by id \u0026 user id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get transactions bill",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "transaction ID",
+                        "name": "transaction_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.BillClient"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1789,6 +1946,10 @@ const docTemplate = `{
                 "product_price": {
                     "type": "integer",
                     "example": 10000
+                },
+                "status": {
+                    "type": "string",
+                    "example": "Pending"
                 },
                 "transaction_id": {
                     "type": "string",
@@ -1843,6 +2004,10 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string",
                     "example": "2022-07-05T14:32:46.996074+07"
+                },
+                "icon": {
+                    "type": "string",
+                    "example": "mdi-paket-data"
                 },
                 "id": {
                     "type": "string",
@@ -1942,6 +2107,9 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.ProductBrandCategory"
                 },
                 "category_id": {
+                    "type": "string"
+                },
+                "deleted": {
                     "type": "string"
                 },
                 "description": {

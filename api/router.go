@@ -20,10 +20,8 @@ type Controller struct {
 	ProductCategory *productcategory.Controller
 	ProductBrand    *productbrand.Controller
 	Product         *product.Controller
-	// PaymentMethod   *paymentmethod.Controller
-	// PaymentVendor   *paymentvendor.Controller
-	User        *user.Controller
-	Transaction *transaction.Controller
+	User            *user.Controller
+	Transaction     *transaction.Controller
 
 	MiddlewareAdminJWT AdminMiddleware.JwtService
 	MiddlewareUserJWT  UserMiddleware.JwtService
@@ -78,6 +76,8 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	userV1.Use(controller.MiddlewareJWT.JwtMiddleware())
 	userV1.POST("/transactions", controller.Transaction.Create)
 	userV1.GET("/:id/transactions", controller.Transaction.UsersGetAll)
+	userV1.GET("/:id/transactions/:transaction_id", controller.Transaction.UsersGetById)
+	userV1.GET("/:id/transactions/:transaction_id/bills", controller.Transaction.GetBill)
 	userV1.GET("/:id", controller.User.GetSingleData)
 	userV1.PUT("/:id", controller.User.UpdateUserData)
 	userV1.DELETE("/:id", controller.User.DeleteData)
@@ -94,5 +94,5 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	tokenV1.GET("", controller.User.ParseToken)
 
 	midtransV1 := e.Group("v1/midtrans")
-	midtransV1.POST("/bababoe", controller.Transaction.Modify)
+	midtransV1.POST("/bababoe", controller.Transaction.MidtransAfterPayment)
 }
