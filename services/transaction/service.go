@@ -102,10 +102,12 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.
 	if params[6] == "" {
 		params[6] = "5"
 	}
-	date := strings.Split(params[2], "_")
-	dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
-	date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
-	params = append(params, date...)
+	if params[2] != "" {
+		date := strings.Split(params[2], "_")
+		dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
+		date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
+		params = append(params, date...)
+	}
 	data, err := s.repository.UsersFindAll(uid, params...)
 	if err != nil {
 		return

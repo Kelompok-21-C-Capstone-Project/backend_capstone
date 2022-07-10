@@ -29,6 +29,10 @@ type AppConfig struct {
 		SERVER_KEY string `mapstructure:"MIDTRANS_SERVER_KEY"`
 		ENV        string `mapstructure:"MIDTRANS_ENV"`
 	}
+	API_Mailjet struct {
+		PRIVATE_KEY string `mapstructure:"MAILJET_PRIVATE_KEY"`
+		PUBLIC_KEY  string `mapstructure:"MAILJET_PUBLIC_KEY"`
+	}
 }
 
 var lock = &sync.Mutex{}
@@ -63,6 +67,9 @@ func initConfig() *AppConfig {
 
 	defaultConfig.API_Midtrans.SERVER_KEY = os.Getenv("MIDTRANS_KEY")
 	defaultConfig.API_Midtrans.ENV = os.Getenv("MIDTRANS_ENV")
+
+	defaultConfig.API_Mailjet.PRIVATE_KEY = os.Getenv("MAILJET_PRIVATE_KEY")
+	defaultConfig.API_Mailjet.PUBLIC_KEY = os.Getenv("MAILJET_PUBLIC_KEY")
 
 	viper.SetConfigType("env")
 	viper.SetConfigName("config")
