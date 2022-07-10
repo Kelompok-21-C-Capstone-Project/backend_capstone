@@ -3,6 +3,7 @@ package products
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/product/dto"
+	"strconv"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -17,6 +18,25 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 		db: db,
 	}
 }
+func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		page, _ := strconv.Atoi(page)
+		if page == 0 {
+			page = 1
+		}
+
+		pageSize, _ := strconv.Atoi(pageSize)
+		switch {
+		case pageSize > 100:
+			pageSize = 100
+		case pageSize <= 0:
+			pageSize = 10
+		}
+
+		offset := (page - 1) * pageSize
+		return db.Offset(offset).Limit(pageSize)
+	}
+}
 
 func (repo *PostgresRepository) FindById(id string) (product *models.Product, err error) {
 	if err = repo.db.Preload("ProductBrandCategory").First(&product, &id).Error; err != nil {
@@ -24,11 +44,28 @@ func (repo *PostgresRepository) FindById(id string) (product *models.Product, er
 	}
 	return
 }
-func (repo *PostgresRepository) FindByQuery(key string, value interface{}) (products *[]models.Product, err error) {
-	return
-}
-func (repo *PostgresRepository) FindAll() (products *[]models.Product, err error) {
-	if err = repo.db.Find(&products).Error; err != nil {
+func (repo *PostgresRepository) FindAll(params ...string) (dataCount int64, products *[]dto.Product, err error) {
+	if params[1] == "" {
+		params[1] = "1"
+	}
+	if params[2] == "" {
+		params[2] = "5"
+	}
+	nom, err := strconv.Atoi(params[1])
+	if err != nil {
+		return
+	}
+	if nom < 0 {
+		params[1] = strconv.Itoa(nom)
+	}
+	den, err := strconv.Atoi(params[2])
+	if err != nil {
+		return
+	}
+	if den <= 0 {
+		den = 5
+	}
+	if err = repo.db.Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("lower(product_brands.name) like lower(?) or lower(product_categories.name) like lower(?) or lower(products.id) like lower(?) or lower(products.name) like lower(?)", "%"+params[3]+"%", "%"+params[4]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&products).Error; err != nil {
 		return
 	}
 	return
@@ -49,7 +86,7 @@ func (repo *PostgresRepository) ClientFindAll() (products *[]dto.ProductCategory
 		return
 	}
 	for i, el := range *products {
-		if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as 'group', products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.product_category_id = ?", el.Id).Find(&(*products)[i].Products).Error; err != nil {
+		if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as group, products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.product_category_id = ?", el.Id).Find(&(*products)[i].Products).Error; err != nil {
 			return
 		}
 	}

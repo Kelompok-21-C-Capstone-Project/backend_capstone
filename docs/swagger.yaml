@@ -1,4 +1,44 @@
 definitions:
+  backend_capstone_services_product_dto.ProductCategory:
+    properties:
+      id:
+        example: xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      label:
+        example: Some Category
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/dto.ClientProduct'
+        type: array
+      slug:
+        example: some-category
+        type: string
+    type: object
+  backend_capstone_services_productcategory_dto.ProductCategory:
+    properties:
+      description:
+        example: some description
+        type: string
+      icon:
+        example: mdi-some-category
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Some Name
+        type: string
+      product_sum:
+        example: 33
+        type: integer
+      slug:
+        example: some-name
+        type: string
+    type: object
   dto.BillClient:
     properties:
       bill:
@@ -89,21 +129,49 @@ definitions:
         example: paket-data
         type: string
     type: object
-  dto.ProductCategory:
+  dto.ProductBrand:
     properties:
+      category:
+        example: E-Money
+        type: string
+      default:true;not null:
+        example: false
+        type: boolean
+      description:
+        example: some description
+        type: string
+      icon_path:
+        example: mdi-some-brand
+        type: string
       id:
-        example: xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
-      label:
-        example: Some Category
+      name:
+        example: some name
         type: string
-      products:
+      product_sum:
+        example: 33
+        type: integer
+    type: object
+  dto.ResponseBodyProductBrand:
+    properties:
+      datas:
         items:
-          $ref: '#/definitions/dto.ClientProduct'
+          $ref: '#/definitions/dto.ProductBrand'
         type: array
-      slug:
-        example: some-category
-        type: string
+      page_length:
+        example: 3
+        type: integer
+    type: object
+  dto.ResponseBodyProductCategory:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/backend_capstone_services_productcategory_dto.ProductCategory'
+        type: array
+      page_length:
+        example: 3
+        type: integer
     type: object
   dto.ResponseUserTransaction:
     properties:
@@ -707,7 +775,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/dto.ProductCategory'
+              $ref: '#/definitions/backend_capstone_services_product_dto.ProductCategory'
             type: array
         "400":
           description: Bad Request
@@ -739,7 +807,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.ProductCategory'
+            $ref: '#/definitions/backend_capstone_services_product_dto.ProductCategory'
         "400":
           description: Bad Request
           schema:
@@ -785,6 +853,19 @@ paths:
   /v1/product_brands:
     get:
       description: Get product brand by id
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
       produces:
       - application/json
       responses:
@@ -792,7 +873,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.ProductBrand'
+              $ref: '#/definitions/dto.ResponseBodyProductBrand'
             type: array
         "400":
           description: Bad Request
@@ -1029,6 +1110,19 @@ paths:
   /v1/product_categories:
     get:
       description: Get product category for admin side
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
       produces:
       - application/json
       responses:
@@ -1036,7 +1130,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.ProductCategory'
+              $ref: '#/definitions/dto.ResponseBodyProductCategory'
             type: array
         "400":
           description: Bad Request
@@ -1198,6 +1292,27 @@ paths:
   /v1/products:
     get:
       description: Get product data from database
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by brand
+        in: query
+        name: brand
+        type: string
+      - description: search data by category
+        in: query
+        name: category
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
       produces:
       - application/json
       responses:

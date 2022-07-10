@@ -3,6 +3,9 @@ package product
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/product/dto"
+	"log"
+	"math"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -10,8 +13,7 @@ import (
 
 type Repository interface {
 	FindById(id string) (product *models.Product, err error)
-	FindByQuery(key string, value interface{}) (products *[]models.Product, err error)
-	FindAll() (products *[]models.Product, err error)
+	FindAll(params ...string) (dataCount int64, products *[]dto.Product, err error)
 	ClientFindAll() (products *[]dto.ProductCategory, err error)
 	ClientFindAllBySlug(slug string) (products *dto.ProductCategory, err error)
 	Insert(data *models.Product) (product *models.Product, err error)
@@ -22,7 +24,7 @@ type Repository interface {
 
 type Service interface {
 	GetById(id string) (product models.Product, err error)
-	GetAll() (products []models.Product, err error)
+	GetAll(params ...string) (products dto.ResponseBodyProduct, err error)
 	ClientGetAll() (products []dto.ProductCategory, err error)
 	ClientGetAllBySlug(slug string) (products dto.ProductCategory, err error)
 	GetAllByCategory(categoryId string) (products []models.Product, err error)
@@ -55,12 +57,38 @@ func (s *service) GetById(id string) (product models.Product, err error) {
 	product = *data
 	return
 }
-func (s *service) GetAll() (products []models.Product, err error) {
-	data, err := s.repository.FindAll()
+func (s *service) GetAll(params ...string) (products dto.ResponseBodyProduct, err error) {
+	log.Print("enter service.GetAll")
+	if params[1] == "" {
+		params[1] = "1"
+	}
+	if params[2] == "" {
+		params[2] = "5"
+	}
+	nom, err := strconv.Atoi(params[1])
 	if err != nil {
 		return
 	}
-	products = *data
+	if nom < 0 {
+		params[1] = strconv.Itoa(nom)
+	}
+	den, err := strconv.Atoi(params[2])
+	if err != nil {
+		return
+	}
+	if den <= 0 {
+		den = 5
+	}
+	if err != nil {
+		return
+	}
+	dataCount, data, err := s.repository.FindAll(params...)
+	products.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
+	if data == nil {
+		products.Data = []dto.Product{}
+		return
+	}
+	products.Data = *data
 	return
 }
 func (s *service) ClientGetAllBySlug(slug string) (category dto.ProductCategory, err error) {
