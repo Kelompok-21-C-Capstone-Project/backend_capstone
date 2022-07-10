@@ -34,6 +34,11 @@ func (BillClient) TableName() string {
 	return "transactions"
 }
 
+type ResponseUserTransaction struct {
+	Count int                          `json:"page_length" example:"3"`
+	Data  []ClientTransactionsResponse `json:"data"`
+}
+
 type ClientTransactionsResponse struct {
 	Id                 string    `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Category           string    `json:"type" example:"paket-data"`

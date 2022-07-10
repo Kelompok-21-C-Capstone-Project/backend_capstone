@@ -105,6 +105,16 @@ definitions:
         example: some-category
         type: string
     type: object
+  dto.ResponseUserTransaction:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.ClientTransactionsResponse'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+    type: object
   models.Payment:
     properties:
       amount:
@@ -1602,7 +1612,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/dto.ClientTransactionsResponse'
+              $ref: '#/definitions/dto.ResponseUserTransaction'
             type: array
         "400":
           description: Bad Request

@@ -1589,7 +1589,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.ClientTransactionsResponse"
+                                "$ref": "#/definitions/dto.ResponseUserTransaction"
                             }
                         }
                     },
@@ -2101,6 +2101,21 @@ const docTemplate = `{
                 "slug": {
                     "type": "string",
                     "example": "some-category"
+                }
+            }
+        },
+        "dto.ResponseUserTransaction": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ClientTransactionsResponse"
+                    }
+                },
+                "page_length": {
+                    "type": "integer",
+                    "example": 3
                 }
             }
         },

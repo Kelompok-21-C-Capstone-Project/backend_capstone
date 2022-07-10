@@ -6,7 +6,9 @@ import (
 	dtoMidtrans "backend_capstone/utils/midtransdriver/dto"
 	"errors"
 	"log"
+	"math"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -26,7 +28,7 @@ type Midtrans interface {
 type Repository interface {
 	FindById(id string) (transaction *models.Transaction, err error)
 	FindAll() (transactions *[]dto.ClientTransactionsResponse, err error)
-	UsersFindAll(uip string, params ...string) (transactions *[]dto.ClientTransactionsResponse, err error)
+	UsersFindAll(uip string, params ...string) (dataCount int64, transactions *[]dto.ClientTransactionsResponse, err error)
 	UsersFindById(uid string, tid string) (transaction *dto.ClientTransactionsResponse, err error)
 	CheckProductStock(pid string) (product *models.Product, err error)
 	ProductReStock(pid string) (err error)
@@ -41,7 +43,7 @@ type Repository interface {
 type Service interface {
 	GetById(id string) (transaction models.Transaction, err error)
 	GetAll() (transactions []dto.ClientTransactionsResponse, err error)
-	UsersGetAll(uid string, params ...string) (transactions []dto.ClientTransactionsResponse, err error)
+	UsersGetAll(uid string, params ...string) (transactions dto.ResponseUserTransaction, err error)
 	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	GetBill(uid string, tid string) (bills dto.BillClient, err error)
@@ -83,7 +85,7 @@ func (s *service) GetAll() (transactions []dto.ClientTransactionsResponse, err e
 	transactions = *data
 	return
 }
-func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.ClientTransactionsResponse, err error) {
+func (s *service) UsersGetAll(uid string, params ...string) (transactions dto.ResponseUserTransaction, err error) {
 	if params[2] != "" {
 		regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
 		if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {
@@ -110,15 +112,17 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.
 	if params[6] == "" {
 		params[6] = "5"
 	}
-	data, err := s.repository.UsersFindAll(uid, params...)
+	count, data, err := s.repository.UsersFindAll(uid, params...)
 	if err != nil {
 		return
 	}
 	if data == nil {
-		transactions = []dto.ClientTransactionsResponse{}
+		transactions.Data = []dto.ClientTransactionsResponse{}
 		return
 	}
-	transactions = *data
+	den, _ := strconv.Atoi(params[6])
+	transactions.Count = int(math.Ceil(float64(count) / float64(den)))
+	transactions.Data = *data
 	return
 }
 func (s *service) UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error) {
