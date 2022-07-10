@@ -85,6 +85,10 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.
 		if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {
 			return
 		}
+		date := strings.Split(params[2], "_")
+		dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
+		date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
+		params = append(params, date...)
 	} else if params[1] != "" {
 		regexDate := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
 		if resR, _ := regexp.MatchString(regexDate, params[1]); !resR {
@@ -101,12 +105,6 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.
 	}
 	if params[6] == "" {
 		params[6] = "5"
-	}
-	if params[2] != "" {
-		date := strings.Split(params[2], "_")
-		dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
-		date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
-		params = append(params, date...)
 	}
 	data, err := s.repository.UsersFindAll(uid, params...)
 	if err != nil {
