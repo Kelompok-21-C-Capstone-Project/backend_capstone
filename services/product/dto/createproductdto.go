@@ -7,7 +7,7 @@ import (
 type CraeteProductDTO struct {
 	Name        string `validate:"required"`
 	Price       uint32 `validate:"required"`
-	Stock       uint32 `validate:"required"`
+	Stock       uint32
 	Description string `validate:"required"`
 	BrandId     string `validate:"required"`
 	CategoryId  string `validate:"required"`
