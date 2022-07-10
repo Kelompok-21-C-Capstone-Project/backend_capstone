@@ -110,6 +110,10 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.
 	if err != nil {
 		return
 	}
+	if data == nil {
+		transactions = []dto.ClientTransactionsResponse{}
+		return
+	}
 	transactions = *data
 	return
 }
