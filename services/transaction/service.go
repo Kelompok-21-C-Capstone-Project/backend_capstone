@@ -76,6 +76,10 @@ func (s *service) GetAll() (transactions []dto.ClientTransactionsResponse, err e
 	if err != nil {
 		return
 	}
+	if data == nil {
+		transactions = []dto.ClientTransactionsResponse{}
+		return
+	}
 	transactions = *data
 	return
 }
@@ -128,6 +132,10 @@ func (s *service) UsersGetById(uid string, tid string) (transaction dto.ClientTr
 	}
 	data, err := s.repository.UsersFindById(uid, tid)
 	if err != nil {
+		return
+	}
+	if data == nil {
+		transaction = dto.ClientTransactionsResponse{}
 		return
 	}
 	transaction = *data
