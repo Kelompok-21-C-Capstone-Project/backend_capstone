@@ -9,7 +9,7 @@ type ProductBrand struct {
 	Id          string `json:"id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Name        string `json:"name,omitempty" example:"some name"`
 	Category    string `json:"category,omitempty" example:"E-Money"`
-	IsAvailable bool   `json:"default:true;not null" example:"false"`
+	IsAvailable bool   `json:"is_available" example:"false"`
 	Description string `json:"description,omitempty" example:"some description"`
 	IconPath    string `json:"icon_path,omitempty" example:"mdi-some-brand"`
 	Product     int    `json:"product_sum" example:"33"`
