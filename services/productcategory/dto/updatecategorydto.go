@@ -5,10 +5,10 @@ import (
 )
 
 type UpdateCategoryDTO struct {
-	Name        string `validator:"required"`
-	IsAvailable bool   `validator:"required,boolean"`
-	Description string `validator:"required,alphaunicode"`
-	Icon        string
+	Name        string `json:"name" validator:"required"`
+	IsAvailable bool   `json:"is_available" validator:"required,boolean"`
+	Description string `json:"description" validator:"required,alphaunicode"`
+	Icon        string `json:"icon"`
 }
 
 func (data *UpdateCategoryDTO) GenerateModel(id string, slug string) *models.ProductCategory {

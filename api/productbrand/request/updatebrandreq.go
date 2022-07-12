@@ -4,7 +4,7 @@ import "backend_capstone/services/productbrand/dto"
 
 type UpdateBrandRequest struct {
 	Name        string `json:"name" example:"XL"`
-	IsAvailable bool   `json:"status" example:"true"`
+	IsAvailable bool   `json:"is_available" example:"true"`
 	Description string `json:"description" example:"Excelent Celullar"`
 }
 
