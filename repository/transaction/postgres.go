@@ -26,7 +26,7 @@ func (repo *PostgresRepository) CountUsers(id string) (ammount int64, err error)
 }
 
 func (repo *PostgresRepository) FindById(id string) (transaction *models.TransactionResponse, err error) {
-	if err = repo.db.Preload("Payment").First(&transaction, &id).Error; err != nil {
+	if err = repo.db.Preload("Payment").First(&models.Transaction{}, &id).Scan(&transaction).Error; err != nil {
 		return
 	}
 	return
@@ -53,13 +53,35 @@ func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
 }
 
 func (repo *PostgresRepository) UsersFindAll(uid string, params ...string) (dataCount int64, transactions *[]dto.ClientTransactionsResponse, err error) {
+	den, err := strconv.Atoi(params[6])
+	if err != nil {
+		return
+	}
 	if params[1] != "" {
+		if den == -1 {
+			if err = repo.db.Debug().Order("transactions.created_at desc").Table("transactions").Select("transactions.id, product_categories.slug as category, product_categories.icon as icon, payments.status as status, products.name as product, transactions.description as transaction_details, payments.billed as charged, payments.created_at, payments.method as payment_method").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on transactions.product_id = products.id").Joins("left join product_brand_categories on products.product_brand_category_id = product_brand_categories.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("transactions.deleted is null and transactions.user_id = ? and lower(product_categories.slug) like lower(?) and lower(payments.status) like lower(?) and to_char(transactions.created_at,'DD-MM-YYYY') = ? and (lower(transactions.id) like lower(?) or lower(products.name) like lower(?))", uid, params[4], params[3], params[1], params[0], params[0]).Count(&dataCount).Scan(&transactions).Error; err != nil {
+				return
+			}
+			return
+		}
 		if err = repo.db.Debug().Order("transactions.created_at desc").Table("transactions").Select("transactions.id, product_categories.slug as category, product_categories.icon as icon, payments.status as status, products.name as product, transactions.description as transaction_details, payments.billed as charged, payments.created_at, payments.method as payment_method").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on transactions.product_id = products.id").Joins("left join product_brand_categories on products.product_brand_category_id = product_brand_categories.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("transactions.deleted is null and transactions.user_id = ? and lower(product_categories.slug) like lower(?) and lower(payments.status) like lower(?) and to_char(transactions.created_at,'DD-MM-YYYY') = ? and (lower(transactions.id) like lower(?) or lower(products.name) like lower(?))", uid, params[4], params[3], params[1], params[0], params[0]).Count(&dataCount).Scopes(Paginate(params[5], params[6])).Scan(&transactions).Error; err != nil {
 			return
 		}
 		return
 	} else if params[2] != "" {
+		if den == -1 {
+			if err = repo.db.Debug().Order("transactions.created_at desc").Table("transactions").Select("transactions.id, product_categories.slug as category, product_categories.icon as icon, payments.status as status, products.name as product, transactions.description as transaction_details, payments.billed as charged, payments.created_at, payments.method as payment_method").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on transactions.product_id = products.id").Joins("left join product_brand_categories on products.product_brand_category_id = product_brand_categories.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("transactions.deleted is null and transactions.user_id = ? and lower(product_categories.slug) like lower(?) and lower(payments.status) like lower(?) and (lower(transactions.id) like lower(?) or lower(products.name) like lower(?)) and transactions.created_at >= ? and transactions.created_at <= ?", uid, params[4], params[3], params[0], params[0], params[7], params[8]).Count(&dataCount).Scan(&transactions).Error; err != nil {
+				return
+			}
+			return
+		}
 		if err = repo.db.Debug().Order("transactions.created_at desc").Table("transactions").Select("transactions.id, product_categories.slug as category, product_categories.icon as icon, payments.status as status, products.name as product, transactions.description as transaction_details, payments.billed as charged, payments.created_at, payments.method as payment_method").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on transactions.product_id = products.id").Joins("left join product_brand_categories on products.product_brand_category_id = product_brand_categories.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("transactions.deleted is null and transactions.user_id = ? and lower(product_categories.slug) like lower(?) and lower(payments.status) like lower(?) and (lower(transactions.id) like lower(?) or lower(products.name) like lower(?)) and transactions.created_at >= ? and transactions.created_at <= ?", uid, params[4], params[3], params[0], params[0], params[7], params[8]).Count(&dataCount).Scopes(Paginate(params[5], params[6])).Scan(&transactions).Error; err != nil {
+			return
+		}
+		return
+	}
+	if den == -1 {
+		if err = repo.db.Debug().Order("transactions.created_at desc").Table("transactions").Select("transactions.id, product_categories.slug as category, product_categories.icon as icon, payments.status as status, products.name as product, transactions.description as transaction_details, payments.billed as charged, payments.created_at, payments.method as payment_method").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on transactions.product_id = products.id").Joins("left join product_brand_categories on products.product_brand_category_id = product_brand_categories.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("transactions.deleted is null and transactions.user_id = ? and lower(product_categories.slug) like lower(?) and lower(payments.status) like lower(?) and (lower(transactions.id) like lower(?) or lower(products.name) like lower(?))", uid, params[4], params[3], params[0], params[0]).Count(&dataCount).Scan(&transactions).Error; err != nil {
 			return
 		}
 		return
@@ -82,7 +104,7 @@ func (repo *PostgresRepository) FindAll() (transactions *[]dto.ClientTransaction
 	return
 }
 func (repo *PostgresRepository) Insert(data *models.Transaction) (transaction *models.TransactionResponse, err error) {
-	if err = repo.db.Create(&data).First(&transaction, &data.Id).Error; err != nil {
+	if err = repo.db.Create(&data).Scan(&transaction).Error; err != nil {
 		return
 	}
 	return
@@ -145,7 +167,7 @@ func (repo *PostgresRepository) GetUserInfo(tid string) (user models.UserRespons
 	if err = repo.db.First(&transaction, &tid).Error; err != nil {
 		return
 	}
-	if err = repo.db.First(&user, &transaction.UserId).Error; err != nil {
+	if err = repo.db.First(&models.User{}, &transaction.UserId).Scan(&user).Error; err != nil {
 		log.Print("terjadi error")
 		return
 	}
