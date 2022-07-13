@@ -62,26 +62,46 @@ func (repo *PostgresRepository) FindAll(params ...string) (dataCount int64, prod
 	if err != nil {
 		return
 	}
-	if den <= 0 {
-		den = 5
-	}
 	if params[3] != "" && params[4] != "" {
+		if den == -1 {
+			if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(product_brands.name) like lower(?) and lower(product_categories.slug) like lower(?) and (lower(products.id) like lower(?) or lower(products.name) like lower(?))", "%"+params[3]+"%", "%"+params[4]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scan(&products).Error; err != nil {
+				return
+			}
+			return
+		}
 		if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(product_brands.name) like lower(?) and lower(product_categories.slug) like lower(?) and (lower(products.id) like lower(?) or lower(products.name) like lower(?))", "%"+params[3]+"%", "%"+params[4]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&products).Error; err != nil {
 			return
 		}
 		return
 	}
 	if params[3] != "" {
+		if den == -1 {
+			if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(product_brands.name) like lower(?) and (lower(products.id) like lower(?) or lower(products.name) like lower(?))", "%"+params[3]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scan(&products).Error; err != nil {
+				return
+			}
+			return
+		}
 		if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(product_brands.name) like lower(?) and (lower(products.id) like lower(?) or lower(products.name) like lower(?))", "%"+params[3]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&products).Error; err != nil {
 			return
 		}
 		return
 	}
 	if params[4] != "" {
+		if den == -1 {
+			if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(product_categories.slug) like lower(?) and (lower(products.id) like lower(?) or lower(products.name) like lower(?))", "%"+params[4]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scan(&products).Error; err != nil {
+				return
+			}
+			return
+		}
 		if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(product_categories.slug) like lower(?) and (lower(products.id) like lower(?) or lower(products.name) like lower(?))", "%"+params[4]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&products).Error; err != nil {
 			return
 		}
 		return
+	}
+	if den == -1 {
+		if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(products.id) like lower(?) or lower(products.name) like lower(?)", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scan(&products).Error; err != nil {
+			return
+		}
 	}
 	if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(products.id) like lower(?) or lower(products.name) like lower(?)", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&products).Error; err != nil {
 		return

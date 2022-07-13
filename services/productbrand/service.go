@@ -3,6 +3,7 @@ package productbrand
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/productbrand/dto"
+	"log"
 	"math"
 	"strconv"
 
@@ -74,13 +75,17 @@ func (s *service) GetAll(params ...string) (productBrands dto.ResponseBodyProduc
 	if err != nil {
 		return
 	}
-	if den <= 0 {
-		den = 5
-	}
+	log.Print(den)
 	dataCount, datas, err := s.repository.FindAll(params...)
 	if err != nil {
 		return
 	}
+	if den < -1 || den == 0 {
+		den = 10
+	} else if den == -1 {
+		den = int(dataCount)
+	}
+	log.Print(den, dataCount)
 	productBrands.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
 	if datas == nil {
 		productBrands.Data = []dto.ProductBrand{}
