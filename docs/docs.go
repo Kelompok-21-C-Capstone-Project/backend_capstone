@@ -2289,93 +2289,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Product": {
-            "type": "object",
-            "properties": {
-                "category": {
-                    "$ref": "#/definitions/models.ProductBrandCategory"
-                },
-                "category_id": {
-                    "type": "string"
-                },
-                "deleted": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string",
-                    "example": "some description"
-                },
-                "discount": {
-                    "type": "number"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx"
-                },
-                "is_available": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "is_discount": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "name": {
-                    "type": "string",
-                    "example": "Some Product"
-                },
-                "price": {
-                    "type": "integer",
-                    "example": 30000
-                },
-                "stock": {
-                    "type": "integer",
-                    "example": 30
-                },
-                "transactions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Transaction"
-                    }
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.ProductBrandCategory": {
-            "type": "object",
-            "properties": {
-                "brand_id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "category_id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "deleted": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "is_available": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Product"
-                    }
-                },
-                "slug": {
-                    "type": "string"
-                }
-            }
-        },
         "models.ProductBrandCategoryResponse": {
             "type": "object",
             "properties": {
@@ -2401,7 +2314,7 @@ const docTemplate = `{
                 "products": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Product"
+                        "$ref": "#/definitions/models.ProductResponse"
                     }
                 },
                 "slug": {
@@ -2438,40 +2351,8 @@ const docTemplate = `{
                 "product_category": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.ProductCategory"
+                        "$ref": "#/definitions/models.ProductCategoryResponse"
                     }
-                }
-            }
-        },
-        "models.ProductCategory": {
-            "type": "object",
-            "properties": {
-                "deleted": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string",
-                    "example": "some description"
-                },
-                "icon": {
-                    "type": "string",
-                    "example": "mdi-some-category"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "is_available": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "name": {
-                    "type": "string",
-                    "example": "Some Name"
-                },
-                "slug": {
-                    "type": "string",
-                    "example": "some-name"
                 }
             }
         },
@@ -2553,44 +2434,11 @@ const docTemplate = `{
                 "transactions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Transaction"
+                        "$ref": "#/definitions/models.TransactionResponse"
                     }
                 },
                 "updated_at": {
                     "type": "string"
-                }
-            }
-        },
-        "models.Transaction": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string"
-                },
-                "deleted": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string",
-                    "example": "some description"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "payment": {
-                    "$ref": "#/definitions/models.Payment"
-                },
-                "product_id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "updated": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                 }
             }
         },
