@@ -26,7 +26,7 @@ func (repo *PostgresRepository) CountUsers(id string) (ammount int64, err error)
 }
 
 func (repo *PostgresRepository) FindById(id string) (transaction *models.TransactionResponse, err error) {
-	if err = repo.db.Preload("Payment").First(&transaction, &id).Error; err != nil {
+	if err = repo.db.Preload("Payment").First(&models.Transaction{}, &id).Scan(&transaction).Error; err != nil {
 		return
 	}
 	return

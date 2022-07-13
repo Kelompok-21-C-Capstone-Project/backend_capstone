@@ -39,7 +39,7 @@ func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
 }
 
 func (repo *PostgresRepository) FindById(id string) (product *models.ProductResponse, err error) {
-	if err = repo.db.Preload("ProductBrandCategory").First(&product, &id).Error; err != nil {
+	if err = repo.db.Preload("ProductBrandCategory").First(&models.Product{}, &id).Scan(&product).Error; err != nil {
 		return
 	}
 	return
@@ -99,11 +99,11 @@ func (repo *PostgresRepository) FindAll(params ...string) (dataCount int64, prod
 		return
 	}
 	if den == -1 {
-		if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(products.id) like lower(?) or lower(products.name) like lower(?)", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scan(&products).Error; err != nil {
+		if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and (lower(products.id) like lower(?) or lower(products.name) like lower(?))", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scan(&products).Error; err != nil {
 			return
 		}
 	}
-	if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and lower(products.id) like lower(?) or lower(products.name) like lower(?)", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&products).Error; err != nil {
+	if err = repo.db.Debug().Table("products").Select("products.*, product_categories.name as category , product_brands.name as brand").Joins("left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brands.id = product_brand_categories.product_brand_id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Where("products.deleted is null and (lower(products.id) like lower(?) or lower(products.name) like lower(?))", "%"+params[0]+"%", "%"+params[0]+"%").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&products).Error; err != nil {
 		return
 	}
 	return
@@ -137,7 +137,7 @@ func (repo *PostgresRepository) Insert(data *models.Product) (product *models.Pr
 	return product, err
 }
 func (repo *PostgresRepository) Update(id string, data *models.Product) (product *models.ProductResponse, err error) {
-	if err = repo.db.First(&product, &id).Model(product).Updates(data).Preload("ProductBrandCategory").First(&product, &id).Error; err != nil {
+	if err = repo.db.First(&product, &id).Model(product).Updates(data).Preload("ProductBrandCategory").First(&models.Product{}, &id).Scan(&product).Error; err != nil {
 		return
 	}
 	return
