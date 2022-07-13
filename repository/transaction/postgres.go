@@ -25,7 +25,7 @@ func (repo *PostgresRepository) CountUsers(id string) (ammount int64, err error)
 	return
 }
 
-func (repo *PostgresRepository) FindById(id string) (transaction *models.Transaction, err error) {
+func (repo *PostgresRepository) FindById(id string) (transaction *models.TransactionResponse, err error) {
 	if err = repo.db.Preload("Payment").First(&transaction, &id).Error; err != nil {
 		return
 	}
@@ -81,11 +81,11 @@ func (repo *PostgresRepository) FindAll() (transactions *[]dto.ClientTransaction
 	}
 	return
 }
-func (repo *PostgresRepository) Insert(data *models.Transaction) (transaction *models.Transaction, err error) {
-	if err = repo.db.Create(&data).Error; err != nil {
+func (repo *PostgresRepository) Insert(data *models.Transaction) (transaction *models.TransactionResponse, err error) {
+	if err = repo.db.Create(&data).First(&transaction, &data.Id).Error; err != nil {
 		return
 	}
-	return data, err
+	return
 }
 func (repo *PostgresRepository) InsertPayment(data *models.Payment) (transaction *models.Payment, err error) {
 	if err = repo.db.Create(&data).Error; err != nil {
@@ -99,7 +99,7 @@ func (repo *PostgresRepository) MidtransUpdate(tid string, status string) (err e
 	}
 	return
 }
-func (repo *PostgresRepository) Update() (transaction *models.Transaction, err error) {
+func (repo *PostgresRepository) Update() (transaction *models.TransactionResponse, err error) {
 	return
 }
 func (repo *PostgresRepository) Delete(id string) (err error) {

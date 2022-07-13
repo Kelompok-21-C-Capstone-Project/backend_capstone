@@ -40,7 +40,7 @@ func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id string) (productBrand *models.ProductBrand, err error) {
+func (repo *PostgresRepository) FindById(id string) (productBrand *models.ProductBrandResponse, err error) {
 	if err = repo.db.Preload("ProductCategories").First(&productBrand, &id).Error; err != nil {
 		return
 	}
@@ -78,13 +78,13 @@ func (repo *PostgresRepository) FindCategoryById(id string) (productCategory *mo
 	}
 	return
 }
-func (repo *PostgresRepository) Insert(data *models.ProductBrand) (productBrand *models.ProductBrand, err error) {
+func (repo *PostgresRepository) Insert(data *models.ProductBrand) (productBrand *models.ProductBrandResponse, err error) {
 	if err = repo.db.Create(data).Preload("ProductCategories").First(&productBrand, &data.Id).Error; err != nil {
 		return
 	}
 	return
 }
-func (repo *PostgresRepository) Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrand, err error) {
+func (repo *PostgresRepository) Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrandResponse, err error) {
 	if err = repo.db.First(&productBrand, &id).Model(productBrand).Updates(data).Error; err != nil {
 		return
 	}

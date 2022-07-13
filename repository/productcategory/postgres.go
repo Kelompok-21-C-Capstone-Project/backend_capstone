@@ -38,7 +38,7 @@ func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id string) (productCategory *models.ProductCategory, err error) {
+func (repo *PostgresRepository) FindById(id string) (productCategory *models.ProductCategoryResponse, err error) {
 	if err = repo.db.First(&productCategory, &id).Error; err != nil {
 		return
 	}
@@ -70,13 +70,13 @@ func (repo *PostgresRepository) FindAll(params ...string) (DataCount int64, prod
 	}
 	return
 }
-func (repo *PostgresRepository) Insert(data *models.ProductCategory) (productCategory *models.ProductCategory, err error) {
-	if err = repo.db.Create(data).Error; err != nil {
+func (repo *PostgresRepository) Insert(data *models.ProductCategory) (productCategory *models.ProductCategoryResponse, err error) {
+	if err = repo.db.Create(&data).First(&productCategory, &data.Id).Error; err != nil {
 		return
 	}
-	return data, err
+	return
 }
-func (repo *PostgresRepository) Update(id string, data *models.ProductCategory) (productCategory *models.ProductCategory, err error) {
+func (repo *PostgresRepository) Update(id string, data *models.ProductCategory) (productCategory *models.ProductCategoryResponse, err error) {
 	if err = repo.db.First(&productCategory, &id).Model(productCategory).Updates(data).Error; err != nil {
 		return
 	}

@@ -27,7 +27,7 @@ func NewController(service productcategoryUseCase.Service) *Controller {
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.CreateCategoryRequest true "Payload format" SchemaExample(request.CreateCategoryRequest)
-// @Success      201  {object}  models.ProductCategory
+// @Success      201  {object}  models.ProductCategoryResponse
 // @Failure      400  {object}  response.BasicCategoryResponse
 // @Failure      403  {object}  response.BasicCategoryResponse
 // @Failure      500  {object}  response.BasicCategoryResponse
@@ -57,7 +57,7 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // @Description  Get product category for client side
 // @Tags         clients
 // @Produce      json
-// @Success      200  {array}  models.ProductCategory
+// @Success      200  {array}  models.ProductCategoryResponse
 // @Failure      400  {object}  response.BasicCategoryResponse
 // @Failure      403  {object}  response.BasicCategoryResponse
 // @Failure      500  {object}  response.BasicCategoryResponse
@@ -99,7 +99,7 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // @Tags         product_categories
 // @Produce      json
 // @Param id   path  string  true  "Category ID" minLength:"32"
-// @Success      200  {object}  models.ProductCategory
+// @Success      200  {object}  models.ProductCategoryResponse
 // @Failure      400  {object}  response.BasicCategoryResponse
 // @Failure      403  {object}  response.BasicCategoryResponse
 // @Failure      500  {object}  response.BasicCategoryResponse
@@ -126,7 +126,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Produce      json
 // @Param id   path  string  true  "Category ID" minLength:"32"
 // @Param Payload body request.UpdateCategoryRequest true "Payload format" SchemaExample(request.UpdateCategoryRequest)
-// @Success      200  {object}  models.ProductCategory
+// @Success      200  {object}  models.ProductCategoryResponse
 // @Failure      400  {object}  response.BasicCategoryResponse
 // @Failure      403  {object}  response.BasicCategoryResponse
 // @Failure      500  {object}  response.BasicCategoryResponse

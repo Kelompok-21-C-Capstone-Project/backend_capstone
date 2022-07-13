@@ -27,7 +27,7 @@ func NewController(service productbrandUseCase.Service) *Controller {
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.CreateBrandRequest true "Payload format" SchemaExample(request.CreateBrandRequest)
-// @Success      201  {object}  models.ProductBrand
+// @Success      201  {object}  models.ProductBrandResponse
 // @Failure      400  {object}  response.BasicBrandResponse
 // @Failure      403  {object}  response.BasicBrandResponse
 // @Failure      500  {object}  response.BasicBrandResponse
@@ -87,7 +87,7 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // @Tags         product_brands
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
-// @Success      200  {object}  models.ProductBrand
+// @Success      200  {object}  models.ProductBrandResponse
 // @Failure      400  {object}  response.BasicBrandResponse
 // @Failure      403  {object}  response.BasicBrandResponse
 // @Failure      500  {object}  response.BasicBrandResponse
@@ -114,7 +114,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
 // @Param Payload body request.UpdateBrandRequest true "Payload format" SchemaExample(request.UpdateBrandRequest)
-// @Success      200  {object}  models.ProductBrand
+// @Success      200  {object}  models.ProductBrandResponse
 // @Failure      400  {object}  response.BasicBrandResponse
 // @Failure      403  {object}  response.BasicBrandResponse
 // @Failure      500  {object}  response.BasicBrandResponse

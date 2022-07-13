@@ -26,15 +26,15 @@ type Midtrans interface {
 }
 
 type Repository interface {
-	FindById(id string) (transaction *models.Transaction, err error)
+	FindById(id string) (transaction *models.TransactionResponse, err error)
 	FindAll() (transactions *[]dto.ClientTransactionsResponse, err error)
 	UsersFindAll(uip string, params ...string) (dataCount int64, transactions *[]dto.ClientTransactionsResponse, err error)
 	UsersFindById(uid string, tid string) (transaction *dto.ClientTransactionsResponse, err error)
 	CheckProductStock(pid string) (product *models.Product, err error)
 	ProductReStock(pid string) (err error)
-	Insert(data *models.Transaction) (transaction *models.Transaction, err error)
+	Insert(data *models.Transaction) (transaction *models.TransactionResponse, err error)
 	InsertPayment(data *models.Payment) (transaction *models.Payment, err error)
-	Update() (transaction *models.Transaction, err error)
+	Update() (transaction *models.TransactionResponse, err error)
 	MidtransUpdate(tid string, status string) (err error)
 	GetTransactionProduct(pid string) (product *models.Product, err error)
 	GetBillById(tid string) (bill dto.BillClient, err error)
@@ -43,13 +43,13 @@ type Repository interface {
 }
 
 type Service interface {
-	GetById(id string) (transaction models.Transaction, err error)
+	GetById(id string) (transaction models.TransactionResponse, err error)
 	GetAll() (transactions []dto.ClientTransactionsResponse, err error)
 	UsersGetAll(uid string, params ...string) (transactions dto.ResponseUserTransaction, err error)
 	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	GetBill(uid string, tid string) (bills dto.BillClient, err error)
-	Modify() (transaction models.Transaction, err error)
+	Modify() (transaction models.TransactionResponse, err error)
 	Remove() (err error)
 	MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error)
 }
@@ -70,7 +70,7 @@ func NewService(repository Repository, midtransApi Midtrans, mailjetApi Mailjet)
 	}
 }
 
-func (s *service) GetById(id string) (transaction models.Transaction, err error) {
+func (s *service) GetById(id string) (transaction models.TransactionResponse, err error) {
 
 	return
 }
@@ -270,7 +270,7 @@ func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (e
 	}
 	return
 }
-func (s *service) Modify() (transaction models.Transaction, err error) {
+func (s *service) Modify() (transaction models.TransactionResponse, err error) {
 	return
 }
 func (s *service) Remove() (err error) {
