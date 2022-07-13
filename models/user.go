@@ -2,8 +2,6 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Role string
@@ -25,7 +23,7 @@ type User struct {
 	Transactions []Transaction
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
-	Deleted      gorm.DeletedAt
+	Deleted      time.Time
 }
 
 type UserResponse struct {

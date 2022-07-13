@@ -40,7 +40,7 @@ func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id string) (productBrand *models.ProductBrand, err error) {
+func (repo *PostgresRepository) FindById(id string) (productBrand *models.ProductBrandResponse, err error) {
 	if err = repo.db.Preload("ProductCategories").First(&productBrand, &id).Error; err != nil {
 		return
 	}
@@ -67,7 +67,7 @@ func (repo *PostgresRepository) FindAll(params ...string) (dataCount int64, prod
 	if den <= 0 {
 		den = 5
 	}
-	if err = repo.db.Debug().Table("product_brands").Select("product_brands.*, product_categories.name as category, count(products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_brand_id = product_brands.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Joins("left join products on products.product_brand_category_id = product_brand_categories.id").Where("lower(product_brands.name) like lower(?) or lower(product_brands.id) like lower(?)", "%"+params[0]+"%", "%"+params[0]+"%").Group("product_brands.id,product_categories.name").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&productBrands).Error; err != nil {
+	if err = repo.db.Debug().Table("product_brands").Select("product_brands.*, product_categories.name as category, count(products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_brand_id = product_brands.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Joins("left join products on products.product_brand_category_id = product_brand_categories.id").Where("product_brands.deleted is null and lower(product_brands.name) like lower(?) or lower(product_brands.id) like lower(?)", "%"+params[0]+"%", "%"+params[0]+"%").Group("product_brands.id,product_categories.name").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&productBrands).Error; err != nil {
 		return
 	}
 	return
@@ -78,13 +78,13 @@ func (repo *PostgresRepository) FindCategoryById(id string) (productCategory *mo
 	}
 	return
 }
-func (repo *PostgresRepository) Insert(data *models.ProductBrand) (productBrand *models.ProductBrand, err error) {
+func (repo *PostgresRepository) Insert(data *models.ProductBrand) (productBrand *models.ProductBrandResponse, err error) {
 	if err = repo.db.Create(data).Preload("ProductCategories").First(&productBrand, &data.Id).Error; err != nil {
 		return
 	}
 	return
 }
-func (repo *PostgresRepository) Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrand, err error) {
+func (repo *PostgresRepository) Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrandResponse, err error) {
 	if err = repo.db.First(&productBrand, &id).Model(productBrand).Updates(data).Error; err != nil {
 		return
 	}
@@ -98,7 +98,7 @@ func (repo *PostgresRepository) Delete(id string) (err error) {
 	return
 }
 func (repo *PostgresRepository) CheckBrandCategory(brandId string, categoryId string) (rowCount int64, err error) {
-	rowCount = repo.db.Where("product_brand_id = ? AND product_category_id = ?", brandId, categoryId).Find(&models.ProductBrandCategory{}).RowsAffected
+	rowCount = repo.db.Where("deleted is null and product_brand_id = ? AND product_category_id = ?", brandId, categoryId).Find(&models.ProductBrandCategory{}).RowsAffected
 	if rowCount > 0 {
 		return rowCount, errors.New("")
 	}
@@ -118,7 +118,7 @@ func (repo *PostgresRepository) InsertBrandCategory(brandId string, categoryId s
 	return
 }
 func (repo *PostgresRepository) DeleteBrandCategory(brandId string, categoryId string) (err error) {
-	if err = repo.db.Where("product_brand_id = ? AND product_category_id = ?", brandId, categoryId).Delete(&models.ProductBrandCategory{}).Error; err != nil {
+	if err = repo.db.Where("deleted is null and product_brand_id = ? AND product_category_id = ?", brandId, categoryId).Delete(&models.ProductBrandCategory{}).Error; err != nil {
 		return
 	}
 	return

@@ -12,18 +12,18 @@ import (
 )
 
 type Repository interface {
-	FindById(id string) (productCategory *models.ProductCategory, err error)
+	FindById(id string) (productCategory *models.ProductCategoryResponse, err error)
 	FindAll(params ...string) (dataCount int64, productCategories *[]dto.ProductCategory, err error)
-	Insert(data *models.ProductCategory) (productCategory *models.ProductCategory, err error)
-	Update(id string, data *models.ProductCategory) (productCategory *models.ProductCategory, err error)
+	Insert(data *models.ProductCategory) (productCategory *models.ProductCategoryResponse, err error)
+	Update(id string, data *models.ProductCategory) (productCategory *models.ProductCategoryResponse, err error)
 	Delete(id string) (err error)
 }
 
 type Service interface {
-	GetById(id string) (productCategory models.ProductCategory, err error)
+	GetById(id string) (productCategory models.ProductCategoryResponse, err error)
 	GetAll(params ...string) (data dto.ResponseBodyProductCategory, err error)
-	Create(createcategoryDTO dto.CreateCategoryDTO) (productCategory models.ProductCategory, err error)
-	Modify(id string, updatecategoryDTO dto.UpdateCategoryDTO) (productCategory models.ProductCategory, err error)
+	Create(createcategoryDTO dto.CreateCategoryDTO) (productCategory models.ProductCategoryResponse, err error)
+	Modify(id string, updatecategoryDTO dto.UpdateCategoryDTO) (productCategory models.ProductCategoryResponse, err error)
 	Remove(id string) (err error)
 }
 
@@ -39,7 +39,7 @@ func NewService(repository Repository) Service {
 	}
 }
 
-func (s *service) GetById(id string) (productCategory models.ProductCategory, err error) {
+func (s *service) GetById(id string) (productCategory models.ProductCategoryResponse, err error) {
 	_, err = uuid.Parse(id)
 	if err != nil {
 		return
@@ -84,7 +84,7 @@ func (s *service) GetAll(params ...string) (data dto.ResponseBodyProductCategory
 	data.Data = *datas
 	return
 }
-func (s *service) Create(createcategoryDTO dto.CreateCategoryDTO) (productCategory models.ProductCategory, err error) {
+func (s *service) Create(createcategoryDTO dto.CreateCategoryDTO) (productCategory models.ProductCategoryResponse, err error) {
 	if err = s.validate.Struct(createcategoryDTO); err != nil {
 		return
 	}
@@ -94,7 +94,7 @@ func (s *service) Create(createcategoryDTO dto.CreateCategoryDTO) (productCatego
 	productCategory = *data
 	return
 }
-func (s *service) Modify(id string, updatecategoryDTO dto.UpdateCategoryDTO) (productCategory models.ProductCategory, err error) {
+func (s *service) Modify(id string, updatecategoryDTO dto.UpdateCategoryDTO) (productCategory models.ProductCategoryResponse, err error) {
 	if err = s.validate.Struct(updatecategoryDTO); err != nil {
 		return
 	}

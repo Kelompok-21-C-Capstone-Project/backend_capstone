@@ -12,24 +12,24 @@ import (
 )
 
 type Repository interface {
-	FindById(id string) (product *models.Product, err error)
+	FindById(id string) (product *models.ProductResponse, err error)
 	FindAll(params ...string) (dataCount int64, products *[]dto.Product, err error)
 	ClientFindAll() (products *[]dto.ProductCategory, err error)
 	ClientFindAllBySlug(slug string) (products *dto.ProductCategory, err error)
-	Insert(data *models.Product) (product *models.Product, err error)
-	Update(id string, data *models.Product) (product *models.Product, err error)
+	Insert(data *models.Product) (product *models.ProductResponse, err error)
+	Update(id string, data *models.Product) (product *models.ProductResponse, err error)
 	Delete(id string) (err error)
 	ValidateProductBrandCategories(brandId string, categoryId string) (productBrandCategoriesId string, err error)
 }
 
 type Service interface {
-	GetById(id string) (product models.Product, err error)
+	GetById(id string) (product models.ProductResponse, err error)
 	GetAll(params ...string) (products dto.ResponseBodyProduct, err error)
 	ClientGetAll() (products []dto.ProductCategory, err error)
 	ClientGetAllBySlug(slug string) (products dto.ProductCategory, err error)
-	GetAllByCategory(categoryId string) (products []models.Product, err error)
-	Create(createproductDTO dto.CraeteProductDTO) (product models.Product, err error)
-	Modify(id string, updateproductDTO dto.UpdateProductDTO) (product models.Product, err error)
+	GetAllByCategory(categoryId string) (products []models.ProductResponse, err error)
+	Create(createproductDTO dto.CraeteProductDTO) (product models.ProductResponse, err error)
+	Modify(id string, updateproductDTO dto.UpdateProductDTO) (product models.ProductResponse, err error)
 	Remove(id string) (err error)
 }
 
@@ -45,7 +45,7 @@ func NewService(repository Repository) Service {
 	}
 }
 
-func (s *service) GetById(id string) (product models.Product, err error) {
+func (s *service) GetById(id string) (product models.ProductResponse, err error) {
 	_, err = uuid.Parse(id)
 	if err != nil {
 		return
@@ -119,10 +119,10 @@ func (s *service) ClientGetAll() (products []dto.ProductCategory, err error) {
 	}
 	return
 }
-func (s *service) GetAllByCategory(categoryId string) (products []models.Product, err error) {
+func (s *service) GetAllByCategory(categoryId string) (products []models.ProductResponse, err error) {
 	return
 }
-func (s *service) Create(createproductDTO dto.CraeteProductDTO) (product models.Product, err error) {
+func (s *service) Create(createproductDTO dto.CraeteProductDTO) (product models.ProductResponse, err error) {
 	if err = s.validate.Struct(createproductDTO); err != nil {
 		return
 	}
@@ -146,7 +146,7 @@ func (s *service) Create(createproductDTO dto.CraeteProductDTO) (product models.
 	product = *data
 	return
 }
-func (s *service) Modify(id string, updateproductDTO dto.UpdateProductDTO) (product models.Product, err error) {
+func (s *service) Modify(id string, updateproductDTO dto.UpdateProductDTO) (product models.ProductResponse, err error) {
 	if err = s.validate.Struct(updateproductDTO); err != nil {
 		return
 	}

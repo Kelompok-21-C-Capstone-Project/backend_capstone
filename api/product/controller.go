@@ -28,7 +28,7 @@ func NewController(service productUseCase.Service) *Controller {
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
-// @Success      201  {object}  models.Product{deleted=string}
+// @Success      201  {object}  models.ProductResponse
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -63,7 +63,7 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // @Param page_size   query  string  false  "search data by page size"
 // @Tags         products
 // @Produce      json
-// @Success      200  {array}  models.ProductBrand
+// @Success      200  {array}  models.ProductBrandResponse
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -138,7 +138,7 @@ func (controller *Controller) ClientGetAllBySlug(c echo.Context) (err error) {
 // @Tags         products
 // @Produce      json
 // @Param id   path  string  true  "Product ID" minLength:"32"
-// @Success      200  {object}  models.Product{deleted=string}
+// @Success      200  {object}  models.ProductResponse
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -165,7 +165,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
 // @Param Payload body request.UpdateProductRequest true "Payload format" SchemaExample(request.UpdateProductRequest)
-// @Success      200  {object}  models.Product{deleted=string}
+// @Success      200  {object}  models.ProductResponse
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse

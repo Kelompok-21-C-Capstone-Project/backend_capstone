@@ -249,7 +249,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.ProductCategory"
+                                "$ref": "#/definitions/models.ProductCategoryResponse"
                             }
                         }
                     },
@@ -371,7 +371,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductBrand"
+                            "$ref": "#/definitions/models.ProductBrandResponse"
                         }
                     },
                     "400": {
@@ -423,7 +423,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductBrand"
+                            "$ref": "#/definitions/models.ProductBrandResponse"
                         }
                     },
                     "400": {
@@ -485,7 +485,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductBrand"
+                            "$ref": "#/definitions/models.ProductBrandResponse"
                         }
                     },
                     "400": {
@@ -772,7 +772,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductCategory"
+                            "$ref": "#/definitions/models.ProductCategoryResponse"
                         }
                     },
                     "400": {
@@ -824,7 +824,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductCategory"
+                            "$ref": "#/definitions/models.ProductCategoryResponse"
                         }
                     },
                     "400": {
@@ -886,7 +886,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductCategory"
+                            "$ref": "#/definitions/models.ProductCategoryResponse"
                         }
                     },
                     "400": {
@@ -1013,7 +1013,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.ProductBrand"
+                                "$ref": "#/definitions/models.ProductBrandResponse"
                             }
                         }
                     },
@@ -1069,19 +1069,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/models.Product"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "deleted": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/models.ProductResponse"
                         }
                     },
                     "400": {
@@ -1133,19 +1121,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/models.Product"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "deleted": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/models.ProductResponse"
                         }
                     },
                     "400": {
@@ -1207,19 +1183,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/models.Product"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "deleted": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/models.ProductResponse"
                         }
                     },
                     "400": {
@@ -1463,7 +1427,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Transaction"
+                            "$ref": "#/definitions/models.TransactionResponse"
                         }
                     },
                     "400": {
@@ -2216,10 +2180,6 @@ const docTemplate = `{
                     "type": "string",
                     "example": "E-Money"
                 },
-                "default:true;not null": {
-                    "type": "boolean",
-                    "example": false
-                },
                 "description": {
                     "type": "string",
                     "example": "some description"
@@ -2231,6 +2191,10 @@ const docTemplate = `{
                 "id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": false
                 },
                 "name": {
                     "type": "string",
@@ -2325,11 +2289,110 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Product": {
+        "models.ProductBrandCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "brand_id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "category_id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "deleted": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ProductResponse"
+                    }
+                },
+                "slug": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ProductBrandResponse": {
+            "type": "object",
+            "properties": {
+                "deleted": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "some description"
+                },
+                "icon_path": {
+                    "type": "string",
+                    "example": "/path/to/file"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "type": "string",
+                    "example": "some name"
+                },
+                "product_category": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ProductCategoryResponse"
+                    }
+                }
+            }
+        },
+        "models.ProductCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "deleted": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "some description"
+                },
+                "icon": {
+                    "type": "string",
+                    "example": "mdi-some-category"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Some Name"
+                },
+                "slug": {
+                    "type": "string",
+                    "example": "some-name"
+                }
+            }
+        },
+        "models.ProductResponse": {
             "type": "object",
             "properties": {
                 "category": {
-                    "$ref": "#/definitions/models.ProductBrandCategory"
+                    "$ref": "#/definitions/models.ProductBrandCategoryResponse"
                 },
                 "category_id": {
                     "type": "string"
@@ -2371,7 +2434,7 @@ const docTemplate = `{
                 "transactions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Transaction"
+                        "$ref": "#/definitions/models.TransactionResponse"
                     }
                 },
                 "updated_at": {
@@ -2379,100 +2442,13 @@ const docTemplate = `{
                 }
             }
         },
-        "models.ProductBrand": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "example": "some description"
-                },
-                "icon_path": {
-                    "type": "string",
-                    "example": "/path/to/file"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "isAvailable": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "name": {
-                    "type": "string",
-                    "example": "some name"
-                },
-                "product_category": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ProductCategory"
-                    }
-                }
-            }
-        },
-        "models.ProductBrandCategory": {
-            "type": "object",
-            "properties": {
-                "brand_id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "category_id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "is_available": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Product"
-                    }
-                },
-                "slug": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.ProductCategory": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "example": "some description"
-                },
-                "icon": {
-                    "type": "string",
-                    "example": "mdi-some-category"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "is_available": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "name": {
-                    "type": "string",
-                    "example": "Some Name"
-                },
-                "slug": {
-                    "type": "string",
-                    "example": "some-name"
-                }
-            }
-        },
-        "models.Transaction": {
+        "models.TransactionResponse": {
             "type": "object",
             "properties": {
                 "date": {
+                    "type": "string"
+                },
+                "deleted": {
                     "type": "string"
                 },
                 "description": {
@@ -2536,6 +2512,10 @@ const docTemplate = `{
                 "description": {
                     "type": "string",
                     "example": "Telekomunikasi"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
                 },
                 "name": {
                     "type": "string",
@@ -2708,13 +2688,13 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Excelent Celullar"
                 },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "name": {
                     "type": "string",
                     "example": "XL"
-                },
-                "status": {
-                    "type": "boolean",
-                    "example": true
                 }
             }
         },
@@ -2729,13 +2709,13 @@ const docTemplate = `{
                     "type": "string",
                     "example": "mdi-some-category"
                 },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "name": {
                     "type": "string",
                     "example": "some name"
-                },
-                "status": {
-                    "type": "boolean",
-                    "example": true
                 }
             }
         },
