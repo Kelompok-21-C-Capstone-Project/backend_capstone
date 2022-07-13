@@ -24,6 +24,7 @@ import (
 	transactionService "backend_capstone/services/transaction"
 	userService "backend_capstone/services/user"
 	"backend_capstone/utils"
+	"backend_capstone/utils/mailjetdriver"
 	"backend_capstone/utils/midtransdriver"
 	"backend_capstone/utils/security"
 	"log"
@@ -35,9 +36,10 @@ func RegisterModules(dbCon *utils.DatabaseConnection, configs *configs.AppConfig
 	jwtPermitUtils := security.NewJwtService(configs.App.JWT)
 	passwordHashPermitUtils := security.NewPasswordHash()
 	midtransPermitUtils := midtransdriver.NewMidtransService(configs)
+	mailjetPermitUtils := mailjetdriver.NewTransactionMailjetService(configs)
 
 	transactionPermitRepository := transactionRepo.RepositoryFactory(dbCon)
-	transactionPermitService := transactionService.NewService(transactionPermitRepository, midtransPermitUtils)
+	transactionPermitService := transactionService.NewService(transactionPermitRepository, midtransPermitUtils, mailjetPermitUtils)
 	transactionPermitController := transactionController.NewController(transactionPermitService)
 
 	paymentPermitService := paymentService.NewService(nil)

@@ -30,6 +30,7 @@ type AppConfig struct {
 		ENV        string `mapstructure:"MIDTRANS_ENV"`
 	}
 	API_Mailjet struct {
+		EMAIL       string `mapstructure:"MAILJET_EMAIL"`
 		PRIVATE_KEY string `mapstructure:"MAILJET_PRIVATE_KEY"`
 		PUBLIC_KEY  string `mapstructure:"MAILJET_PUBLIC_KEY"`
 	}
@@ -70,6 +71,7 @@ func initConfig() *AppConfig {
 
 	defaultConfig.API_Mailjet.PRIVATE_KEY = os.Getenv("MAILJET_PRIVATE_KEY")
 	defaultConfig.API_Mailjet.PUBLIC_KEY = os.Getenv("MAILJET_PUBLIC_KEY")
+	defaultConfig.API_Mailjet.EMAIL = os.Getenv("MAILJET_EMAIL")
 
 	viper.SetConfigType("env")
 	viper.SetConfigName("config")
@@ -85,8 +87,9 @@ func initConfig() *AppConfig {
 	errApp := viper.Unmarshal(&finalConfig.App)
 	errDB := viper.Unmarshal(&finalConfig.Database)
 	errMidtrans := viper.Unmarshal(&finalConfig.API_Midtrans)
+	errMailjet := viper.Unmarshal(&finalConfig.API_Mailjet)
 
-	if errApp != nil || errDB != nil {
+	if errApp != nil || errDB != nil || errMailjet != nil || errMidtrans != nil {
 		if errApp != nil {
 			log.Info("error when parse config file", errApp)
 		}
@@ -94,7 +97,10 @@ func initConfig() *AppConfig {
 			log.Info("error when parse config file", errDB)
 		}
 		if errMidtrans != nil {
-			log.Info("error when parse config file", errDB)
+			log.Info("error when parse config file", errMidtrans)
+		}
+		if errMailjet != nil {
+			log.Info("error when parse config file", errMailjet)
 		}
 		return &defaultConfig
 	}

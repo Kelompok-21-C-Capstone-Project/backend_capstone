@@ -17,8 +17,8 @@ import (
 )
 
 type Mailjet interface {
-	SendBill() (err error)
-	SendInvoice() (err error)
+	SendBill(name string, email string, bill dto.BillClient) (err error)
+	SendInvoice(name string, email string, bill dto.BillClient) (err error)
 }
 
 type Midtrans interface {
@@ -37,6 +37,8 @@ type Repository interface {
 	Update() (transaction *models.Transaction, err error)
 	MidtransUpdate(tid string, status string) (err error)
 	GetTransactionProduct(pid string) (product *models.Product, err error)
+	GetBillById(tid string) (bill dto.BillClient, err error)
+	GetUserInfo(tid string) (user models.UserResponse, err error)
 	Delete(id string) (err error)
 }
 
@@ -56,13 +58,15 @@ type service struct {
 	repository Repository
 	validate   *validator.Validate
 	midtrans   Midtrans
+	mailjet    Mailjet
 }
 
-func NewService(repository Repository, midtransApi Midtrans) Service {
+func NewService(repository Repository, midtransApi Midtrans, mailjetApi Mailjet) Service {
 	return &service{
 		repository: repository,
 		validate:   validator.New(),
 		midtrans:   midtransApi,
+		mailjet:    mailjetApi,
 	}
 }
 
@@ -191,6 +195,14 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 		Charger:        dataPayment.Billed - dataProduct.Price,
 		Deadline:       dataPayment.CreatedAt.Add(time.Hour * time.Duration(1)),
 	}
+	userInfo, err := s.repository.GetUserInfo(userId)
+	if err != nil {
+		return
+	}
+	err = s.mailjet.SendBill(userInfo.Name, userInfo.Email, bill)
+	if err != nil {
+		return
+	}
 	return
 }
 func (s *service) GetBill(uid string, tid string) (bills dto.BillClient, err error) {
@@ -243,6 +255,18 @@ func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (e
 	}
 	if err = s.repository.MidtransUpdate(midtransData.TransactionId, midtransData.Status); err != nil {
 		err = errors.New("Midtrans Transaction Id " + midtransData.TransactionId + " Fail To Update")
+	}
+	bills, err := s.repository.GetBillById(midtransData.TransactionId)
+	if err != nil {
+		return
+	}
+	userInfo, err := s.repository.GetUserInfo(midtransData.TransactionId)
+	if err != nil {
+		return
+	}
+	err = s.mailjet.SendInvoice(userInfo.Name, userInfo.Email, bills)
+	if err != nil {
+		return
 	}
 	return
 }
