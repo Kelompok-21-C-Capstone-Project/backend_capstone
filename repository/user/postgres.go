@@ -40,10 +40,13 @@ func (repo *PostgresRepository) FindAll() (users *[]models.UserResponse, err err
 	return
 }
 func (repo *PostgresRepository) Insert(data *models.User) (user *models.UserResponse, err error) {
+	log.Print(repo.db)
 	err = repo.db.Create(data).First(&user, &data.Id).Error
 	if err != nil {
+		log.Print("terjadi error")
 		return
 	}
+
 	return
 }
 func (repo *PostgresRepository) Update(id string, data *models.User) (user *models.UserResponse, err error) {

@@ -67,9 +67,12 @@ func ClientGetAll() {}
 // GetAll godoc
 // @Summary Get all category
 // @Description  Get product category for admin side
+// @Param query   query  string  false  "search data by query"
+// @Param page   query  string  false  "search data by page"
+// @Param page_size   query  string  false  "search data by page size"
 // @Tags         product_categories
 // @Produce      json
-// @Success      200  {array}  models.ProductCategory
+// @Success      200  {array}  dto.ResponseBodyProductCategory
 // @Failure      400  {object}  response.BasicCategoryResponse
 // @Failure      403  {object}  response.BasicCategoryResponse
 // @Failure      500  {object}  response.BasicCategoryResponse
@@ -77,7 +80,10 @@ func ClientGetAll() {}
 // @Router       /v1/product_categories [get]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.productcategory.GetAll")
-	datas, err := controller.service.GetAll()
+	query := c.QueryParam("query")
+	page := c.QueryParam("page")
+	pageSize := c.QueryParam("page_size")
+	datas, err := controller.service.GetAll(query, page, pageSize)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicCategoryResponse{
 			Status:  "fail",

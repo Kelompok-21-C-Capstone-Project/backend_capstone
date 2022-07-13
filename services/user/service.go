@@ -9,6 +9,11 @@ import (
 	"github.com/google/uuid"
 )
 
+type Mailjet interface {
+	ValidateEmail() (err error)
+	RecoverPassword() (err error)
+}
+
 type JwtService interface {
 	CreateJWT(data models.User) (token string, err error)
 }

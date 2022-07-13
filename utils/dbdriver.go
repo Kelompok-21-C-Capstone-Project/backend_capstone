@@ -72,7 +72,7 @@ func newMySQL(configs *configs.AppConfig) *gorm.DB {
 
 	switch configs.Database.DRIVER {
 	case "mysql":
-		connectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+		connectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True",
 			configs.Database.USERNAME,
 			configs.Database.PASSWORD,
 			configs.Database.HOST,
@@ -81,7 +81,6 @@ func newMySQL(configs *configs.AppConfig) *gorm.DB {
 	}
 
 	db, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
-
 	if err != nil {
 		panic(err)
 	}

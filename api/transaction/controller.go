@@ -81,9 +81,16 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // @Summary Get all transaction from specific user
 // @Description  Get all transaction from specific user
 // @Param id   path  string  true  "user ID" minLength:"32"
+// @Param query   query  string  false  "search data by query"
+// @Param date   query  string  false  "search data by date"
+// @Param date_range   query  string  false  "search data by date range"
+// @Param status   query  string  false  "search data by status"
+// @Param category   query  string  false  "search data by category"
+// @Param page   query  string  false  "search data by page"
+// @Param page_size   query  string  false  "search data by page size"
 // @Tags         users
 // @Produce      json
-// @Success      200  {array}  dto.ClientTransactionsResponse
+// @Success      200  {array}  dto.ResponseUserTransaction
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
@@ -92,11 +99,21 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 func (controller *Controller) UsersGetAll(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.UsersGetAll")
 	id := c.Param("id")
+	query := c.QueryParam("query")
+	date := c.QueryParam("date")
+	dateRange := c.QueryParam("date_range")
+	status := c.QueryParam("status")
+	category := c.QueryParam("category")
+	page := c.QueryParam("page")
+	pageSize := c.QueryParam("page_size")
+
+	// page := c.QueryParam("pages")
+	// limit := c.QueryParam("limits")
 	if id != c.Get("payload").(string) {
 		err = errors.New("Tidak berizin")
 		return
 	}
-	datas, err := controller.service.UsersGetAll(id)
+	datas, err := controller.service.UsersGetAll(id, query, date, dateRange, status, category, page, pageSize)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
 			Status:  "fail",
@@ -257,17 +274,21 @@ func (controller *Controller) GetBill(c echo.Context) (err error) {
 func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
 	log.Print(c.Request().Body)
 	reqMidtrans := new(request.MidtransReq)
-	if err = c.Bind(reqMidtrans); err != nil {
-		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
-			Status:  "fail",
-			Message: err.Error(),
-		})
+	if err := c.Bind(reqMidtrans); err != nil {
+		// return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+		// 	Status:  "fail",
+		// 	Message: err.Error(),
+		// })
+		log.Print(err)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	if err = controller.service.MidtransAfterPayment(reqMidtrans.DtoReq()); err != nil {
-		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
-			Status:  "fail",
-			Message: err.Error(),
-		})
+	if err := controller.service.MidtransAfterPayment(reqMidtrans.DtoReq()); err != nil {
+		// return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+		// 	Status:  "fail",
+		// 	Message: err.Error(),
+		// })
+		log.Print(err)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	return
+	return c.JSON(http.StatusOK, errors.New("success"))
 }

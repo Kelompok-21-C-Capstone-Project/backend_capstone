@@ -161,7 +161,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.ProductCategory"
+                                "$ref": "#/definitions/backend_capstone_services_product_dto.ProductCategory"
                             }
                         }
                     },
@@ -209,7 +209,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ProductCategory"
+                            "$ref": "#/definitions/backend_capstone_services_product_dto.ProductCategory"
                         }
                     },
                     "400": {
@@ -289,13 +289,33 @@ const docTemplate = `{
                     "product_brands"
                 ],
                 "summary": "Get brand",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search data by query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.ProductBrand"
+                                "$ref": "#/definitions/dto.ResponseBodyProductBrand"
                             }
                         }
                     },
@@ -670,13 +690,33 @@ const docTemplate = `{
                     "product_categories"
                 ],
                 "summary": "Get all category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search data by query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.ProductCategory"
+                                "$ref": "#/definitions/dto.ResponseBodyProductCategory"
                             }
                         }
                     },
@@ -935,6 +975,38 @@ const docTemplate = `{
                     "products"
                 ],
                 "summary": "Get product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search data by query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by brand",
+                        "name": "brand",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by category",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1539,6 +1611,48 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by date",
+                        "name": "date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by date range",
+                        "name": "date_range",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by category",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page size",
+                        "name": "page_size",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1547,7 +1661,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.ClientTransactionsResponse"
+                                "$ref": "#/definitions/dto.ResponseUserTransaction"
                             }
                         }
                     },
@@ -1916,6 +2030,62 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "backend_capstone_services_product_dto.ProductCategory": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "label": {
+                    "type": "string",
+                    "example": "Some Category"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ClientProduct"
+                    }
+                },
+                "slug": {
+                    "type": "string",
+                    "example": "some-category"
+                }
+            }
+        },
+        "backend_capstone_services_productcategory_dto.ProductCategory": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "some description"
+                },
+                "icon": {
+                    "type": "string",
+                    "example": "mdi-some-category"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Some Name"
+                },
+                "product_sum": {
+                    "type": "integer",
+                    "example": 33
+                },
+                "slug": {
+                    "type": "string",
+                    "example": "some-name"
+                }
+            }
+        },
         "dto.BillClient": {
             "type": "object",
             "properties": {
@@ -1946,6 +2116,10 @@ const docTemplate = `{
                 "product_price": {
                     "type": "integer",
                     "example": 10000
+                },
+                "status": {
+                    "type": "string",
+                    "example": "Pending"
                 },
                 "transaction_id": {
                     "type": "string",
@@ -2001,6 +2175,10 @@ const docTemplate = `{
                     "type": "string",
                     "example": "2022-07-05T14:32:46.996074+07"
                 },
+                "icon": {
+                    "type": "string",
+                    "example": "mdi-paket-data"
+                },
                 "id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -2031,26 +2209,81 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.ProductCategory": {
+        "dto.ProductBrand": {
             "type": "object",
             "properties": {
+                "category": {
+                    "type": "string",
+                    "example": "E-Money"
+                },
+                "default:true;not null": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "description": {
+                    "type": "string",
+                    "example": "some description"
+                },
+                "icon_path": {
+                    "type": "string",
+                    "example": "mdi-some-brand"
+                },
                 "id": {
                     "type": "string",
-                    "example": "xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                 },
-                "label": {
+                "name": {
                     "type": "string",
-                    "example": "Some Category"
+                    "example": "some name"
                 },
-                "products": {
+                "product_sum": {
+                    "type": "integer",
+                    "example": 33
+                }
+            }
+        },
+        "dto.ResponseBodyProductBrand": {
+            "type": "object",
+            "properties": {
+                "datas": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.ClientProduct"
+                        "$ref": "#/definitions/dto.ProductBrand"
                     }
                 },
-                "slug": {
-                    "type": "string",
-                    "example": "some-category"
+                "page_length": {
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "dto.ResponseBodyProductCategory": {
+            "type": "object",
+            "properties": {
+                "datas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/backend_capstone_services_productcategory_dto.ProductCategory"
+                    }
+                },
+                "page_length": {
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "dto.ResponseUserTransaction": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ClientTransactionsResponse"
+                    }
+                },
+                "page_length": {
+                    "type": "integer",
+                    "example": 3
                 }
             }
         },

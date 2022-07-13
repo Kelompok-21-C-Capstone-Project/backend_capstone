@@ -34,9 +34,15 @@ func (BillClient) TableName() string {
 	return "transactions"
 }
 
+type ResponseUserTransaction struct {
+	Count int                          `json:"page_length" example:"3"`
+	Data  []ClientTransactionsResponse `json:"data"`
+}
+
 type ClientTransactionsResponse struct {
 	Id                 string    `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Category           string    `json:"type" example:"paket-data"`
+	Icon               string    `json:"icon" example:"mdi-paket-data"`
 	Status             string    `json:"status" example:"Pending"`
 	Product            string    `json:"label" example:"Telkomsel 5GB Super Tiktok"`
 	TransactionDetails string    `json:"phone_number" example:"2312312412523"`
@@ -50,6 +56,7 @@ func (ClientTransactionsResponse) TableName() string {
 }
 
 type MidtransAfterPayment struct {
-	TransactionId string `json:"transaction_id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
-	Status        string `json:"transaction_status" example:"Pending"`
+	TransactionId string `json:"order_id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Status        string `json:"transaction_status,omitempty" example:"Pending"`
+	Code          string `json:"status_code,omitempty"`
 }

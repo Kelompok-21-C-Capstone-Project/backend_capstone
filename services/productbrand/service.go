@@ -3,6 +3,8 @@ package productbrand
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/productbrand/dto"
+	"math"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -11,8 +13,7 @@ import (
 type Repository interface {
 	FindById(id string) (productBrand *models.ProductBrand, err error)
 	FindCategoryById(id string) (productCategory *models.ProductCategory, err error)
-	FindByQuery(key string, value interface{}) (productBrands *[]models.ProductBrand, err error)
-	FindAll() (productBrands *[]models.ProductBrand, err error)
+	FindAll(params ...string) (dataCount int64, productBrands *[]dto.ProductBrand, err error)
 	Insert(data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
 	Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
 	Delete(id string) (err error)
@@ -23,7 +24,7 @@ type Repository interface {
 
 type Service interface {
 	GetById(id string) (productBrand models.ProductBrand, err error)
-	GetAll() (productBrands []models.ProductBrand, err error)
+	GetAll(params ...string) (productBrands dto.ResponseBodyProductBrand, err error)
 	Create(createbrandDTO dto.CreateBrandDTO) (productBrand models.ProductBrand, err error)
 	Modify(id string, updatebrandDTO dto.UpdateBrandDTO) (productBrand models.ProductBrand, err error)
 	Remove(id string) (err error)
@@ -55,12 +56,37 @@ func (s *service) GetById(id string) (productBrand models.ProductBrand, err erro
 	productBrand = *data
 	return
 }
-func (s *service) GetAll() (productBrands []models.ProductBrand, err error) {
-	data, err := s.repository.FindAll()
+func (s *service) GetAll(params ...string) (productBrands dto.ResponseBodyProductBrand, err error) {
+	if params[1] == "" {
+		params[1] = "1"
+	}
+	if params[2] == "" {
+		params[2] = "5"
+	}
+	nom, err := strconv.Atoi(params[1])
 	if err != nil {
 		return
 	}
-	productBrands = *data
+	if nom < 0 {
+		params[1] = strconv.Itoa(nom)
+	}
+	den, err := strconv.Atoi(params[2])
+	if err != nil {
+		return
+	}
+	if den <= 0 {
+		den = 5
+	}
+	dataCount, datas, err := s.repository.FindAll(params...)
+	if err != nil {
+		return
+	}
+	productBrands.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
+	if datas == nil {
+		productBrands.Data = []dto.ProductBrand{}
+		return
+	}
+	productBrands.Data = *datas
 	return
 }
 func (s *service) Create(createbrandDTO dto.CreateBrandDTO) (productBrand models.ProductBrand, err error) {
