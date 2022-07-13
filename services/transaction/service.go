@@ -223,6 +223,7 @@ func (s *service) GetBill(uid string, tid string) (bills dto.BillClient, err err
 	if err != nil {
 		return
 	}
+	log.Print(dataTransaction)
 	// ngambil data product dari repo pake data `transaction.product_id` : product
 	dataProduct, err := s.repository.GetTransactionProduct(dataTransaction.ProductId)
 	if err != nil {

@@ -29,6 +29,9 @@ func (repo *PostgresRepository) FindById(id string) (transaction *models.Transac
 	if err = repo.db.Preload("Payment").First(&models.Transaction{}, &id).Scan(&transaction).Error; err != nil {
 		return
 	}
+	if err = repo.db.First(&models.Payment{}, "transaction_id = ?", id).Scan(&transaction.Payment).Error; err != nil {
+		return
+	}
 	return
 }
 
