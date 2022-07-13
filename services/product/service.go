@@ -76,13 +76,15 @@ func (s *service) GetAll(params ...string) (products dto.ResponseBodyProduct, er
 	if err != nil {
 		return
 	}
-	if den <= 0 {
-		den = 5
-	}
+	dataCount, data, err := s.repository.FindAll(params...)
 	if err != nil {
 		return
 	}
-	dataCount, data, err := s.repository.FindAll(params...)
+	if den < -1 || den == 0 {
+		den = 10
+	} else if den == -1 {
+		den = int(dataCount)
+	}
 	products.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
 	if data == nil {
 		products.Data = []dto.Product{}

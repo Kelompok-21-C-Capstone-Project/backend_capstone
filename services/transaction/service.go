@@ -116,15 +116,23 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions dto.Re
 	if params[6] == "" {
 		params[6] = "5"
 	}
+	den, err := strconv.Atoi(params[6])
+	if err != nil {
+		return
+	}
 	count, data, err := s.repository.UsersFindAll(uid, params...)
 	if err != nil {
 		return
+	}
+	if den < -1 || den == 0 {
+		den = 10
+	} else if den == 0 {
+		den = int(count)
 	}
 	if data == nil {
 		transactions.Data = []dto.ClientTransactionsResponse{}
 		return
 	}
-	den, _ := strconv.Atoi(params[6])
 	transactions.Count = int(math.Ceil(float64(count) / float64(den)))
 	transactions.Data = *data
 	return
@@ -195,14 +203,14 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 		Charger:        dataPayment.Billed - dataProduct.Price,
 		Deadline:       dataPayment.CreatedAt.Add(time.Hour * time.Duration(1)),
 	}
-	userInfo, err := s.repository.GetUserInfo(userId)
-	if err != nil {
-		return
-	}
-	err = s.mailjet.SendBill(userInfo.Name, userInfo.Email, bill)
-	if err != nil {
-		return
-	}
+	// userInfo, err := s.repository.GetUserInfo(userId)
+	// if err != nil {
+	// 	return
+	// }
+	// err = s.mailjet.SendBill(userInfo.Name, userInfo.Email, bill)
+	// if err != nil {
+	// 	return
+	// }
 	return
 }
 func (s *service) GetBill(uid string, tid string) (bills dto.BillClient, err error) {
@@ -256,18 +264,18 @@ func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (e
 	if err = s.repository.MidtransUpdate(midtransData.TransactionId, midtransData.Status); err != nil {
 		err = errors.New("Midtrans Transaction Id " + midtransData.TransactionId + " Fail To Update")
 	}
-	bills, err := s.repository.GetBillById(midtransData.TransactionId)
-	if err != nil {
-		return
-	}
-	userInfo, err := s.repository.GetUserInfo(midtransData.TransactionId)
-	if err != nil {
-		return
-	}
-	err = s.mailjet.SendInvoice(userInfo.Name, userInfo.Email, bills)
-	if err != nil {
-		return
-	}
+	// bills, err := s.repository.GetBillById(midtransData.TransactionId)
+	// if err != nil {
+	// 	return
+	// }
+	// userInfo, err := s.repository.GetUserInfo(midtransData.TransactionId)
+	// if err != nil {
+	// 	return
+	// }
+	// err = s.mailjet.SendInvoice(userInfo.Name, userInfo.Email, bills)
+	// if err != nil {
+	// 	return
+	// }
 	return
 }
 func (s *service) Modify() (transaction models.TransactionResponse, err error) {

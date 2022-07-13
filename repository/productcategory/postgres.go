@@ -62,8 +62,11 @@ func (repo *PostgresRepository) FindAll(params ...string) (DataCount int64, prod
 	if err != nil {
 		return
 	}
-	if den <= 0 {
-		den = 5
+	if den == -1 {
+		if err = repo.db.Table("product_categories").Select("product_categories.* , count(products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Where("product_categories.deleted is null and lower(product_categories.id) like lower(?) or lower(product_categories.name) like lower(?)", "%"+params[0]+"%", "%"+params[0]+"%").Group("product_categories.id").Count(&DataCount).Scan(&productCategories).Error; err != nil {
+			return
+		}
+		return
 	}
 	if err = repo.db.Table("product_categories").Select("product_categories.* , count(products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Where("product_categories.deleted is null and lower(product_categories.id) like lower(?) or lower(product_categories.name) like lower(?)", "%"+params[0]+"%", "%"+params[0]+"%").Group("product_categories.id").Count(&DataCount).Scopes(Paginate(params[1], params[2])).Scan(&productCategories).Error; err != nil {
 		return
