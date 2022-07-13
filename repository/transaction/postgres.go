@@ -104,7 +104,7 @@ func (repo *PostgresRepository) FindAll() (transactions *[]dto.ClientTransaction
 	return
 }
 func (repo *PostgresRepository) Insert(data *models.Transaction) (transaction *models.TransactionResponse, err error) {
-	if err = repo.db.Create(&data).First(&transaction, &data.Id).Error; err != nil {
+	if err = repo.db.Create(&data).Scan(&transaction).Error; err != nil {
 		return
 	}
 	return
@@ -167,7 +167,7 @@ func (repo *PostgresRepository) GetUserInfo(tid string) (user models.UserRespons
 	if err = repo.db.First(&transaction, &tid).Error; err != nil {
 		return
 	}
-	if err = repo.db.First(&user, &transaction.UserId).Error; err != nil {
+	if err = repo.db.First(&models.User{}, &transaction.UserId).Scan(&user).Error; err != nil {
 		log.Print("terjadi error")
 		return
 	}
