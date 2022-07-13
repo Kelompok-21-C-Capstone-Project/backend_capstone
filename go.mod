@@ -32,13 +32,10 @@ require (
 	github.com/jackc/pgtype v1.11.0 // indirect
 	github.com/jackc/pgx/v4 v4.16.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
-<<<<<<< HEAD
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/objx v0.4.0 // indirect
-=======
 	github.com/mailjet/mailjet-apiv3-go/v3 v3.2.0 // indirect
 	github.com/mailjet/mailjet-apiv3-go/v4 v4.0.1
->>>>>>> 72c99ab34aeb8ff7e5b3a0524133581e8a1afdab
 	golang.org/x/time v0.0.0-20220609170525-579cf78fd858 // indirect
 )
 
