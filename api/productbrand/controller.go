@@ -27,7 +27,7 @@ func NewController(service productbrandUseCase.Service) *Controller {
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.CreateBrandRequest true "Payload format" SchemaExample(request.CreateBrandRequest)
-// @Success      201  {object}  models.ProductBrand
+// @Success      201  {object}  models.ProductBrandResponse
 // @Failure      400  {object}  response.BasicBrandResponse
 // @Failure      403  {object}  response.BasicBrandResponse
 // @Failure      500  {object}  response.BasicBrandResponse
@@ -55,9 +55,12 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // GetAll godoc
 // @Summary Get brand
 // @Description  Get product brand by id
+// @Param query   query  string  false  "search data by query"
+// @Param page   query  string  false  "search data by page"
+// @Param page_size   query  string  false  "search data by page size"
 // @Tags         product_brands
 // @Produce      json
-// @Success      200  {array}  models.ProductBrand
+// @Success      200  {array}  dto.ResponseBodyProductBrand
 // @Failure      400  {object}  response.BasicBrandResponse
 // @Failure      403  {object}  response.BasicBrandResponse
 // @Failure      500  {object}  response.BasicBrandResponse
@@ -65,7 +68,10 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // @Router       /v1/product_brands [get]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.productbrand.GetAll")
-	datas, err := controller.service.GetAll()
+	query := c.QueryParam("query")
+	page := c.QueryParam("page")
+	pageSize := c.QueryParam("page_size")
+	datas, err := controller.service.GetAll(query, page, pageSize)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicBrandResponse{
 			Status:  "fail",
@@ -81,7 +87,7 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // @Tags         product_brands
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
-// @Success      200  {object}  models.ProductBrand
+// @Success      200  {object}  models.ProductBrandResponse
 // @Failure      400  {object}  response.BasicBrandResponse
 // @Failure      403  {object}  response.BasicBrandResponse
 // @Failure      500  {object}  response.BasicBrandResponse
@@ -108,7 +114,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
 // @Param Payload body request.UpdateBrandRequest true "Payload format" SchemaExample(request.UpdateBrandRequest)
-// @Success      200  {object}  models.ProductBrand
+// @Success      200  {object}  models.ProductBrandResponse
 // @Failure      400  {object}  response.BasicBrandResponse
 // @Failure      403  {object}  response.BasicBrandResponse
 // @Failure      500  {object}  response.BasicBrandResponse

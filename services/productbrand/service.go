@@ -3,18 +3,19 @@ package productbrand
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/productbrand/dto"
+	"math"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
 
 type Repository interface {
-	FindById(id string) (productBrand *models.ProductBrand, err error)
+	FindById(id string) (productBrand *models.ProductBrandResponse, err error)
 	FindCategoryById(id string) (productCategory *models.ProductCategory, err error)
-	FindByQuery(key string, value interface{}) (productBrands *[]models.ProductBrand, err error)
-	FindAll() (productBrands *[]models.ProductBrand, err error)
-	Insert(data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
-	Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrand, err error)
+	FindAll(params ...string) (dataCount int64, productBrands *[]dto.ProductBrand, err error)
+	Insert(data *models.ProductBrand) (productBrand *models.ProductBrandResponse, err error)
+	Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrandResponse, err error)
 	Delete(id string) (err error)
 	CheckBrandCategory(brandId string, categoryId string) (rowCount int64, err error)
 	InsertBrandCategory(brandId string, categoryId string, slug string) (productBrand *models.ProductBrandCategory, err error)
@@ -22,10 +23,10 @@ type Repository interface {
 }
 
 type Service interface {
-	GetById(id string) (productBrand models.ProductBrand, err error)
-	GetAll() (productBrands []models.ProductBrand, err error)
-	Create(createbrandDTO dto.CreateBrandDTO) (productBrand models.ProductBrand, err error)
-	Modify(id string, updatebrandDTO dto.UpdateBrandDTO) (productBrand models.ProductBrand, err error)
+	GetById(id string) (productBrand models.ProductBrandResponse, err error)
+	GetAll(params ...string) (productBrands dto.ResponseBodyProductBrand, err error)
+	Create(createbrandDTO dto.CreateBrandDTO) (productBrand models.ProductBrandResponse, err error)
+	Modify(id string, updatebrandDTO dto.UpdateBrandDTO) (productBrand models.ProductBrandResponse, err error)
 	Remove(id string) (err error)
 	AddBrandCategory(brandId string, categoryId string) (productBrandCategory models.ProductBrandCategory, err error)
 	RemoveBrandCategory(brandId string, categoryId string) (err error)
@@ -43,7 +44,7 @@ func NewService(repository Repository) Service {
 	}
 }
 
-func (s *service) GetById(id string) (productBrand models.ProductBrand, err error) {
+func (s *service) GetById(id string) (productBrand models.ProductBrandResponse, err error) {
 	_, err = uuid.Parse(id)
 	if err != nil {
 		return
@@ -55,15 +56,40 @@ func (s *service) GetById(id string) (productBrand models.ProductBrand, err erro
 	productBrand = *data
 	return
 }
-func (s *service) GetAll() (productBrands []models.ProductBrand, err error) {
-	data, err := s.repository.FindAll()
+func (s *service) GetAll(params ...string) (productBrands dto.ResponseBodyProductBrand, err error) {
+	if params[1] == "" {
+		params[1] = "1"
+	}
+	if params[2] == "" {
+		params[2] = "5"
+	}
+	nom, err := strconv.Atoi(params[1])
 	if err != nil {
 		return
 	}
-	productBrands = *data
+	if nom < 0 {
+		params[1] = strconv.Itoa(nom)
+	}
+	den, err := strconv.Atoi(params[2])
+	if err != nil {
+		return
+	}
+	if den <= 0 {
+		den = 5
+	}
+	dataCount, datas, err := s.repository.FindAll(params...)
+	if err != nil {
+		return
+	}
+	productBrands.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
+	if datas == nil {
+		productBrands.Data = []dto.ProductBrand{}
+		return
+	}
+	productBrands.Data = *datas
 	return
 }
-func (s *service) Create(createbrandDTO dto.CreateBrandDTO) (productBrand models.ProductBrand, err error) {
+func (s *service) Create(createbrandDTO dto.CreateBrandDTO) (productBrand models.ProductBrandResponse, err error) {
 	if err = s.validate.Struct(createbrandDTO); err != nil {
 		return
 	}
@@ -72,7 +98,7 @@ func (s *service) Create(createbrandDTO dto.CreateBrandDTO) (productBrand models
 	productBrand = *data
 	return
 }
-func (s *service) Modify(id string, updatebrandDTO dto.UpdateBrandDTO) (productBrand models.ProductBrand, err error) {
+func (s *service) Modify(id string, updatebrandDTO dto.UpdateBrandDTO) (productBrand models.ProductBrandResponse, err error) {
 	_, err = uuid.Parse(id)
 	if err != nil {
 		return

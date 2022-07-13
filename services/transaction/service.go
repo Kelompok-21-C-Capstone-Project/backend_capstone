@@ -6,7 +6,9 @@ import (
 	dtoMidtrans "backend_capstone/utils/midtransdriver/dto"
 	"errors"
 	"log"
+	"math"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -15,8 +17,8 @@ import (
 )
 
 type Mailjet interface {
-	SendBill() (err error)
-	SendInvoice() (err error)
+	SendBill(name string, email string, bill dto.BillClient) (err error)
+	SendInvoice(name string, email string, bill dto.BillClient) (err error)
 }
 
 type Midtrans interface {
@@ -24,28 +26,30 @@ type Midtrans interface {
 }
 
 type Repository interface {
-	FindById(id string) (transaction *models.Transaction, err error)
+	FindById(id string) (transaction *models.TransactionResponse, err error)
 	FindAll() (transactions *[]dto.ClientTransactionsResponse, err error)
-	UsersFindAll(uip string, params ...string) (transactions *[]dto.ClientTransactionsResponse, err error)
+	UsersFindAll(uip string, params ...string) (dataCount int64, transactions *[]dto.ClientTransactionsResponse, err error)
 	UsersFindById(uid string, tid string) (transaction *dto.ClientTransactionsResponse, err error)
 	CheckProductStock(pid string) (product *models.Product, err error)
 	ProductReStock(pid string) (err error)
-	Insert(data *models.Transaction) (transaction *models.Transaction, err error)
+	Insert(data *models.Transaction) (transaction *models.TransactionResponse, err error)
 	InsertPayment(data *models.Payment) (transaction *models.Payment, err error)
-	Update() (transaction *models.Transaction, err error)
+	Update() (transaction *models.TransactionResponse, err error)
 	MidtransUpdate(tid string, status string) (err error)
 	GetTransactionProduct(pid string) (product *models.Product, err error)
+	GetBillById(tid string) (bill dto.BillClient, err error)
+	GetUserInfo(tid string) (user models.UserResponse, err error)
 	Delete(id string) (err error)
 }
 
 type Service interface {
-	GetById(id string) (transaction models.Transaction, err error)
+	GetById(id string) (transaction models.TransactionResponse, err error)
 	GetAll() (transactions []dto.ClientTransactionsResponse, err error)
-	UsersGetAll(uid string, params ...string) (transactions []dto.ClientTransactionsResponse, err error)
+	UsersGetAll(uid string, params ...string) (transactions dto.ResponseUserTransaction, err error)
 	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	GetBill(uid string, tid string) (bills dto.BillClient, err error)
-	Modify() (transaction models.Transaction, err error)
+	Modify() (transaction models.TransactionResponse, err error)
 	Remove() (err error)
 	MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error)
 }
@@ -54,17 +58,19 @@ type service struct {
 	repository Repository
 	validate   *validator.Validate
 	midtrans   Midtrans
+	mailjet    Mailjet
 }
 
-func NewService(repository Repository, midtransApi Midtrans) Service {
+func NewService(repository Repository, midtransApi Midtrans, mailjetApi Mailjet) Service {
 	return &service{
 		repository: repository,
 		validate:   validator.New(),
 		midtrans:   midtransApi,
+		mailjet:    mailjetApi,
 	}
 }
 
-func (s *service) GetById(id string) (transaction models.Transaction, err error) {
+func (s *service) GetById(id string) (transaction models.TransactionResponse, err error) {
 
 	return
 }
@@ -76,15 +82,23 @@ func (s *service) GetAll() (transactions []dto.ClientTransactionsResponse, err e
 	if err != nil {
 		return
 	}
+	if data == nil {
+		transactions = []dto.ClientTransactionsResponse{}
+		return
+	}
 	transactions = *data
 	return
 }
-func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.ClientTransactionsResponse, err error) {
+func (s *service) UsersGetAll(uid string, params ...string) (transactions dto.ResponseUserTransaction, err error) {
 	if params[2] != "" {
 		regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
 		if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {
 			return
 		}
+		date := strings.Split(params[2], "_")
+		dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
+		date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
+		params = append(params, date...)
 	} else if params[1] != "" {
 		regexDate := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
 		if resR, _ := regexp.MatchString(regexDate, params[1]); !resR {
@@ -102,15 +116,17 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions []dto.
 	if params[6] == "" {
 		params[6] = "5"
 	}
-	date := strings.Split(params[2], "_")
-	dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
-	date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
-	params = append(params, date...)
-	data, err := s.repository.UsersFindAll(uid, params...)
+	count, data, err := s.repository.UsersFindAll(uid, params...)
 	if err != nil {
 		return
 	}
-	transactions = *data
+	if data == nil {
+		transactions.Data = []dto.ClientTransactionsResponse{}
+		return
+	}
+	den, _ := strconv.Atoi(params[6])
+	transactions.Count = int(math.Ceil(float64(count) / float64(den)))
+	transactions.Data = *data
 	return
 }
 func (s *service) UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error) {
@@ -124,6 +140,10 @@ func (s *service) UsersGetById(uid string, tid string) (transaction dto.ClientTr
 	}
 	data, err := s.repository.UsersFindById(uid, tid)
 	if err != nil {
+		return
+	}
+	if data == nil {
+		transaction = dto.ClientTransactionsResponse{}
 		return
 	}
 	transaction = *data
@@ -174,6 +194,14 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 		ProductPrice:   dataProduct.Price,
 		Charger:        dataPayment.Billed - dataProduct.Price,
 		Deadline:       dataPayment.CreatedAt.Add(time.Hour * time.Duration(1)),
+	}
+	userInfo, err := s.repository.GetUserInfo(userId)
+	if err != nil {
+		return
+	}
+	err = s.mailjet.SendBill(userInfo.Name, userInfo.Email, bill)
+	if err != nil {
+		return
 	}
 	return
 }
@@ -228,9 +256,21 @@ func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (e
 	if err = s.repository.MidtransUpdate(midtransData.TransactionId, midtransData.Status); err != nil {
 		err = errors.New("Midtrans Transaction Id " + midtransData.TransactionId + " Fail To Update")
 	}
+	bills, err := s.repository.GetBillById(midtransData.TransactionId)
+	if err != nil {
+		return
+	}
+	userInfo, err := s.repository.GetUserInfo(midtransData.TransactionId)
+	if err != nil {
+		return
+	}
+	err = s.mailjet.SendInvoice(userInfo.Name, userInfo.Email, bills)
+	if err != nil {
+		return
+	}
 	return
 }
-func (s *service) Modify() (transaction models.Transaction, err error) {
+func (s *service) Modify() (transaction models.TransactionResponse, err error) {
 	return
 }
 func (s *service) Remove() (err error) {

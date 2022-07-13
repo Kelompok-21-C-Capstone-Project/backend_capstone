@@ -28,7 +28,7 @@ func NewController(service productUseCase.Service) *Controller {
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.CreateProductRequest true "Payload format" SchemaExample(request.CreateProductRequest)
-// @Success      201  {object}  models.Product{deleted=string}
+// @Success      201  {object}  models.ProductResponse
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -56,9 +56,14 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // GetAll godoc
 // @Summary Get product
 // @Description  Get product data from database
+// @Param query   query  string  false  "search data by query"
+// @Param brand   query  string  false  "search data by brand"
+// @Param category   query  string  false  "search data by category"
+// @Param page   query  string  false  "search data by page"
+// @Param page_size   query  string  false  "search data by page size"
 // @Tags         products
 // @Produce      json
-// @Success      200  {array}  models.ProductBrand
+// @Success      200  {array}  models.ProductBrandResponse
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -66,7 +71,12 @@ func (controller *Controller) Create(c echo.Context) (err error) {
 // @Router       /v1/products [get]
 func (controller *Controller) GetAll(c echo.Context) (err error) {
 	log.Print("enter controller.product.GetAll")
-	datas, err := controller.service.GetAll()
+	query := c.QueryParam("query")
+	page := c.QueryParam("page")
+	pageSize := c.QueryParam("page_size")
+	brand := c.QueryParam("brand")
+	category := c.QueryParam("category")
+	datas, err := controller.service.GetAll(query, page, pageSize, brand, category)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicProductResponse{
 			Status:  "fail",
@@ -87,7 +97,7 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // @Failure      500  {object}  response.BasicProductResponse
 // @Router       /v1/clients/products [get]
 func (controller *Controller) ClientGetAll(c echo.Context) (err error) {
-	log.Print("enter controller.product.GetAll")
+	log.Print("enter controller.product.ClientGetAll")
 	datas, err := controller.service.ClientGetAll()
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicProductResponse{
@@ -110,7 +120,7 @@ func (controller *Controller) ClientGetAll(c echo.Context) (err error) {
 // @Failure      500  {object}  response.BasicProductResponse
 // @Router       /v1/clients/products/:slug [get]
 func (controller *Controller) ClientGetAllBySlug(c echo.Context) (err error) {
-	log.Print("enter controller.product.GetAll")
+	log.Print("enter controller.product.ClientGetAllBySlug")
 	slug := c.Param("slug")
 	datas, err := controller.service.ClientGetAllBySlug(slug)
 	if err != nil {
@@ -128,7 +138,7 @@ func (controller *Controller) ClientGetAllBySlug(c echo.Context) (err error) {
 // @Tags         products
 // @Produce      json
 // @Param id   path  string  true  "Product ID" minLength:"32"
-// @Success      200  {object}  models.Product{deleted=string}
+// @Success      200  {object}  models.ProductResponse
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -155,7 +165,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
 // @Param Payload body request.UpdateProductRequest true "Payload format" SchemaExample(request.UpdateProductRequest)
-// @Success      200  {object}  models.Product{deleted=string}
+// @Success      200  {object}  models.ProductResponse
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse

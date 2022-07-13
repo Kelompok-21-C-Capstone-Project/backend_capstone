@@ -4,7 +4,7 @@ import "backend_capstone/services/productcategory/dto"
 
 type UpdateCategoryRequest struct {
 	Name        string `json:"name" example:"some name"`
-	IsAvailable bool   `json:"status" example:"true"`
+	IsAvailable bool   `json:"is_available" example:"true"`
 	Description string `json:"description" example:"some description"`
 	Icon        string `json:"icon" example:"mdi-some-category"`
 }

@@ -90,7 +90,7 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 // @Param page_size   query  string  false  "search data by page size"
 // @Tags         users
 // @Produce      json
-// @Success      200  {array}  dto.ClientTransactionsResponse
+// @Success      200  {array}  dto.ResponseUserTransaction
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
@@ -185,7 +185,7 @@ func (controller *Controller) GetById(c echo.Context) (err error) {
 // @Accept       json
 // @Produce      json
 // @Param id   path  string  true  "Brand ID" minLength:"32"
-// @Success      200  {object}  models.Transaction
+// @Success      200  {object}  models.TransactionResponse
 // @Failure      400  {object}  response.BasicTransactionResponse
 // @Failure      403  {object}  response.BasicTransactionResponse
 // @Failure      500  {object}  response.BasicTransactionResponse
