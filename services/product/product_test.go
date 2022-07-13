@@ -11,11 +11,11 @@ import (
 )
 
 func TestGetById(t *testing.T) {
-	var mockRepo = mocks.Repository{Mock: mock.Mock{}}
+	var mockRepo = new(mocks.Repository)
 	t.Run("success", func(t *testing.T) {
 		mockRepo.On("FindById", mock.Anything).Return(&models.ProductResponse{}, nil)
 		service := product.NewService(mockRepo)
-		_, err := service.GetById("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+		_, err := service.GetById("5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5")
 		assert.NoError(t, err)
 	})
 }
