@@ -104,7 +104,7 @@ func (repo *PostgresRepository) FindAll() (transactions *[]dto.ClientTransaction
 	return
 }
 func (repo *PostgresRepository) Insert(data *models.Transaction) (transaction *models.TransactionResponse, err error) {
-	if err = repo.db.Create(&data).Scan(&transaction).Error; err != nil {
+	if err = repo.db.Create(&data).First(&data, &data.Id).Scan(&transaction).Error; err != nil {
 		return
 	}
 	return
