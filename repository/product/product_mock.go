@@ -12,10 +12,50 @@ type ProductRepoMock struct {
 
 func (repository *ProductRepoMock) FindById(id string) *models.Product {
 	arguments := repository.Mock.Called(id)
-	if arguments.Get(0) == nil {
+	if arguments.GetById(0) == nil {
 		return nil
 	} else {
-		product := arguments.Get(0).(models.Product)
+		product := arguments.GetById(0).(models.Product)
+		return &product
+	}
+}
+
+func (repository *ProductRepoMock) FindAll() *models.Product {
+	arguments := repository.Mock.Called()
+	if arguments.GetAll(0) == nil {
+		return nil
+	} else {
+		product := arguments.GetAll(0).(models.Product)
+		return &product
+	}
+}
+
+func (repository *ProductRepoMock) Insert(data[]) *models.Product {
+	arguments := repository.Mock.Insert(data[])
+	if arguments.Create() == nil {
+		return nil
+	} else {
+		product := arguments.Create(data[]).(models.Product)
+		return &product
+	}
+}
+
+func (repository *ProductRepoMock) Update(id string) *models.Product {
+	arguments := repository.Mock.Update(Id)
+	if arguments.Modify(0) == nil {
+		return nil
+	} else {
+		product := arguments.Modify(0).(models.Product)
+		return &product
+	}
+}
+
+func (repository *ProductRepoMock) Delete(id string) *models.Product {
+	arguments := repository.Mock.Delete(Id)
+	if arguments.Remove(0) == nil {
+		return nil
+	} else {
+		product := arguments.Remove(0).(models.Product)
 		return &product
 	}
 }
