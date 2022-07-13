@@ -1,24 +1,21 @@
-package product
+package product_test
 
 import (
-	"backend_capstone/repository"
+	"backend_capstone/models"
+	"backend_capstone/services/product"
+	"backend_capstone/services/product/mocks"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-var productrepo = &repository.ProductRepoMock{Mock: mock.Mock{}}
-var productservice = service{repository: productrepo}
-
-func TestCategoryService_GetNotFound(t *testing.T) {
-
-	// program mock
-	productrepo.Mock.On("FindById", "1").Return(nil)
-
-	product, err := productservice.GetById("1")
-
-	assert.Nil(t, product)
-	assert.NotNil(t, err)
-
+func TestGetById(t *testing.T) {
+	var mockRepo = mocks.Repository{Mock: mock.Mock{}}
+	t.Run("success", func(t *testing.T) {
+		mockRepo.On("FindById", mock.Anything).Return(&models.ProductResponse{}, nil)
+		service := product.NewService(mockRepo)
+		_, err := service.GetById("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+		assert.NoError(t, err)
+	})
 }
