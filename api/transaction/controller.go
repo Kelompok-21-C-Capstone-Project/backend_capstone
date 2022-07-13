@@ -260,6 +260,7 @@ func (controller *Controller) Remove(c echo.Context) (err error) {
 // @Security ApiKeyAuth
 // @Router       /v1/users/{id}/transactions/{transaction_id}/bills [get]
 func (controller *Controller) GetBill(c echo.Context) (err error) {
+	log.Print("controller transaction GetBill()")
 	id := c.Param("id")
 	tid := c.Param("transaction_id")
 	data, err := controller.service.GetBill(id, tid)

@@ -29,6 +29,9 @@ func (repo *PostgresRepository) FindById(id string) (transaction *models.Transac
 	if err = repo.db.Preload("Payment").First(&models.Transaction{}, &id).Scan(&transaction).Error; err != nil {
 		return
 	}
+	if err = repo.db.First(&models.Payment{}, "transaction_id = ?", id).Scan(&transaction.Payment).Error; err != nil {
+		return
+	}
 	return
 }
 
@@ -104,7 +107,7 @@ func (repo *PostgresRepository) FindAll() (transactions *[]dto.ClientTransaction
 	return
 }
 func (repo *PostgresRepository) Insert(data *models.Transaction) (transaction *models.TransactionResponse, err error) {
-	if err = repo.db.Create(&data).Scan(&transaction).Error; err != nil {
+	if err = repo.db.Create(&data).First(&data, &data.Id).Scan(&transaction).Error; err != nil {
 		return
 	}
 	return
