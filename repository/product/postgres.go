@@ -39,7 +39,10 @@ func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
 }
 
 func (repo *PostgresRepository) FindById(id string) (product *models.ProductResponse, err error) {
-	if err = repo.db.Preload("ProductBrandCategory").First(&models.Product{}, &id).Scan(&product).Error; err != nil {
+	if err = repo.db.First(&models.Product{}, &id).Scan(&product).Error; err != nil {
+		return
+	}
+	if err = repo.db.First(&models.ProductBrandCategory{}, &id).Scan(&product.ProductBrandCategory).Error; err != nil {
 		return
 	}
 	return
