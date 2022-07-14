@@ -183,7 +183,7 @@ definitions:
         example: 3
         type: integer
     type: object
-  models.Payment:
+  models.PaymentResponse:
     properties:
       amount:
         type: integer
@@ -203,7 +203,7 @@ definitions:
         type: string
       status:
         type: string
-      transactionId:
+      transactionResponseId:
         type: string
       updatedAt:
         type: string
@@ -329,7 +329,7 @@ definitions:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
       payment:
-        $ref: '#/definitions/models.Payment'
+        $ref: '#/definitions/models.PaymentResponse'
       product_id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
@@ -382,6 +382,9 @@ definitions:
       icon:
         example: mdi-data-icon
         type: string
+      is_available:
+        example: true
+        type: boolean
       name:
         example: soma name
         type: string
@@ -397,6 +400,9 @@ definitions:
       description:
         example: some description
         type: string
+      is_available:
+        example: true
+        type: boolean
       name:
         example: Some Product
         type: string
@@ -529,6 +535,9 @@ definitions:
       description:
         example: some description
         type: string
+      is_available:
+        example: true
+        type: boolean
       is_discount:
         example: true
         type: boolean
@@ -538,9 +547,6 @@ definitions:
       price:
         example: 30000
         type: integer
-      status:
-        example: true
-        type: boolean
       stock:
         example: 20
         type: integer

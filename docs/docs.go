@@ -2251,7 +2251,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Payment": {
+        "models.PaymentResponse": {
             "type": "object",
             "properties": {
                 "amount": {
@@ -2281,7 +2281,7 @@ const docTemplate = `{
                 "status": {
                     "type": "string"
                 },
-                "transactionId": {
+                "transactionResponseId": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -2460,7 +2460,7 @@ const docTemplate = `{
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                 },
                 "payment": {
-                    "$ref": "#/definitions/models.Payment"
+                    "$ref": "#/definitions/models.PaymentResponse"
                 },
                 "product_id": {
                     "type": "string",
@@ -2534,6 +2534,10 @@ const docTemplate = `{
                     "type": "string",
                     "example": "mdi-data-icon"
                 },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "name": {
                     "type": "string",
                     "example": "soma name"
@@ -2554,6 +2558,10 @@ const docTemplate = `{
                 "description": {
                     "type": "string",
                     "example": "some description"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
                 },
                 "name": {
                     "type": "string",
@@ -2734,6 +2742,10 @@ const docTemplate = `{
                     "type": "string",
                     "example": "some description"
                 },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "is_discount": {
                     "type": "boolean",
                     "example": true
@@ -2745,10 +2757,6 @@ const docTemplate = `{
                 "price": {
                     "type": "integer",
                     "example": 30000
-                },
-                "status": {
-                    "type": "boolean",
-                    "example": true
                 },
                 "stock": {
                     "type": "integer",

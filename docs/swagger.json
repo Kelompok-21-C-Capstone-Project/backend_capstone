@@ -2239,7 +2239,7 @@
                 }
             }
         },
-        "models.Payment": {
+        "models.PaymentResponse": {
             "type": "object",
             "properties": {
                 "amount": {
@@ -2269,7 +2269,7 @@
                 "status": {
                     "type": "string"
                 },
-                "transactionId": {
+                "transactionResponseId": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -2448,7 +2448,7 @@
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                 },
                 "payment": {
-                    "$ref": "#/definitions/models.Payment"
+                    "$ref": "#/definitions/models.PaymentResponse"
                 },
                 "product_id": {
                     "type": "string",
@@ -2522,6 +2522,10 @@
                     "type": "string",
                     "example": "mdi-data-icon"
                 },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "name": {
                     "type": "string",
                     "example": "soma name"
@@ -2542,6 +2546,10 @@
                 "description": {
                     "type": "string",
                     "example": "some description"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
                 },
                 "name": {
                     "type": "string",
@@ -2722,6 +2730,10 @@
                     "type": "string",
                     "example": "some description"
                 },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "is_discount": {
                     "type": "boolean",
                     "example": true
@@ -2733,10 +2745,6 @@
                 "price": {
                     "type": "integer",
                     "example": 30000
-                },
-                "status": {
-                    "type": "boolean",
-                    "example": true
                 },
                 "stock": {
                     "type": "integer",
