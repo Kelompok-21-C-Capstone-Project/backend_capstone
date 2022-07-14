@@ -448,6 +448,16 @@ definitions:
         minLength: 8
         type: string
     type: object
+  request.PayloadUpdateStock:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/request.UpdateProductStock'
+        type: array
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+    type: object
   request.RegisterAdminRequest:
     properties:
       email:
@@ -550,6 +560,15 @@ definitions:
       stock:
         example: 20
         type: integer
+    type: object
+  request.UpdateProductStock:
+    properties:
+      add:
+        example: 3
+        type: integer
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
     type: object
   request.UpdateUserRequest:
     properties:
@@ -1494,6 +1513,42 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Update product
+      tags:
+      - products
+  /v1/products/stocks:
+    put:
+      consumes:
+      - application/json
+      description: Update mulitple product stock
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.PayloadUpdateStock'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicProductSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update product stock
       tags:
       - products
   /v1/tokens:

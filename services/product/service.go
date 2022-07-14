@@ -20,6 +20,7 @@ type Repository interface {
 	Update(id string, data *models.Product) (product *models.ProductResponse, err error)
 	Delete(id string) (err error)
 	ValidateProductBrandCategories(brandId string, categoryId string) (productBrandCategoriesId string, err error)
+	UpdateStock(data *dto.UpdateStockDTO) (err error)
 }
 
 type Service interface {
@@ -30,6 +31,7 @@ type Service interface {
 	GetAllByCategory(categoryId string) (products []models.ProductResponse, err error)
 	Create(createproductDTO dto.CraeteProductDTO) (product models.ProductResponse, err error)
 	Modify(id string, updateproductDTO dto.UpdateProductDTO) (product models.ProductResponse, err error)
+	ModifyStock(data *dto.UpdateStockDTO) (err error)
 	Remove(id string) (err error)
 }
 
@@ -182,5 +184,18 @@ func (s *service) Remove(id string) (err error) {
 		return
 	}
 	s.repository.Delete(id)
+	return
+}
+func (s *service) ModifyStock(data *dto.UpdateStockDTO) (err error) {
+	if err = s.validate.Struct(data); err != nil {
+		return
+	}
+	_, err = uuid.Parse((*data).AdminId)
+	if err != nil {
+		return
+	}
+	if err = s.repository.UpdateStock(data); err != nil {
+		return
+	}
 	return
 }

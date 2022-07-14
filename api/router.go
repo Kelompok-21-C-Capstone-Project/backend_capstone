@@ -70,6 +70,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	productV1.GET("", controller.Product.GetAll)
 	productV1.GET("/:id", controller.Product.GetById)
 	productV1.PUT("/:id", controller.Product.Modify)
+	productV1.PUT("/stocks", controller.Product.ModifyStock)
 	productV1.DELETE("/:id", controller.Product.Remove)
 
 	userV1 := e.Group("v1/users")

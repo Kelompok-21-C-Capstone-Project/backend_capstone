@@ -191,6 +191,41 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, data)
 }
 
+// ModifyStock godoc
+// @Summary Update product stock
+// @Description  Update mulitple product stock
+// @Tags         products
+// @Accept       json
+// @Produce      json
+// @Param Payload body request.PayloadUpdateStock true "Payload format" SchemaExample(request.PayloadUpdateStock)
+// @Success      200  {object}  response.BasicProductSuccessResponse
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Security ApiKeyAuth
+// @Router       /v1/products/stocks [put]
+func (controller *Controller) ModifyStock(c echo.Context) (err error) {
+	log.Print("enter controller.product.ModifyStock")
+	payloadUpdateStock := new(request.PayloadUpdateStock)
+	if err = c.Bind(payloadUpdateStock); err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicProductResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	// payloadUpdateStock.DtoReq()
+	err = controller.service.ModifyStock(payloadUpdateStock.DtoReq())
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicProductResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusAccepted, response.BasicProductSuccessResponse{
+		Status: "success",
+	})
+}
+
 // Remove godoc
 // @Summary Delete product data by id
 // @Description  Delete product data from database

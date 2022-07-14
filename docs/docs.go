@@ -1093,6 +1093,63 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/products/stocks": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update mulitple product stock",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Update product stock",
+                "parameters": [
+                    {
+                        "description": "Payload format",
+                        "name": "Payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.PayloadUpdateStock"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/products/{id}": {
             "get": {
                 "security": [
@@ -2625,6 +2682,21 @@ const docTemplate = `{
                 }
             }
         },
+        "request.PayloadUpdateStock": {
+            "type": "object",
+            "properties": {
+                "datas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.UpdateProductStock"
+                    }
+                },
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                }
+            }
+        },
         "request.RegisterAdminRequest": {
             "type": "object",
             "properties": {
@@ -2761,6 +2833,19 @@ const docTemplate = `{
                 "stock": {
                     "type": "integer",
                     "example": 20
+                }
+            }
+        },
+        "request.UpdateProductStock": {
+            "type": "object",
+            "properties": {
+                "add": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                 }
             }
         },

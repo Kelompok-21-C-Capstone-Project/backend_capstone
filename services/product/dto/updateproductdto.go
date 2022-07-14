@@ -27,3 +27,13 @@ func (data *UpdateProductDTO) GenerateModel(id string, ProductBrandCategoryId st
 		ProductBrandCategoryId: ProductBrandCategoryId,
 	}
 }
+
+type UpdateStockDTO struct {
+	AdminId string                  `validate:"required"`
+	Datas   []UpdateProductStockDTO `validate:"required"`
+}
+
+type UpdateProductStockDTO struct {
+	Id    string `validate:"required"`
+	Stock uint32 `validate:"required"`
+}
