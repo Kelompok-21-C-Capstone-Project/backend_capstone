@@ -161,7 +161,7 @@ func (repo *PostgresRepository) ValidateProductBrandCategories(brandId string, c
 		ProductBrandId:    brandId,
 		ProductCategoryId: categoryId,
 		Slug:              "",
-		IsAvailable:       false,
+		IsAvailable:       nil,
 	}).Error; err != nil {
 		return
 	}

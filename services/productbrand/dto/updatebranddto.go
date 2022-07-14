@@ -14,7 +14,7 @@ func (data *UpdateBrandDTO) GenerateModel(id string) *models.ProductBrand {
 	return &models.ProductBrand{
 		Id:          id,
 		Name:        data.Name,
-		IsAvailable: data.IsAvailable,
+		IsAvailable: &data.IsAvailable,
 		Description: data.Description,
 	}
 }

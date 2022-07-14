@@ -88,10 +88,10 @@ func (repo *PostgresRepository) Insert(data *models.ProductBrand) (productBrand 
 	return
 }
 func (repo *PostgresRepository) Update(id string, data *models.ProductBrand) (productBrand *models.ProductBrandResponse, err error) {
-	if err = repo.db.First(&productBrand, &id).Model(productBrand).Updates(data).Error; err != nil {
+	log.Print(data)
+	if err = repo.db.First(&productBrand, &id).Model(productBrand).Updates(&data).Error; err != nil {
 		return
 	}
-	log.Print(productBrand)
 	return
 }
 func (repo *PostgresRepository) Delete(id string) (err error) {
@@ -116,7 +116,7 @@ func (repo *PostgresRepository) InsertBrandCategory(brandId string, categoryId s
 		ProductBrandId:    brandId,
 		ProductCategoryId: categoryId,
 		Slug:              slug,
-		IsAvailable:       false,
+		IsAvailable:       nil,
 	}
 	if err = repo.db.Create(productBrand).Error; err != nil {
 		return

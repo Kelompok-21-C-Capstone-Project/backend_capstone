@@ -6,7 +6,7 @@ type UpdateProductRequest struct {
 	Name        string `json:"name" example:"Some Product"`
 	Price       uint32 `json:"price" example:"30000"`
 	Stock       uint32 `json:"stock" example:"20"`
-	IsAvailable bool   `json:"status"  example:"true"`
+	IsAvailable bool   `json:"is_available"  example:"true"`
 	IsDiscount  bool   `json:"is_discount" example:"true"`
 	Description string `json:"description" example:"some description"`
 	BrandId     string `json:"brand_id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`

@@ -11,6 +11,7 @@ type CraeteProductDTO struct {
 	Description string `validate:"required"`
 	BrandId     string `validate:"required"`
 	CategoryId  string `validate:"required"`
+	IsAvailable bool
 }
 
 func (data *CraeteProductDTO) GenerateModel(id string, ProductBrandCategoryId string) *models.Product {
@@ -21,5 +22,6 @@ func (data *CraeteProductDTO) GenerateModel(id string, ProductBrandCategoryId st
 		Stock:                  data.Stock,
 		Description:            data.Description,
 		ProductBrandCategoryId: ProductBrandCategoryId,
+		IsAvailable:            &data.IsAvailable,
 	}
 }

@@ -22,8 +22,8 @@ func (data *UpdateProductDTO) GenerateModel(id string, ProductBrandCategoryId st
 		Price:                  data.Price,
 		Stock:                  data.Stock,
 		Description:            data.Description,
-		IsAvailable:            data.IsAvailable,
-		IsDiscount:             data.IsDiscount,
+		IsAvailable:            &data.IsAvailable,
+		IsDiscount:             &data.IsDiscount,
 		ProductBrandCategoryId: ProductBrandCategoryId,
 	}
 }
