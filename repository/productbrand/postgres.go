@@ -44,7 +44,7 @@ func (repo *PostgresRepository) FindById(id string) (productBrand *models.Produc
 	if err = repo.db.First(&models.ProductBrand{}, &id).Scan(&productBrand).Error; err != nil {
 		return
 	}
-	if err = repo.db.Debug().Table("product_categories").Joins("left join product_brand_categories on product_brand_categories.product_category_id = product_categories.id").Where("product_brand_categories.product_brand_id = ?", id).Scan(&productBrand.ProductCategories).Error; err != nil {
+	if err = repo.db.Debug().Table("product_categories").Joins("left join product_brand_categories on product_brand_categories.product_category_id = product_categories.id").Where("product_brand_categories.deleted is null and product_brand_categories.product_brand_id = ?", id).Find(&productBrand.ProductCategories).Error; err != nil {
 		return
 	}
 	return
