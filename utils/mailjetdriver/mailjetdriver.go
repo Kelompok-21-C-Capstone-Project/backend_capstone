@@ -58,7 +58,7 @@ func (d *MailjetDriver) SendBill(name string, email string, bill dto.BillClient)
 	text = strings.Replace(text, "<%payment_details%>", bill.PaymentDetails, 1)
 	text = strings.Replace(text, "<%deadline%>", bill.Deadline.Format("02-01-2006 15:04:05"), 1)
 	if strings.Contains(bill.VaNumber, "http") {
-		paymentImg := "<img src=\"" + bill.VaNumber + "\" alt=\"QR Code\" style=\"display: block; margin-left: auto; margin-right: auto;\">"
+		paymentImg := `<img src="` + bill.VaNumber + `" alt=\"QR Code\" style=\"display: block; margin-left: auto; margin-right: auto;\">`
 		text = strings.Replace(text, "<%payment_code%>", paymentImg, 1)
 	} else {
 		text = strings.Replace(text, "<%payment_code%>", bill.VaNumber, 1)
