@@ -3,6 +3,7 @@ package productcategory
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/productcategory/dto"
+	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -70,6 +71,7 @@ func (s *service) GetAll(params ...string) (data dto.ResponseBodyProductCategory
 		return
 	}
 	dataCount, datas, err := s.repository.FindAll(params...)
+	log.Print(dataCount)
 	if err != nil {
 		return
 	}

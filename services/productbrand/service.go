@@ -77,6 +77,7 @@ func (s *service) GetAll(params ...string) (productBrands dto.ResponseBodyProduc
 	}
 	log.Print(den)
 	dataCount, datas, err := s.repository.FindAll(params...)
+	log.Print(dataCount)
 	if err != nil {
 		return
 	}
@@ -85,7 +86,6 @@ func (s *service) GetAll(params ...string) (productBrands dto.ResponseBodyProduc
 	} else if den == -1 {
 		den = int(dataCount)
 	}
-	log.Print(den, dataCount)
 	productBrands.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
 	if datas == nil {
 		productBrands.Data = []dto.ProductBrand{}

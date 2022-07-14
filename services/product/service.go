@@ -77,6 +77,7 @@ func (s *service) GetAll(params ...string) (products dto.ResponseBodyProduct, er
 		return
 	}
 	dataCount, data, err := s.repository.FindAll(params...)
+	log.Print(dataCount)
 	if err != nil {
 		return
 	}
