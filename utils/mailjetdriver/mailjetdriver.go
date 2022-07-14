@@ -35,6 +35,8 @@ func NewTransactionMailjetService(configs *configs.AppConfig) transaction.Mailje
 }
 
 func (d *MailjetDriver) SendBill(name string, email string, bill dto.BillClient) (err error) {
+	var text string
+
 	_, filename, _, ok := runtime.Caller(0)
 	if !ok {
 		return errors.New("unable to get the current filename")
@@ -44,12 +46,11 @@ func (d *MailjetDriver) SendBill(name string, email string, bill dto.BillClient)
 	fileContent, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		log.Print("Membuka file gagal")
-		log.Print(err)
-		return
+		text = HTML_BILLING
+	} else {
+		// Convert []byte to string
+		text = string(fileContent)
 	}
-
-	// Convert []byte to string
-	text := string(fileContent)
 
 	text = strings.Replace(text, "<%name%>", name, 1)
 	text = strings.Replace(text, "<%product_name%>", bill.Product, 1)
@@ -92,13 +93,15 @@ func (d *MailjetDriver) SendBill(name string, email string, bill dto.BillClient)
 }
 
 func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClient) (err error) {
+	var text string
 	fileContent, err := ioutil.ReadFile("./media/invoice.html")
 	if err != nil {
-		log.Fatal(err)
+		log.Print("Membuka file gagal")
+		text = HTML_INVOICE
+	} else {
+		// Convert []byte to string
+		text = string(fileContent)
 	}
-
-	// Convert []byte to string
-	text := string(fileContent)
 
 	text = strings.Replace(text, "<%name%>", name, 1)
 	text = strings.Replace(text, "<%product_name%>", bill.Product, 1)
@@ -130,3 +133,108 @@ func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClie
 	}
 	return
 }
+
+var (
+	HTML_BILLING = `<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Billing</title>
+	</head>
+	<body style="margin: 0; padding: 0;">
+		<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc;">
+			<tr>
+				<td align="center" bgcolor="#FFD700" style="padding: 40px 0 30px 0;">
+					<img src="https://raw.githubusercontent.com/ixtza/backend_capstone/feat/system/utils/mailjetdriver/media/payzone.svg" alt="Payzone" width="300" height="100" style="display: block;" />
+				 </td>
+			</tr>
+			<tr>
+				<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px; font-family: Arial, sans-serif; font-size: 14px;">
+					<table border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tr>
+						 <td style="padding: 40px 30px 40px 30px; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">
+							Your transaction is waiting for you!
+						 </td>
+						</tr>
+						<tr>
+						 <td style="padding: 40px 30px 40px 30px;">
+							Dear <%name%>, your purchase for <%product_name%> is on due. Please compleate this purchase by paying Rp<%payment_price%>,00 via <strong><%payment_details%></strong> before <%deadline%>.
+						 </td>
+						</tr>
+						<tr>            
+						 <td style="padding: 40px 30px 40px 30px; font-size: 20px;  font-weight: bold; text-align: center;">
+							<%payment_code%>
+						 </td>
+						</tr>
+					 </table>
+				 </td>
+			</tr>
+			<tr>
+					<td bgcolor="#FFD700" style="padding: 30px 30px 30px 30px; font-family: Arial, sans-serif; font-size: 14px;">
+					Payzone 2022 &#169
+				 </td>
+			</tr>
+		 </table>
+	 </body>
+	</html>`
+	HTML_INVOICE = `<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Invoice</title>
+	</head>
+	<body style="margin: 0; padding: 0;">
+		<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc;">
+			<tr>
+				<td align="center" bgcolor="#FFD700" style="padding: 40px 0 30px 0;">
+					<img src="https://raw.githubusercontent.com/ixtza/backend_capstone/feat/system/utils/mailjetdriver/media/payzone.svg" alt="Payzone" width="300" height="100" style="display: block;" />
+				 </td>
+			</tr>
+			<tr>
+				<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px; font-family: Arial, sans-serif; font-size: 14px;">
+					<table border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tr>
+						 <td style="padding: 40px 30px 40px 30px; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">
+							Your transaction has been Compleated!
+						 </td>
+						</tr>
+						<tr>
+						 <td style="padding: 40px 30px 40px 30px;">
+							Dear <%name%>, your purchase for <%product_name%> has been compleated.
+							<table style="padding: 40px 30px 40px 30px;">
+								<tr>
+									<td>
+										Item : <%product_name%>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Price :Rp<%payment_price%>,00
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Payment Method: <%payment_details%>
+									</td>
+								</tr>
+							</table>
+						 </td>
+						</tr>
+						<tr>    
+						</tr>
+					 </table>
+				 </td>
+			</tr>
+			<tr>
+					<td bgcolor="#FFD700" style="padding: 30px 30px 30px 30px; font-family: Arial, sans-serif; font-size: 14px;">
+					Payzone 2022 &#169
+				 </td>
+			</tr>
+		 </table>
+	 </body>
+	</html>`
+)
