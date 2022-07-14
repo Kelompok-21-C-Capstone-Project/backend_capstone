@@ -41,7 +41,10 @@ func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
 }
 
 func (repo *PostgresRepository) FindById(id string) (productBrand *models.ProductBrandResponse, err error) {
-	if err = repo.db.Preload("ProductCategories").First(&models.ProductBrand{}, &id).Scan(&productBrand).Error; err != nil {
+	if err = repo.db.First(&models.ProductBrand{}, &id).Scan(&productBrand).Error; err != nil {
+		return
+	}
+	if err = repo.db.Debug().Table("product_categories").Joins("left join product_brand_categories on product_brand_categories.product_category_id = product_categories.id").Where("product_brand_categories.product_brand_id = ?", id).Scan(&productBrand.ProductCategories).Error; err != nil {
 		return
 	}
 	return

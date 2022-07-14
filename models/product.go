@@ -31,11 +31,11 @@ type ProductResponse struct {
 	IsAvailable            *bool                        `gorm:"default:true;not null" example:"true" json:"is_available"`
 	IsDiscount             *bool                        `gorm:"default:false;not null" example:"false" json:"is_discount,omitempty"`
 	Description            string                       `gorm:"type:text" example:"some description" json:"description,omitempty"`
-	Transactions           []TransactionResponse        `json:"transactions,omitempty"`
+	Transactions           []TransactionResponse        `json:"transactions"`
 	ProductBrandCategoryId string                       `json:"category_id,omitempty"`
 	ProductBrandCategory   ProductBrandCategoryResponse `json:"category,omitempty"`
 	UpdatedAt              time.Time                    `json:"updated_at,omitempty"`
-	Deleted                time.Time                    `json:"deleted,omitempty"`
+	// Deleted                time.Time                    `json:"deleted,omitempty"`
 }
 
 func (ProductResponse) TableName() string {

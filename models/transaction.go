@@ -28,7 +28,7 @@ type TransactionResponse struct {
 	Description string          `gorm:"type:text" json:"description,omitempty" example:"some description"`
 	CreatedAt   time.Time       `json:"date,omitempty"`
 	UpdatedAt   time.Time       `json:"updated,omitempty"`
-	Deleted     time.Time       `json:"deleted,omitempty"`
+	// Deleted     time.Time       `json:"deleted,omitempty"`
 }
 
 func (TransactionResponse) TableName() string {
