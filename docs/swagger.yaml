@@ -203,7 +203,7 @@ definitions:
         type: string
       status:
         type: string
-      transactionResponseId:
+      transactionId:
         type: string
       updatedAt:
         type: string
@@ -215,8 +215,6 @@ definitions:
         type: string
       category_id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-        type: string
-      deleted:
         type: string
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
@@ -233,8 +231,6 @@ definitions:
     type: object
   models.ProductBrandResponse:
     properties:
-      deleted:
-        type: string
       description:
         example: some description
         type: string
@@ -257,8 +253,6 @@ definitions:
     type: object
   models.ProductCategoryResponse:
     properties:
-      deleted:
-        type: string
       description:
         example: some description
         type: string
@@ -283,8 +277,6 @@ definitions:
       category:
         $ref: '#/definitions/models.ProductBrandCategoryResponse'
       category_id:
-        type: string
-      deleted:
         type: string
       description:
         example: some description
@@ -319,8 +311,6 @@ definitions:
   models.TransactionResponse:
     properties:
       date:
-        type: string
-      deleted:
         type: string
       description:
         example: some description

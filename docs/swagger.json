@@ -2326,7 +2326,7 @@
                 "status": {
                     "type": "string"
                 },
-                "transactionResponseId": {
+                "transactionId": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -2344,9 +2344,6 @@
                 "category_id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "deleted": {
-                    "type": "string"
                 },
                 "id": {
                     "type": "string",
@@ -2370,9 +2367,6 @@
         "models.ProductBrandResponse": {
             "type": "object",
             "properties": {
-                "deleted": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string",
                     "example": "some description"
@@ -2404,9 +2398,6 @@
         "models.ProductCategoryResponse": {
             "type": "object",
             "properties": {
-                "deleted": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string",
                     "example": "some description"
@@ -2440,9 +2431,6 @@
                     "$ref": "#/definitions/models.ProductBrandCategoryResponse"
                 },
                 "category_id": {
-                    "type": "string"
-                },
-                "deleted": {
                     "type": "string"
                 },
                 "description": {
@@ -2491,9 +2479,6 @@
             "type": "object",
             "properties": {
                 "date": {
-                    "type": "string"
-                },
-                "deleted": {
                     "type": "string"
                 },
                 "description": {

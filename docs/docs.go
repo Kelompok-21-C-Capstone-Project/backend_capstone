@@ -2338,7 +2338,7 @@ const docTemplate = `{
                 "status": {
                     "type": "string"
                 },
-                "transactionResponseId": {
+                "transactionId": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -2356,9 +2356,6 @@ const docTemplate = `{
                 "category_id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                },
-                "deleted": {
-                    "type": "string"
                 },
                 "id": {
                     "type": "string",
@@ -2382,9 +2379,6 @@ const docTemplate = `{
         "models.ProductBrandResponse": {
             "type": "object",
             "properties": {
-                "deleted": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string",
                     "example": "some description"
@@ -2416,9 +2410,6 @@ const docTemplate = `{
         "models.ProductCategoryResponse": {
             "type": "object",
             "properties": {
-                "deleted": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string",
                     "example": "some description"
@@ -2452,9 +2443,6 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.ProductBrandCategoryResponse"
                 },
                 "category_id": {
-                    "type": "string"
-                },
-                "deleted": {
                     "type": "string"
                 },
                 "description": {
@@ -2503,9 +2491,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "date": {
-                    "type": "string"
-                },
-                "deleted": {
                     "type": "string"
                 },
                 "description": {
