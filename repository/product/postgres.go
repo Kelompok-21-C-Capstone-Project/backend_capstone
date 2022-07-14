@@ -38,11 +38,14 @@ func Paginate(page string, pageSize string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func (repo *PostgresRepository) FindById(id string) (product *models.ProductResponse, err error) {
-	if err = repo.db.First(&models.Product{}, &id).Scan(&product).Error; err != nil {
-		return
+func ProductTransaction() func(tx *gorm.DB) *gorm.DB {
+	return func(tx *gorm.DB) *gorm.DB {
+		return tx.Table("transactions")
 	}
-	if err = repo.db.First(&models.ProductBrandCategory{}, &id).Scan(&product.ProductBrandCategory).Error; err != nil {
+}
+
+func (repo *PostgresRepository) FindById(id string) (product *models.ProductResponse, err error) {
+	if err = repo.db.Debug().Preload("ProductBrandCategory").Preload("Transactions").Preload("Transactions.Payment").First(&product, &id).Error; err != nil {
 		return
 	}
 	return

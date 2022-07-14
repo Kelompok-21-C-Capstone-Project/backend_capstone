@@ -20,7 +20,7 @@ type ProductBrandCategoryResponse struct {
 	ProductCategoryId string            `gorm:"type:varchar(50);not null" json:"category_id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Slug              string            `gorm:"type:varchar(50);not null" json:"slug,omitempty"`
 	IsAvailable       *bool             `gorm:"default:true;not null" json:"is_available" example:"true"`
-	Products          []ProductResponse `json:"products"`
+	Products          []ProductResponse `gorm:"foreignKey:ProductBrandCategoryId" json:"products"`
 	// Deleted           time.Time         `json:"deleted,omitempty"`
 }
 
