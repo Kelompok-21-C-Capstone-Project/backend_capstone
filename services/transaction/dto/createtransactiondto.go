@@ -36,12 +36,12 @@ func (data *CreateTransactionDTO) GeneratePaymentModel(id string, transactionId 
 	}
 }
 
-func (data *CreateTransactionDTO) GenerateMidtransPayment(orderId string) dto.MidtransPaymentDTO {
+func (data *CreateTransactionDTO) GenerateMidtransPayment(orderId string, itemPrice uint32) dto.MidtransPaymentDTO {
 	return dto.MidtransPaymentDTO{
 		MethodDetails: data.MethodDetails,
 		OrderId:       orderId,
 		Paid:          int64(data.Price),
-		ItemPrice:     int64(data.Price),
+		ItemPrice:     int64(itemPrice),
 		ItemId:        data.ProductId,
 		ItemName:      data.ProductId,
 	}

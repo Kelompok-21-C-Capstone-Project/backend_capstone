@@ -175,7 +175,7 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 	if err != nil {
 		return
 	}
-	payment, err := s.midtrans.DoPayment(createtransactionDTO.PaymentMethod, createtransactionDTO.GenerateMidtransPayment(tid))
+	payment, err := s.midtrans.DoPayment(createtransactionDTO.PaymentMethod, createtransactionDTO.GenerateMidtransPayment(tid, dataProduct.PriceBuy))
 	if err != nil {
 		s.repository.ProductReStock(createtransactionDTO.ProductId)
 		s.repository.Delete(tid)
@@ -200,7 +200,7 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 		Billed:         dataPayment.Billed,
 		Product:        dataProduct.Name,
 		ProductPrice:   dataProduct.Price,
-		Charger:        dataPayment.Billed - dataProduct.Price,
+		Charger:        dataProduct.Profit,
 		Deadline:       dataPayment.CreatedAt.Add(time.Hour * time.Duration(1)),
 	}
 	userInfo, err := s.repository.GetUserInfo(tid)
@@ -238,7 +238,7 @@ func (s *service) GetBill(uid string, tid string) (bills dto.BillClient, err err
 		Billed:         dataTransaction.Payment.Billed,
 		Product:        dataProduct.Name,
 		ProductPrice:   dataProduct.Price,
-		Charger:        dataTransaction.Payment.Billed - dataProduct.Price,
+		Charger:        dataProduct.Profit,
 		Deadline:       dataTransaction.Payment.CreatedAt.Add(time.Hour * time.Duration(1)),
 	}
 	return
