@@ -293,3 +293,15 @@ func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusOK, errors.New("success"))
 }
+
+func (controller *Controller) AdminDetailTransaction(c echo.Context) (err error) {
+	log.Print("enter controller.transaction.AdminDetailTransaction")
+	query := c.QueryParam("query")
+	dateRange := c.QueryParam("date_range")
+	status := c.QueryParam("status")
+	category := c.QueryParam("category")
+	page := c.QueryParam("page")
+	pageSize := c.QueryParam("page_size")
+	data, err := controller.service.AdminDetailTransaction(query, dateRange, status, category, page, pageSize)
+	return c.JSON(http.StatusCreated, data)
+}

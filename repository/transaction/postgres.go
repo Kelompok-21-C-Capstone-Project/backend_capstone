@@ -176,3 +176,12 @@ func (repo *PostgresRepository) GetUserInfo(tid string) (user models.UserRespons
 	}
 	return
 }
+func (repo *PostgresRepository) AdminDetailTransaction(params ...string) (dashboardData dto.DetailPenjualanDTO, err error) {
+	if err = repo.db.Table("transactions").Joins("left join products on products.id = transactions.product_id left join payments on transactions.id = payments.transaction_id left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id left join product_brands on product_brand_categories.product_brand_id = left join product_categories on product_brand_categories.product_category_id = product_categories.id").Select("count(payments.billed) as sum, count(payments.charged) as profit, count(transactions.id) as transaction_count").Where("transactions.deleted is null and products.deleted is null and lower(product_brands.slug) like lower(?) and (lower(product_brands.name) like lower(?) or lower(payments.method_details) like lower(?)) and and transactions.created_at >= ? and transactions.created_at <= ?").Error; err != nil {
+		return
+	}
+	if err = repo.db.Error; err != nil {
+		return
+	}
+	return
+}

@@ -40,6 +40,7 @@ type Repository interface {
 	GetBillById(tid string) (bill dto.BillClient, err error)
 	GetUserInfo(tid string) (user models.UserResponse, err error)
 	Delete(id string) (err error)
+	AdminDetailTransaction(params ...string) (dashboardData dto.DetailPenjualanDTO, err error)
 }
 
 type Service interface {
@@ -52,6 +53,7 @@ type Service interface {
 	Modify() (transaction models.TransactionResponse, err error)
 	Remove() (err error)
 	MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error)
+	AdminDetailTransaction(params ...string) (dashboardData dto.DetailPenjualanDTO, err error)
 }
 
 type service struct {
@@ -283,5 +285,22 @@ func (s *service) Modify() (transaction models.TransactionResponse, err error) {
 	return
 }
 func (s *service) Remove() (err error) {
+	return
+}
+func (s *service) AdminDetailTransaction(params ...string) (dashboardData dto.DetailPenjualanDTO, err error) {
+	if params[1] != "" {
+		regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
+		if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {
+			return
+		}
+		date := strings.Split(params[1], "_")
+		dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
+		date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
+		params = append(params, date...)
+	}
+	dashboardData, err = s.repository.AdminDetailTransaction(params...)
+	if err != nil {
+		return
+	}
 	return
 }
