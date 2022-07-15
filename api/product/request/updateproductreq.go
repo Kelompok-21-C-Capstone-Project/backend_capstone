@@ -30,7 +30,9 @@ func (data *PayloadUpdateStock) DtoReq() *dto.UpdateStockDTO {
 
 type UpdateProductRequest struct {
 	Name        string `json:"name" example:"Some Product"`
-	Price       uint32 `json:"price" example:"30000"`
+	Price       uint32 `json:"harga_jual" example:"30000"`
+	PriceBuy    uint32 `json:"harga_beli" example:"30000"`
+	Profit      uint32 `json:"komisi" example:"30000"`
 	Stock       uint32 `json:"stock" example:"20"`
 	IsAvailable bool   `json:"is_available"  example:"true"`
 	IsDiscount  bool   `json:"is_discount" example:"true"`
@@ -43,6 +45,8 @@ func (data *UpdateProductRequest) DtoReq() *dto.UpdateProductDTO {
 	return &dto.UpdateProductDTO{
 		Name:        data.Name,
 		Price:       data.Price,
+		PriceBuy:    data.PriceBuy,
+		Profit:      data.Profit,
 		Stock:       data.Stock,
 		IsAvailable: data.IsAvailable,
 		IsDiscount:  data.IsDiscount,

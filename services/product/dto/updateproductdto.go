@@ -7,9 +7,11 @@ import (
 type UpdateProductDTO struct {
 	Name        string `validate:"required"`
 	Price       uint32 `validate:"required"`
-	Stock       uint32 `validate:"required"`
-	IsAvailable bool   `validate:"required"`
-	IsDiscount  bool   `validate:"required"`
+	PriceBuy    uint32 `validate:"required"`
+	Profit      uint32 `validate:"required"`
+	Stock       uint32
+	IsAvailable bool
+	IsDiscount  bool
 	Description string `validate:"required"`
 	BrandId     string `validate:"required"`
 	CategoryId  string `validate:"required"`
@@ -20,6 +22,8 @@ func (data *UpdateProductDTO) GenerateModel(id string, ProductBrandCategoryId st
 		Id:                     id,
 		Name:                   data.Name,
 		Price:                  data.Price,
+		PriceBuy:               data.PriceBuy,
+		Profit:                 data.Profit,
 		Stock:                  data.Stock,
 		Description:            data.Description,
 		IsAvailable:            &data.IsAvailable,

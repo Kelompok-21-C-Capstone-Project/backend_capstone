@@ -2452,6 +2452,14 @@ const docTemplate = `{
                 "discount": {
                     "type": "number"
                 },
+                "harga_beli": {
+                    "type": "integer",
+                    "example": 30000
+                },
+                "harga_jual": {
+                    "type": "integer",
+                    "example": 30000
+                },
                 "id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx"
@@ -2464,13 +2472,13 @@ const docTemplate = `{
                     "type": "boolean",
                     "example": false
                 },
+                "komisi": {
+                    "type": "integer",
+                    "example": 30000
+                },
                 "name": {
                     "type": "string",
                     "example": "Some Product"
-                },
-                "price": {
-                    "type": "integer",
-                    "example": 30000
                 },
                 "stock": {
                     "type": "integer",
@@ -2601,17 +2609,25 @@ const docTemplate = `{
                     "type": "string",
                     "example": "some description"
                 },
+                "harga_beli": {
+                    "type": "integer",
+                    "example": 30000
+                },
+                "harga_jual": {
+                    "type": "integer",
+                    "example": 30000
+                },
                 "is_available": {
                     "type": "boolean",
                     "example": true
                 },
+                "komisi": {
+                    "type": "integer",
+                    "example": 30000
+                },
                 "name": {
                     "type": "string",
                     "example": "Some Product"
-                },
-                "price": {
-                    "type": "integer",
-                    "example": 30000
                 },
                 "stock": {
                     "type": "integer",
@@ -2799,6 +2815,14 @@ const docTemplate = `{
                     "type": "string",
                     "example": "some description"
                 },
+                "harga_beli": {
+                    "type": "integer",
+                    "example": 30000
+                },
+                "harga_jual": {
+                    "type": "integer",
+                    "example": 30000
+                },
                 "is_available": {
                     "type": "boolean",
                     "example": true
@@ -2807,13 +2831,13 @@ const docTemplate = `{
                     "type": "boolean",
                     "example": true
                 },
+                "komisi": {
+                    "type": "integer",
+                    "example": 30000
+                },
                 "name": {
                     "type": "string",
                     "example": "Some Product"
-                },
-                "price": {
-                    "type": "integer",
-                    "example": 30000
                 },
                 "stock": {
                     "type": "integer",

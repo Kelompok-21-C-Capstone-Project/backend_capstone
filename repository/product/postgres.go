@@ -144,7 +144,7 @@ func (repo *PostgresRepository) Insert(data *models.Product) (product *models.Pr
 	return product, err
 }
 func (repo *PostgresRepository) Update(id string, data *models.Product) (product *models.ProductResponse, err error) {
-	if err = repo.db.First(&product, &id).Model(product).Updates(data).Preload("ProductBrandCategory").First(&models.Product{}, &id).Scan(&product).Error; err != nil {
+	if err = repo.db.First(&product, &id).Model(product).Update("Stock", gorm.Expr("stock + ?", data.Stock)).Omit("Stock").Updates(data).Preload("ProductBrandCategory").First(&models.Product{}, &id).Scan(&product).Error; err != nil {
 		return
 	}
 	return

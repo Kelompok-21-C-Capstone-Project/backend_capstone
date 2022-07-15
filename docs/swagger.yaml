@@ -283,6 +283,12 @@ definitions:
         type: string
       discount:
         type: number
+      harga_beli:
+        example: 30000
+        type: integer
+      harga_jual:
+        example: 30000
+        type: integer
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
         type: string
@@ -292,12 +298,12 @@ definitions:
       is_discount:
         example: false
         type: boolean
+      komisi:
+        example: 30000
+        type: integer
       name:
         example: Some Product
         type: string
-      price:
-        example: 30000
-        type: integer
       stock:
         example: 30
         type: integer
@@ -390,15 +396,21 @@ definitions:
       description:
         example: some description
         type: string
+      harga_beli:
+        example: 30000
+        type: integer
+      harga_jual:
+        example: 30000
+        type: integer
       is_available:
         example: true
         type: boolean
+      komisi:
+        example: 30000
+        type: integer
       name:
         example: Some Product
         type: string
-      price:
-        example: 30000
-        type: integer
       stock:
         example: 20
         type: integer
@@ -535,18 +547,24 @@ definitions:
       description:
         example: some description
         type: string
+      harga_beli:
+        example: 30000
+        type: integer
+      harga_jual:
+        example: 30000
+        type: integer
       is_available:
         example: true
         type: boolean
       is_discount:
         example: true
         type: boolean
+      komisi:
+        example: 30000
+        type: integer
       name:
         example: Some Product
         type: string
-      price:
-        example: 30000
-        type: integer
       stock:
         example: 20
         type: integer

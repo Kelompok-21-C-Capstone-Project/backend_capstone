@@ -7,6 +7,8 @@ import (
 type CraeteProductDTO struct {
 	Name        string `validate:"required"`
 	Price       uint32 `validate:"required"`
+	PriceBuy    uint32 `validate:"required"`
+	Profit      uint32 `validate:"required"`
 	Stock       uint32
 	Description string `validate:"required"`
 	BrandId     string `validate:"required"`
@@ -19,6 +21,8 @@ func (data *CraeteProductDTO) GenerateModel(id string, ProductBrandCategoryId st
 		Id:                     id,
 		Name:                   data.Name,
 		Price:                  data.Price,
+		PriceBuy:               data.PriceBuy,
+		Profit:                 data.Profit,
 		Stock:                  data.Stock,
 		Description:            data.Description,
 		ProductBrandCategoryId: ProductBrandCategoryId,

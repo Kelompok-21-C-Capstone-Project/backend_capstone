@@ -6,7 +6,7 @@ import (
 
 type UpdateBrandDTO struct {
 	Name        string `json:"name" validator:"required"`
-	IsAvailable bool   `json:"is_available" validator:"required,boolean"`
+	IsAvailable bool   `json:"is_available"`
 	Description string `json:"description" validator:"required,alphaunicode"`
 }
 
