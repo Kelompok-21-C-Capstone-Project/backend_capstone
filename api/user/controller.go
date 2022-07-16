@@ -22,14 +22,35 @@ func NewController(service user.Service) *Controller {
 	}
 }
 
+// AdminDetailUser godoc
+// @Summary Get all user data
+// @Description  Get all user data to dashboard
+// @Param query   query  string  false  "search data by query"
+// @Param page   query  string  false  "search data by page"
+// @Param page_size   query  string  false  "search data by page size"
+// @Tags         products
+// @Produce      json
+// @Success      200  {array}  dto.UserDashboadDTO
+// @Failure      400  {object}  response.BasicUserResponse
+// @Failure      403  {object}  response.BasicUserResponse
+// @Failure      500  {object}  response.BasicUserResponse
+// @Security ApiKeyAuth
+// @Router       /v1/admins/customers [get]
+func (controller *Controller) AdminDetailUser(c echo.Context) (err error) {
+	query := c.QueryParam("query")
+	page := c.QueryParam("page")
+	pageSize := c.QueryParam("page_size")
+	data, err := controller.service.AdminDetailUser(query, page, pageSize)
+	if err != nil {
+		return c.JSON(500, &response.BasicUserResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, data)
+}
 func (controller *Controller) GetAllData(c echo.Context) (err error) {
 	log.Print("enter controller.user.GetAllData")
-	// user, err := utils.ParsingJWT(c)
-	// else if user.Role != "admin" {
-	// 	return c.JSON(200, echo.Map{
-	// 		"error": "restricted (*only for admin)",
-	// 	})
-	// }
 	users, err := controller.service.GetAll()
 	if err != nil {
 		return c.JSON(500, &response.BasicUserResponse{
