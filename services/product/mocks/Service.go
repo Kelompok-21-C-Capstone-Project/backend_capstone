@@ -172,6 +172,20 @@ func (_m *Service) Modify(id string, updateproductDTO dto.UpdateProductDTO) (mod
 	return r0, r1
 }
 
+// ModifyStock provides a mock function with given fields: data
+func (_m *Service) ModifyStock(data *dto.UpdateStockDTO) error {
+	ret := _m.Called(data)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*dto.UpdateStockDTO) error); ok {
+		r0 = rf(data)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // Remove provides a mock function with given fields: id
 func (_m *Service) Remove(id string) error {
 	ret := _m.Called(id)

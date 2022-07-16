@@ -180,6 +180,20 @@ func (_m *Repository) Update(id string, data *models.Product) (*models.ProductRe
 	return r0, r1
 }
 
+// UpdateStock provides a mock function with given fields: data
+func (_m *Repository) UpdateStock(data *dto.UpdateStockDTO) error {
+	ret := _m.Called(data)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*dto.UpdateStockDTO) error); ok {
+		r0 = rf(data)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // ValidateProductBrandCategories provides a mock function with given fields: brandId, categoryId
 func (_m *Repository) ValidateProductBrandCategories(brandId string, categoryId string) (string, error) {
 	ret := _m.Called(brandId, categoryId)
