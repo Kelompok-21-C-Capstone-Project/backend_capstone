@@ -19,8 +19,6 @@ require (
 	gorm.io/gorm v1.23.7
 )
 
-require github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
-
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
