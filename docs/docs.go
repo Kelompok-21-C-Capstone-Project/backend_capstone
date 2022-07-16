@@ -68,6 +68,72 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/admins/customers": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all user data to dashboard",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Get all user data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search data by query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.UserDashboadDTO"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicUserResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicUserResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicUserResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/admins/transactions/details": {
             "get": {
                 "security": [
@@ -2470,6 +2536,44 @@ const docTemplate = `{
                 "page_length": {
                     "type": "integer",
                     "example": 3
+                }
+            }
+        },
+        "dto.UserDashboadDTO": {
+            "type": "object",
+            "properties": {
+                "datas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UserDetails"
+                    }
+                },
+                "page_length": {
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "dto.UserDetails": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "telepon": {
+                    "type": "string"
+                },
+                "total_pembelian": {
+                    "type": "integer"
+                },
+                "total_transaksi": {
+                    "type": "integer"
                 }
             }
         },
