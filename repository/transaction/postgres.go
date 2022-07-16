@@ -6,6 +6,7 @@ import (
 	"errors"
 	"log"
 	"strconv"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -176,11 +177,31 @@ func (repo *PostgresRepository) GetUserInfo(tid string) (user models.UserRespons
 	}
 	return
 }
-func (repo *PostgresRepository) AdminDetailTransaction(params ...string) (dashboardData dto.DetailPenjualanDTO, err error) {
-	if err = repo.db.Table("transactions").Joins("left join products on products.id = transactions.product_id left join payments on transactions.id = payments.transaction_id left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id left join product_brands on product_brand_categories.product_brand_id = left join product_categories on product_brand_categories.product_category_id = product_categories.id").Select("count(payments.billed) as sum, count(payments.charged) as profit, count(transactions.id) as transaction_count").Where("transactions.deleted is null and products.deleted is null and lower(product_brands.slug) like lower(?) and (lower(product_brands.name) like lower(?) or lower(payments.method_details) like lower(?)) and and transactions.created_at >= ? and transactions.created_at <= ?").Error; err != nil {
+func (repo *PostgresRepository) AdminDetailTransaction(params ...string) (dashboardData dto.DashboardDetailTransactionDTO, err error) {
+	log.Print("PostgresRepository.AdminDetailTransaction")
+	if params[5] == "" {
+		params[5] = "10"
+	}
+	den, err := strconv.Atoi(params[5])
+	if err != nil {
 		return
 	}
-	if err = repo.db.Error; err != nil {
+	if params[6] == "" {
+		params[6] = time.Now().Format("02-01-2006")
+	}
+	if params[7] == "" {
+		params[7] = time.Now().AddDate(0, 0, 1).Format("02-01-2006")
+	}
+	if err = repo.db.Debug().Table("transactions").Select("sum(payments.billed) as sum, sum(payments.charged) as profit, count(transactions.id) as transaction_count").Joins("left join products on products.id = transactions.product_id left join payments on transactions.id = payments.transaction_id left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id left join product_brands on product_brand_categories.product_brand_id = product_brands.id left join product_categories on product_brand_categories.product_category_id = product_categories.id").Where("transactions.deleted is null and products.deleted is null and lower(product_categories.slug) like lower(?) and (lower(product_brands.name) like lower(?) or lower(payments.method_details) like lower(?) or lower(products.name) like lower(?)) and transactions.created_at >= ? and transactions.created_at <= ? and lower(status) like lower(?)", "%"+params[3]+"%", "%"+params[0]+"%", "%"+params[0]+"%", "%"+params[0]+"%", params[6], params[7], "%"+params[2]+"%").Scan(&dashboardData.Sum).Error; err != nil {
+		return
+	}
+	if den == -1 {
+		if err = repo.db.Debug().Table("transactions").Select("payments.id as id, payments.status as status, to_char(transactions.created_at,'DD/MM/YYYY HH24:MI:SS') as order_time, (payments.updated_at,'DD/MM/YYYY HH24:MI:SS') as payment_time, product_categories.name as category, users.id as user_id, users.name as user_name, payments.billed as paid, payments.method_details as payment_method").Joins("left join products on products.id = transactions.product_id left join payments on transactions.id = payments.transaction_id left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id left join product_brands on product_brand_categories.product_brand_id = product_brands.id left join product_categories on product_brand_categories.product_category_id = product_categories.id left join users on users.id = transactions.user_id").Where("transactions.deleted is null and products.deleted is null and lower(product_categories.slug) like lower(?) and (lower(product_brands.name) like lower(?) or lower(payments.method_details) like lower(?) or lower(products.name) like lower(?)) and transactions.created_at >= ? and transactions.created_at <= ? and lower(status) like lower(?)", "%"+params[3]+"%", "%"+params[0]+"%", "%"+params[0]+"%", "%"+params[0]+"%", params[6], params[7], "%"+params[2]+"%").Count(&dashboardData.Transactions.PageLength).Scan(&dashboardData.Transactions.Data).Error; err != nil {
+			return
+		}
+		return
+	}
+	if err = repo.db.Debug().Table("transactions").Select("payments.id as id, payments.status as status, to_char(transactions.created_at,'DD/MM/YYYY HH24:MI:SS') as order_time, (payments.updated_at,'DD/MM/YYYY HH24:MI:SS') as payment_time, product_categories.name as category, users.id as user_id, users.name as user_name, payments.billed as paid, payments.method_details as payment_method").Joins("left join products on products.id = transactions.product_id left join payments on transactions.id = payments.transaction_id left join product_brand_categories on product_brand_categories.id = products.product_brand_category_id left join product_brands on product_brand_categories.product_brand_id = product_brands.id left join product_categories on product_brand_categories.product_category_id = product_categories.id left join users on users.id = transactions.user_id").Where("transactions.deleted is null and products.deleted is null and lower(product_categories.slug) like lower(?) and (lower(product_brands.name) like lower(?) or lower(payments.method_details) like lower(?) or lower(products.name) like lower(?)) and transactions.created_at >= ? and transactions.created_at <= ? and lower(status) like lower(?)", "%"+params[3]+"%", "%"+params[0]+"%", "%"+params[0]+"%", "%"+params[0]+"%", params[6], params[7], "%"+params[2]+"%").Count(&dashboardData.Transactions.PageLength).Scopes(Paginate(params[4], params[5])).Scan(&dashboardData.Transactions.Data).Error; err != nil {
 		return
 	}
 	return

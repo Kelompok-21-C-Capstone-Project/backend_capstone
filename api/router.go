@@ -40,6 +40,10 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	authV1 := e.Group("/v1/auth")
 	authV1.POST("", controller.User.AuthUser)
 
+	adminV1 := e.Group("/v1/admins")
+	adminV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
+	adminV1.GET("/transactions/details", controller.Transaction.AdminDetailTransaction)
+
 	transactionV1 := e.Group("/v1/transactions")
 	transactionV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
 	transactionV1.GET("/:id", controller.Transaction.GetById)

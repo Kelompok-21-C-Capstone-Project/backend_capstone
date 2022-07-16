@@ -40,7 +40,7 @@ type Repository interface {
 	GetBillById(tid string) (bill dto.BillClient, err error)
 	GetUserInfo(tid string) (user models.UserResponse, err error)
 	Delete(id string) (err error)
-	AdminDetailTransaction(params ...string) (dashboardData dto.DetailPenjualanDTO, err error)
+	AdminDetailTransaction(params ...string) (dashboardData dto.DashboardDetailTransactionDTO, err error)
 }
 
 type Service interface {
@@ -53,7 +53,7 @@ type Service interface {
 	Modify() (transaction models.TransactionResponse, err error)
 	Remove() (err error)
 	MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error)
-	AdminDetailTransaction(params ...string) (dashboardData dto.DetailPenjualanDTO, err error)
+	AdminDetailTransaction(params ...string) (dashboardData dto.DashboardDetailTransactionDTO, err error)
 }
 
 type service struct {
@@ -128,7 +128,7 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions dto.Re
 	}
 	if den < -1 || den == 0 {
 		den = 10
-	} else if den == 0 {
+	} else if den == -1 {
 		den = int(count)
 	}
 	if data == nil {
@@ -287,10 +287,14 @@ func (s *service) Modify() (transaction models.TransactionResponse, err error) {
 func (s *service) Remove() (err error) {
 	return
 }
-func (s *service) AdminDetailTransaction(params ...string) (dashboardData dto.DetailPenjualanDTO, err error) {
+func (s *service) AdminDetailTransaction(params ...string) (dashboardData dto.DashboardDetailTransactionDTO, err error) {
+	log.Print("service.AdminDetailTransaction")
+	if params[1] == "" {
+		params[1] = time.Now().Format("02-01-2006") + "_" + time.Now().AddDate(0, 0, 1).Format("02-01-2006")
+	}
 	if params[1] != "" {
 		regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
-		if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {
+		if resDR, _ := regexp.MatchString(regexDateRange, params[1]); !resDR {
 			return
 		}
 		date := strings.Split(params[1], "_")
@@ -302,5 +306,21 @@ func (s *service) AdminDetailTransaction(params ...string) (dashboardData dto.De
 	if err != nil {
 		return
 	}
+	if params[5] == "" {
+		params[5] = "10"
+	}
+	den, err := strconv.Atoi(params[5])
+	if err != nil {
+		return
+	}
+	if den < -1 || den == 0 {
+		den = 10
+	} else if den == -1 {
+		den = int(dashboardData.Transactions.PageLength)
+	}
+	if dashboardData.Transactions.Data == nil {
+		dashboardData.Transactions.Data = []dto.DetailTransactionDTO{}
+	}
+	dashboardData.Transactions.PageLength = int64(math.Ceil(float64(dashboardData.Transactions.PageLength) / float64(den)))
 	return
 }

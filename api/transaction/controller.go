@@ -303,5 +303,8 @@ func (controller *Controller) AdminDetailTransaction(c echo.Context) (err error)
 	page := c.QueryParam("page")
 	pageSize := c.QueryParam("page_size")
 	data, err := controller.service.AdminDetailTransaction(query, dateRange, status, category, page, pageSize)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
 	return c.JSON(http.StatusCreated, data)
 }

@@ -104,7 +104,7 @@ func (s *service) ClientGetAllBySlug(slug string) (category dto.ProductCategory,
 	category = *data
 	for ip := range category.Products {
 		if category.Products[ip].Id == "" {
-			category.Products[ip] = nil
+			category.Products = append(category.Products[:ip], category.Products[ip+1:]...)
 		}
 	}
 	return
@@ -118,7 +118,7 @@ func (s *service) ClientGetAll() (products []dto.ProductCategory, err error) {
 	for ic, category := range products {
 		for ip := range category.Products {
 			if products[ic].Products[ip].Id == "" {
-				products[ic].Products[ip] = nil
+				products[ic].Products = append(products[ic].Products[:ip], products[ic].Products[ip+1:]...)
 			}
 		}
 	}

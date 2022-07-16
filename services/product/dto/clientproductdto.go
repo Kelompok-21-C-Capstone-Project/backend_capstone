@@ -1,10 +1,10 @@
 package dto
 
 type ProductCategory struct {
-	Id       string           `json:"id,omitempty" example:"xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
-	Name     string           `json:"label,omitempty" example:"Some Category"`
-	Slug     string           `json:"slug,omitempty" example:"some-category"`
-	Products []*ClientProduct `json:"products,ommitempty"`
+	Id       string          `json:"id,omitempty" example:"xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Name     string          `json:"label,omitempty" example:"Some Category"`
+	Slug     string          `json:"slug,omitempty" example:"some-category"`
+	Products []ClientProduct `json:"products,ommitempty"`
 }
 
 type ClientProduct struct {

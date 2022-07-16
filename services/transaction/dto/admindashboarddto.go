@@ -1,19 +1,23 @@
 package dto
 
-type DetailPenjualanDTO struct {
-	Sum              uint32                        `json:"total_penjualan"`
-	Profit           uint32                        `json:"total_komisi"`
-	TransactionCount uint32                        `json:"total_transaksi"`
-	Data             DashboardDetailTransactionDTO `json:"transactions"`
+type DashboardDetailTransactionDTO struct {
+	Sum          DetailPenjualanDTO `json:"summary"`
+	Transactions DataTransactionDTO `json:"transaksi"`
 }
 
-type DashboardDetailTransactionDTO struct {
-	PageLength int                    `json:"page_length" example:"3"`
+type DetailPenjualanDTO struct {
+	Sum              uint32 `json:"total_penjualan"`
+	Profit           uint32 `json:"total_komisi"`
+	TransactionCount uint32 `json:"total_transaksi"`
+}
+
+type DataTransactionDTO struct {
+	PageLength int64                  `json:"page_length" example:"3"`
 	Data       []DetailTransactionDTO `json:"datas"`
 }
 
 type DetailTransactionDTO struct {
-	Id            string `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Id            string `json:"invoice" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Status        string `json:"status" example:"Pending"`
 	OrderTime     string `json:"order_time" example:"01/02/2022 23:12"`
 	PaymmentTime  string `json:"payment_time" example:"01/02/2022 23:12"`

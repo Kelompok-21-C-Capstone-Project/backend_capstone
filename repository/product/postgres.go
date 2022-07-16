@@ -120,7 +120,7 @@ func (repo *PostgresRepository) ClientFindAllBySlug(slug string) (products *dto.
 	if err != nil {
 		return
 	}
-	if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as group, products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.deleted is null and product_brand_categories.product_category_id = ? and products.deleted is null", products.Id).Find(&products.Products).Error; err != nil {
+	if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as group, products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.deleted is null and product_brand_categories.product_category_id = ? and products.deleted is null and products.is_available is true", products.Id).Find(&products.Products).Error; err != nil {
 		return
 	}
 	return
@@ -131,7 +131,7 @@ func (repo *PostgresRepository) ClientFindAll() (products *[]dto.ProductCategory
 		return
 	}
 	for i, el := range *products {
-		if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as group, products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.deleted is null and product_brand_categories.product_category_id = ?", el.Id).Find(&(*products)[i].Products).Error; err != nil {
+		if err = repo.db.Table("product_brand_categories").Select("products.id, product_brands.name as group, products.name as label, products.description as description, products.stock as stock, products.price as price, products.is_discount").Joins("left join product_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Joins("left join product_brands on product_brand_categories.product_brand_id = product_brands.id").Where("product_brand_categories.deleted is null and products.is_available is true and product_brand_categories.product_category_id = ?", el.Id).Scan(&(*products)[i].Products).Error; err != nil {
 			return
 		}
 	}
