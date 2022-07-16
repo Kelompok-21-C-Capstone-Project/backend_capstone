@@ -60,9 +60,8 @@ func (repo *PostgresRepository) FindAll(params ...string) (dataCount int64, prod
 	}
 	var status bool
 	if params[5] == "" {
-		params[5] = "true"
-	}
-	if params[5] == "false" {
+		status = true
+	} else if params[5] == "false" {
 		status = false
 	} else {
 		status = true
