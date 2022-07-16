@@ -54,6 +54,10 @@ func newPostgres(configs *configs.AppConfig) *gorm.DB {
 			configs.Database.DATABASE)
 	}
 
+	if configs.Database.CONNECTION != "" {
+		connectionString = configs.Database.CONNECTION
+	}
+
 	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 
 	if err != nil {
@@ -67,8 +71,8 @@ func newMySQL(configs *configs.AppConfig) *gorm.DB {
 	var connectionString string
 
 	switch configs.Database.DRIVER {
-	case "postgres":
-		connectionString = fmt.Sprintf("%s:%s@%s:%s/%s",
+	case "mysql":
+		connectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True",
 			configs.Database.USERNAME,
 			configs.Database.PASSWORD,
 			configs.Database.HOST,
@@ -77,7 +81,6 @@ func newMySQL(configs *configs.AppConfig) *gorm.DB {
 	}
 
 	db, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
-
 	if err != nil {
 		panic(err)
 	}

@@ -3,14 +3,17 @@ package main
 import (
 	"backend_capstone/api"
 	"backend_capstone/configs"
+	_ "backend_capstone/docs"
 	"backend_capstone/modules"
 	"backend_capstone/utils"
+	"backend_capstone/utils/gormdriver"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
@@ -18,6 +21,7 @@ func main() {
 
 	// Initialize echo
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{}))
 
 	// Get server config variable
 	config := configs.GetConfig()
@@ -25,6 +29,11 @@ func main() {
 	// Infrastructure driver adapters initialization
 	// Database Adapters
 	dbCon := utils.NewDatabaseConnection(config)
+
+	// gorm migration
+	gormMigrationService := gormdriver.NewGormMigrationService(dbCon)
+	gormMigrationService.GormMigrate()
+
 	defer dbCon.CloseConnection()
 
 	// Interface driving adapters initialization
