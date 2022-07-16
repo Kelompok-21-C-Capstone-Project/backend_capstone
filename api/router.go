@@ -43,6 +43,7 @@ func RegistrationPath(e *echo.Echo, controller Controller) {
 	adminV1 := e.Group("/v1/admins")
 	adminV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())
 	adminV1.GET("/transactions/details", controller.Transaction.AdminDetailTransaction)
+	adminV1.GET("/customers", controller.User.AdminDetailUser)
 
 	transactionV1 := e.Group("/v1/transactions")
 	transactionV1.Use(controller.MiddlewareAdminJWT.JwtAdminMiddleware())

@@ -4,6 +4,8 @@ import (
 	"backend_capstone/models"
 	"backend_capstone/services/user/dto"
 	"errors"
+	"math"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -30,6 +32,7 @@ type Repository interface {
 	Insert(data *models.User) (user *models.UserResponse, err error)
 	Update(id string, data *models.User) (user *models.UserResponse, err error)
 	Delete(id string) (err error)
+	DashboardDetailUser(params ...string) (data dto.UserDashboadDTO, err error)
 }
 
 type Service interface {
@@ -40,6 +43,7 @@ type Service interface {
 	Modify(id string, payloadId string, updateuserDTO dto.UpdateUserDTO) (user models.UserResponse, err error)
 	Remove(id string, payloadId string) (err error)
 	UserLogin(loginuserDTO dto.LoginUserDTO) (token string, err error)
+	AdminDetailUser(params ...string) (data dto.UserDashboadDTO, err error)
 }
 
 type service struct {
@@ -58,6 +62,30 @@ func NewService(repository Repository, hasher PasswordHash, jwtService JwtServic
 		adminKey:   adminKey,
 		validate:   validator.New(),
 	}
+}
+
+func (s *service) AdminDetailUser(params ...string) (data dto.UserDashboadDTO, err error) {
+	data, err = s.repository.DashboardDetailUser(params...)
+	if params[1] == "" {
+		params[1] = "1"
+	}
+	if params[2] == "" {
+		params[2] = "10"
+	}
+	den, err := strconv.Atoi(params[2])
+	if err != nil {
+		return
+	}
+	if den < -1 || den == 0 {
+		den = 10
+	} else if den == -1 {
+		den = int(data.PageLength)
+	}
+	if err != nil {
+		return
+	}
+	data.PageLength = int64(math.Ceil(float64(data.PageLength) / float64(den)))
+	return
 }
 
 // Untuk mengambil data user berdasarkan id
