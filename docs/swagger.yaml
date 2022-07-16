@@ -129,6 +129,62 @@ definitions:
         example: paket-data
         type: string
     type: object
+  dto.DashboardDetailTransactionDTO:
+    properties:
+      summary:
+        $ref: '#/definitions/dto.DetailPenjualanDTO'
+      transaksi:
+        $ref: '#/definitions/dto.DataTransactionDTO'
+    type: object
+  dto.DataTransactionDTO:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/dto.DetailTransactionDTO'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+    type: object
+  dto.DetailPenjualanDTO:
+    properties:
+      total_komisi:
+        type: integer
+      total_penjualan:
+        type: integer
+      total_transaksi:
+        type: integer
+    type: object
+  dto.DetailTransactionDTO:
+    properties:
+      category:
+        example: Paket Data
+        type: string
+      invoice:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      nominal:
+        example: 35000
+        type: integer
+      order_time:
+        example: 01/02/2022 23:12
+        type: string
+      payment_method:
+        example: BCA Virtual Account
+        type: string
+      payment_time:
+        example: 01/02/2022 23:12
+        type: string
+      status:
+        example: Pending
+        type: string
+      user_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      user_name:
+        example: Hadi
+        type: string
+    type: object
   dto.ProductBrand:
     properties:
       category:
@@ -758,6 +814,60 @@ paths:
           schema:
             $ref: '#/definitions/response.BasicUserResponse'
       summary: Admin register
+      tags:
+      - admins
+  /v1/admins/transactions/details:
+    get:
+      description: Get all transaction data for admin dashboard
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by date range
+        in: query
+        name: date_range
+        type: string
+      - description: search data by status
+        in: query
+        name: status
+        type: string
+      - description: search data by category
+        in: query
+        name: category
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.DashboardDetailTransactionDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get transaction data for admin dashboard
       tags:
       - admins
   /v1/auth:

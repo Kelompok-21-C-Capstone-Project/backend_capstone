@@ -294,6 +294,23 @@ func (controller *Controller) MidtransAfterPayment(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, errors.New("success"))
 }
 
+// AdminDetailTransaction godoc
+// @Summary Get transaction data for admin dashboard
+// @Description  Get all transaction data for admin dashboard
+// @Param query   query  string  false  "search data by query"
+// @Param date_range   query  string  false  "search data by date range"
+// @Param status   query  string  false  "search data by status"
+// @Param category   query  string  false  "search data by category"
+// @Param page   query  string  false  "search data by page"
+// @Param page_size   query  string  false  "search data by page size"
+// @Tags         admins
+// @Produce      json
+// @Success      200  {array}  dto.DashboardDetailTransactionDTO
+// @Failure      400  {object}  response.BasicTransactionResponse
+// @Failure      403  {object}  response.BasicTransactionResponse
+// @Failure      500  {object}  response.BasicTransactionResponse
+// @Security ApiKeyAuth
+// @Router       /v1/admins/transactions/details [get]
 func (controller *Controller) AdminDetailTransaction(c echo.Context) (err error) {
 	log.Print("enter controller.transaction.AdminDetailTransaction")
 	query := c.QueryParam("query")
@@ -304,7 +321,10 @@ func (controller *Controller) AdminDetailTransaction(c echo.Context) (err error)
 	pageSize := c.QueryParam("page_size")
 	data, err := controller.service.AdminDetailTransaction(query, dateRange, status, category, page, pageSize)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return c.JSON(http.StatusBadRequest, response.BasicTransactionResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
 	}
 	return c.JSON(http.StatusCreated, data)
 }

@@ -56,6 +56,90 @@
                 }
             }
         },
+        "/v1/admins/transactions/details": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all transaction data for admin dashboard",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admins"
+                ],
+                "summary": "Get transaction data for admin dashboard",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search data by query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by date range",
+                        "name": "date_range",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by category",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.DashboardDetailTransactionDTO"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicTransactionResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/auth": {
             "post": {
                 "security": [
@@ -2215,6 +2299,87 @@
                 "type": {
                     "type": "string",
                     "example": "paket-data"
+                }
+            }
+        },
+        "dto.DashboardDetailTransactionDTO": {
+            "type": "object",
+            "properties": {
+                "summary": {
+                    "$ref": "#/definitions/dto.DetailPenjualanDTO"
+                },
+                "transaksi": {
+                    "$ref": "#/definitions/dto.DataTransactionDTO"
+                }
+            }
+        },
+        "dto.DataTransactionDTO": {
+            "type": "object",
+            "properties": {
+                "datas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.DetailTransactionDTO"
+                    }
+                },
+                "page_length": {
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "dto.DetailPenjualanDTO": {
+            "type": "object",
+            "properties": {
+                "total_komisi": {
+                    "type": "integer"
+                },
+                "total_penjualan": {
+                    "type": "integer"
+                },
+                "total_transaksi": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.DetailTransactionDTO": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "example": "Paket Data"
+                },
+                "invoice": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "nominal": {
+                    "type": "integer",
+                    "example": 35000
+                },
+                "order_time": {
+                    "type": "string",
+                    "example": "01/02/2022 23:12"
+                },
+                "payment_method": {
+                    "type": "string",
+                    "example": "BCA Virtual Account"
+                },
+                "payment_time": {
+                    "type": "string",
+                    "example": "01/02/2022 23:12"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "Pending"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "user_name": {
+                    "type": "string",
+                    "example": "Hadi"
                 }
             }
         },
