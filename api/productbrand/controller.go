@@ -71,7 +71,8 @@ func (controller *Controller) GetAll(c echo.Context) (err error) {
 	query := c.QueryParam("query")
 	page := c.QueryParam("page")
 	pageSize := c.QueryParam("page_size")
-	datas, err := controller.service.GetAll(query, page, pageSize)
+	status := c.QueryParam("status")
+	datas, err := controller.service.GetAll(query, page, pageSize, status)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BasicBrandResponse{
 			Status:  "fail",
