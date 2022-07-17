@@ -3,6 +3,7 @@ package product
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/product/dto"
+	"errors"
 	"log"
 	"math"
 	"regexp"
@@ -247,8 +248,15 @@ func (s *service) ModifyStock(data *dto.UpdateStockDTO) (err error) {
 	if err = s.validate.Struct(data); err != nil {
 		return
 	}
+	if err = s.validate.Struct(data.Datas); err != nil {
+		return
+	}
 	_, err = uuid.Parse((*data).AdminId)
 	if err != nil {
+		return
+	}
+	if len(data.Datas) == 0 {
+		err = errors.New("Data tidak boleh kosong")
 		return
 	}
 	if err = s.repository.UpdateStock(data); err != nil {
