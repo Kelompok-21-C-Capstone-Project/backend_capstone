@@ -2476,10 +2476,6 @@ const docTemplate = `{
                 "page_length": {
                     "type": "integer",
                     "example": 3
-                },
-                "tanggal": {
-                    "type": "string",
-                    "example": "12-02-2022"
                 }
             }
         },
@@ -2634,10 +2630,6 @@ const docTemplate = `{
         "dto.SupplyProductDTO": {
             "type": "object",
             "properties": {
-                "harga_beli": {
-                    "type": "integer",
-                    "example": 30
-                },
                 "jumlah": {
                     "type": "integer",
                     "example": 30
@@ -2649,6 +2641,10 @@ const docTemplate = `{
                 "product_data": {
                     "type": "string",
                     "example": "Paket, PLN, Pulsa"
+                },
+                "tanggal": {
+                    "type": "string",
+                    "example": "12-02-2022"
                 }
             }
         },

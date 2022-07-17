@@ -49,6 +49,7 @@ func (s *GormMigrationService) GormMigrate() (err error) {
 		&models.Supply{},
 		&models.SupplyProduct{},
 	)
+	s.gorm.Migrator().DropColumn(&models.Supply{}, "admin")
 	if err != nil {
 		return err
 	}

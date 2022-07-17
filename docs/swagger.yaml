@@ -148,9 +148,6 @@ definitions:
       page_length:
         example: 3
         type: integer
-      tanggal:
-        example: 12-02-2022
-        type: string
     type: object
   dto.DataTransactionDTO:
     properties:
@@ -257,9 +254,6 @@ definitions:
     type: object
   dto.SupplyProductDTO:
     properties:
-      harga_beli:
-        example: 30
-        type: integer
       jumlah:
         example: 30
         type: integer
@@ -268,6 +262,9 @@ definitions:
         type: string
       product_data:
         example: Paket, PLN, Pulsa
+        type: string
+      tanggal:
+        example: 12-02-2022
         type: string
     type: object
   dto.UserDashboadDTO:

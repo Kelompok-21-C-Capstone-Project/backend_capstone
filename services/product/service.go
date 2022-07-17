@@ -243,6 +243,7 @@ func (s *service) GetSupplyInvocie(params ...string) (data dto.DataSupplyDTO, er
 	return
 }
 func (s *service) ModifyStock(data *dto.UpdateStockDTO) (err error) {
+	log.Print("service.product.ModifyStock")
 	if err = s.validate.Struct(data); err != nil {
 		return
 	}
@@ -251,6 +252,7 @@ func (s *service) ModifyStock(data *dto.UpdateStockDTO) (err error) {
 		return
 	}
 	if err = s.repository.UpdateStock(data); err != nil {
+		log.Print("error di sini")
 		return
 	}
 	id := uuid.New().String()
@@ -270,6 +272,7 @@ func (s *service) ModifyStock(data *dto.UpdateStockDTO) (err error) {
 			Cost:      el.Price,
 		})
 	}
+	dataSupply.Name = dataSupply.Name[2:]
 	if err = s.repository.CreateSupplyProduct(dataSupply, dataProducts); err != nil {
 		return
 	}

@@ -31,7 +31,7 @@ type Supply struct {
 	SumStock  uint32    `gorm:"default:0;not null"`
 	Products  []Product `gorm:"many2many:supply_products"`
 	AdminId   string    `gorm:"type:varchar(50);not null"`
-	Admin     User      `gorm:"type:varchar(50);foreignKey:AdminId;not null"`
+	Admin     User
 	CreatedAt time.Time
 }
 
