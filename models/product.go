@@ -24,6 +24,8 @@ type Product struct {
 	Deleted                gorm.DeletedAt       `json:"deleted,omitempty"`
 }
 
+// type
+
 type ProductResponse struct {
 	Id                     string                       `json:"id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx"`
 	Name                   string                       `json:"name,omitempty" example:"Some Product"`

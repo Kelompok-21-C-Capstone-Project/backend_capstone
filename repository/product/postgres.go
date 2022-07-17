@@ -161,6 +161,7 @@ func (repo *PostgresRepository) ValidateProductBrandCategories(brandId string, c
 func (repo *PostgresRepository) UpdateStock(data *dto.UpdateStockDTO) (err error) {
 	for _, el := range (*data).Datas {
 		if err = repo.db.First(&models.Product{}, &el.Id).Update("stock", gorm.Expr("stock + ?", el.Stock)).Error; err != nil {
+			repo.db.Rollback()
 			return
 		}
 	}

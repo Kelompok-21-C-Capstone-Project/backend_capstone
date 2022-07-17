@@ -7,6 +7,7 @@ import (
 
 type PayloadUpdateStock struct {
 	AdminId string               `json:"id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
+	Date    string               `json:"date" example:"27 Jun 2022"`
 	Datas   []UpdateProductStock `json:"datas"`
 }
 
