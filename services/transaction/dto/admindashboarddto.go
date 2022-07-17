@@ -20,7 +20,7 @@ type DetailTransactionDTO struct {
 	Id            string `json:"invoice" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Status        string `json:"status" example:"Pending"`
 	OrderTime     string `json:"order_time" example:"01/02/2022 23:12"`
-	PaymmentTime  string `json:"payment_time" example:"01/02/2022 23:12"`
+	PaymentTime   string `json:"payment_time" example:"01/02/2022 23:12"`
 	Category      string `json:"category" example:"Paket Data"`
 	UserId        string `json:"user_id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	UserName      string `json:"user_name" example:"Hadi"`
