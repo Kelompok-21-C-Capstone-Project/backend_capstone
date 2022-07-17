@@ -34,6 +34,10 @@ func (s *GormMigrationService) GormMigrate() (err error) {
 	if err != nil {
 		return err
 	}
+	err = s.gorm.SetupJoinTable(&models.Supply{}, "Products", &models.SupplyProduct{})
+	if err != nil {
+		return err
+	}
 	err = s.gorm.AutoMigrate(
 		&models.ProductBrand{},
 		&models.ProductCategory{},
@@ -42,6 +46,8 @@ func (s *GormMigrationService) GormMigrate() (err error) {
 		&models.User{},
 		&models.Payment{},
 		&models.Transaction{},
+		&models.Supply{},
+		&models.SupplyProduct{},
 	)
 	if err != nil {
 		return err

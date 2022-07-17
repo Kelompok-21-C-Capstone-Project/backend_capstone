@@ -24,7 +24,24 @@ type Product struct {
 	Deleted                gorm.DeletedAt       `json:"deleted,omitempty"`
 }
 
-// type
+type Supply struct {
+	Id        string    `gorm:"type:varchar(50);not null"`
+	Name      string    `gorm:"type:text;not null"`
+	CodeNo    string    `gorm:"type:varchar(50);not null"`
+	SumStock  uint32    `gorm:"default:0;not null"`
+	Products  []Product `gorm:"many2many:supply_products"`
+	AdminId   string    `gorm:"type:varchar(50);not null"`
+	Admin     User      `gorm:"type:varchar(50);foreignKey:AdminId;not null"`
+	CreatedAt time.Time
+}
+
+type SupplyProduct struct {
+	Id        uint32
+	SupplyId  string `gorm:"type:varchar(50);not null"`
+	ProductId string `gorm:"type:varchar(50);not null"`
+	Amount    uint32 `gorm:"default:0;not null"`
+	Cost      uint32 `gorm:"default:0;not null"`
+}
 
 type ProductResponse struct {
 	Id                     string                       `json:"id,omitempty" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx"`

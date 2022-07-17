@@ -92,6 +92,9 @@ func (s *service) GetAll() (transactions []dto.ClientTransactionsResponse, err e
 	return
 }
 func (s *service) UsersGetAll(uid string, params ...string) (transactions dto.ResponseUserTransaction, err error) {
+	if params[2] == "" {
+		params[2] = time.Now().Format("02-01-2006") + "_" + time.Now().AddDate(0, 0, 1).Format("02-01-2006")
+	}
 	if params[2] != "" {
 		regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
 		if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {

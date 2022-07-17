@@ -134,6 +134,75 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/admins/products/invoices": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "invoice data about product supply",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admins"
+                ],
+                "summary": "Get product supply invoice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search data by query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search data by date range",
+                        "name": "date_range",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DataSupplyDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.BasicProductResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/admins/transactions/details": {
             "get": {
                 "security": [
@@ -1276,7 +1345,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.BasicProductSuccessResponse"
+                            "$ref": "#/definitions/request.PayloadUpdateStock"
                         }
                     },
                     "400": {
@@ -2370,6 +2439,10 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 11500
                 },
+                "product_id": {
+                    "type": "string",
+                    "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
                 "status": {
                     "type": "string",
                     "example": "Pending"
@@ -2388,6 +2461,25 @@ const docTemplate = `{
                 },
                 "transaksi": {
                     "$ref": "#/definitions/dto.DataTransactionDTO"
+                }
+            }
+        },
+        "dto.DataSupplyDTO": {
+            "type": "object",
+            "properties": {
+                "datas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.SupplyProductDTO"
+                    }
+                },
+                "page_length": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "tanggal": {
+                    "type": "string",
+                    "example": "12-02-2022"
                 }
             }
         },
@@ -2536,6 +2628,27 @@ const docTemplate = `{
                 "page_length": {
                     "type": "integer",
                     "example": 3
+                }
+            }
+        },
+        "dto.SupplyProductDTO": {
+            "type": "object",
+            "properties": {
+                "harga_beli": {
+                    "type": "integer",
+                    "example": 30
+                },
+                "jumlah": {
+                    "type": "integer",
+                    "example": 30
+                },
+                "no_faktur": {
+                    "type": "string",
+                    "example": "INV/ADSA/ASD"
+                },
+                "product_data": {
+                    "type": "string",
+                    "example": "Paket, PLN, Pulsa"
                 }
             }
         },
@@ -2961,6 +3074,10 @@ const docTemplate = `{
                         "$ref": "#/definitions/request.UpdateProductStock"
                     }
                 },
+                "date": {
+                    "type": "string",
+                    "example": "27-03-2022"
+                },
                 "id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -3121,9 +3238,17 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 3
                 },
+                "harga_total": {
+                    "type": "integer",
+                    "example": 30
+                },
                 "id": {
                     "type": "string",
                     "example": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                },
+                "product_data": {
+                    "type": "string",
+                    "example": "Paket, PLN, Pulsa"
                 }
             }
         },

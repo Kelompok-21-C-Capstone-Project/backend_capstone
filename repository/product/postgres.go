@@ -3,7 +3,6 @@ package products
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/product/dto"
-	"log"
 	"strconv"
 
 	"github.com/google/uuid"
@@ -75,7 +74,6 @@ func (repo *PostgresRepository) FindAll(params ...string) (dataCount int64, prod
 	if err != nil {
 		return
 	}
-	log.Print(den)
 	// if params[3] != "" || params[4] != "" {
 	if den == -1 {
 		if params[5] == "" {
@@ -164,6 +162,43 @@ func (repo *PostgresRepository) UpdateStock(data *dto.UpdateStockDTO) (err error
 			repo.db.Rollback()
 			return
 		}
+	}
+	return
+}
+func (repo *PostgresRepository) CreateSupplyProduct(dataSupply models.Supply, dataProducts []models.SupplyProduct) (err error) {
+	if err = repo.db.Create(&dataSupply).Error; err != nil {
+		return
+	}
+	if err = repo.db.Create(&dataProducts).Error; err != nil {
+		return
+	}
+	return
+}
+func (repo *PostgresRepository) GetSupplyInvocie(params ...string) (data dto.DataSupplyDTO, err error) {
+	if params[1] == "" {
+		params[1] = "1"
+	}
+	if params[2] == "" {
+		params[2] = "5"
+	}
+	nom, err := strconv.Atoi(params[1])
+	if err != nil {
+		return
+	}
+	if nom < 0 {
+		params[1] = strconv.Itoa(nom)
+	}
+	den, err := strconv.Atoi(params[2])
+	if err != nil {
+		return
+	}
+	if den == -1 {
+		if err = repo.db.Model(&data.Data).Select("code_no as id, name, to_char(created_at::timestamp at time zone'gmt+7','DD-MM-YYYY') as date,sum_stock as sum )").Count(&data.PageLength).Where("code_no like ? or lower(name) like lower(?) and transactions.created_at >= ? and transactions.created_at <= ?", "%"+params[0]+"%", "%"+params[0]+"%", params[4], params[5]).Find(&data.Data).Error; err != nil {
+			return
+		}
+	}
+	if err = repo.db.Model(&data.Data).Select("code_no as id, name, to_char(created_at::timestamp at time zone'gmt+7','DD-MM-YYYY') as date,sum_stock as sum").Count(&data.PageLength).Where("code_no like ? or lower(name) like lower(?) and transactions.created_at >= ? and transactions.created_at <= ?", "%"+params[0]+"%", "%"+params[0]+"%", params[4], params[5]).Scopes(Paginate(params[1], params[2])).Find(&data.Data).Error; err != nil {
+		return
 	}
 	return
 }

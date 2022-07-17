@@ -199,7 +199,7 @@ func (controller *Controller) Modify(c echo.Context) (err error) {
 // @Accept       json
 // @Produce      json
 // @Param Payload body request.PayloadUpdateStock true "Payload format" SchemaExample(request.PayloadUpdateStock)
-// @Success      200  {object}  response.BasicProductSuccessResponse
+// @Success      200  {object}  request.PayloadUpdateStock
 // @Failure      400  {object}  response.BasicProductResponse
 // @Failure      403  {object}  response.BasicProductResponse
 // @Failure      500  {object}  response.BasicProductResponse
@@ -225,6 +225,36 @@ func (controller *Controller) ModifyStock(c echo.Context) (err error) {
 	return c.JSON(http.StatusAccepted, response.BasicProductSuccessResponse{
 		Status: "success",
 	})
+}
+
+// GetSupplyInvocie godoc
+// @Summary Get product supply invoice
+// @Description  invoice data about product supply
+// @Tags         admins
+// @Param query   query  string  false  "search data by query"
+// @Param page   query  string  false  "search data by page"
+// @Param page_size   query  string  false  "search data by page size"
+// @Param date_range   query  string  false  "search data by date range"
+// @Produce      json
+// @Success      200  {object}  dto.DataSupplyDTO
+// @Failure      400  {object}  response.BasicProductResponse
+// @Failure      403  {object}  response.BasicProductResponse
+// @Failure      500  {object}  response.BasicProductResponse
+// @Security ApiKeyAuth
+// @Router       /v1/admins/products/invoices [get]
+func (controller *Controller) GetSupplyInvocie(c echo.Context) (err error) {
+	query := c.QueryParam("query")
+	page := c.QueryParam("page")
+	pageSize := c.QueryParam("page_size")
+	dateRange := c.QueryParam("date_range")
+	data, err := controller.service.GetSupplyInvocie(query, page, pageSize, dateRange)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.BasicProductResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, data)
 }
 
 // Remove godoc

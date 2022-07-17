@@ -122,6 +122,9 @@ definitions:
       price:
         example: 11500
         type: integer
+      product_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
       status:
         example: Pending
         type: string
@@ -135,6 +138,19 @@ definitions:
         $ref: '#/definitions/dto.DetailPenjualanDTO'
       transaksi:
         $ref: '#/definitions/dto.DataTransactionDTO'
+    type: object
+  dto.DataSupplyDTO:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/dto.SupplyProductDTO'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+      tanggal:
+        example: 12-02-2022
+        type: string
     type: object
   dto.DataTransactionDTO:
     properties:
@@ -238,6 +254,21 @@ definitions:
       page_length:
         example: 3
         type: integer
+    type: object
+  dto.SupplyProductDTO:
+    properties:
+      harga_beli:
+        example: 30
+        type: integer
+      jumlah:
+        example: 30
+        type: integer
+      no_faktur:
+        example: INV/ADSA/ASD
+        type: string
+      product_data:
+        example: Paket, PLN, Pulsa
+        type: string
     type: object
   dto.UserDashboadDTO:
     properties:
@@ -537,6 +568,9 @@ definitions:
         items:
           $ref: '#/definitions/request.UpdateProductStock'
         type: array
+      date:
+        example: 27-03-2022
+        type: string
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         type: string
@@ -655,8 +689,14 @@ definitions:
       add:
         example: 3
         type: integer
+      harga_total:
+        example: 30
+        type: integer
       id:
         example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      product_data:
+        example: Paket, PLN, Pulsa
         type: string
     type: object
   request.UpdateUserRequest:
@@ -883,6 +923,50 @@ paths:
       summary: Get all user data
       tags:
       - products
+  /v1/admins/products/invoices:
+    get:
+      description: invoice data about product supply
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      - description: search data by date range
+        in: query
+        name: date_range
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DataSupplyDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get product supply invoice
+      tags:
+      - admins
   /v1/admins/transactions/details:
     get:
       description: Get all transaction data for admin dashboard
@@ -1718,7 +1802,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.BasicProductSuccessResponse'
+            $ref: '#/definitions/request.PayloadUpdateStock'
         "400":
           description: Bad Request
           schema:

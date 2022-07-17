@@ -5,7 +5,10 @@ import (
 	"backend_capstone/services/product/dto"
 	"log"
 	"math"
+	"regexp"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -21,6 +24,8 @@ type Repository interface {
 	Delete(id string) (err error)
 	ValidateProductBrandCategories(brandId string, categoryId string) (productBrandCategoriesId string, err error)
 	UpdateStock(data *dto.UpdateStockDTO) (err error)
+	CreateSupplyProduct(dataSupply models.Supply, dataProducts []models.SupplyProduct) (err error)
+	GetSupplyInvocie(params ...string) (data dto.DataSupplyDTO, err error)
 }
 
 type Service interface {
@@ -32,6 +37,7 @@ type Service interface {
 	Create(createproductDTO dto.CraeteProductDTO) (product models.ProductResponse, err error)
 	Modify(id string, updateproductDTO dto.UpdateProductDTO) (product models.ProductResponse, err error)
 	ModifyStock(data *dto.UpdateStockDTO) (err error)
+	GetSupplyInvocie(params ...string) (data dto.DataSupplyDTO, err error)
 	Remove(id string) (err error)
 }
 
@@ -187,6 +193,55 @@ func (s *service) Remove(id string) (err error) {
 	s.repository.Delete(id)
 	return
 }
+func (s *service) GetSupplyInvocie(params ...string) (data dto.DataSupplyDTO, err error) {
+	log.Print("enter service.GetAll")
+	if params[3] == "" {
+		params[3] = time.Now().Format("02-01-2006") + "_" + time.Now().AddDate(0, 0, 1).Format("02-01-2006")
+	}
+	if params[3] != "" {
+		regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
+		if resDR, _ := regexp.MatchString(regexDateRange, params[3]); !resDR {
+			return
+		}
+		date := strings.Split(params[3], "_")
+		dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
+		date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
+		params = append(params, date...)
+	}
+	if params[1] == "" {
+		params[1] = "1"
+	}
+	if params[2] == "" {
+		params[2] = "5"
+	}
+	nom, err := strconv.Atoi(params[1])
+	if err != nil {
+		return
+	}
+	if nom < 0 {
+		params[1] = strconv.Itoa(nom)
+	}
+	den, err := strconv.Atoi(params[2])
+	if err != nil {
+		return
+	}
+	data, err = s.repository.GetSupplyInvocie(params...)
+	if err != nil {
+		return
+	}
+	if den < -1 {
+		data.PageLength = int64(math.Ceil(float64(data.PageLength) / float64(10)))
+	} else if den == -1 || den == 0 {
+		data.PageLength = 1
+	} else {
+		data.PageLength = int64(math.Ceil(float64(data.PageLength) / float64(den)))
+	}
+	if data.Data == nil {
+		data.Data = []dto.SupplyProductDTO{}
+		return
+	}
+	return
+}
 func (s *service) ModifyStock(data *dto.UpdateStockDTO) (err error) {
 	if err = s.validate.Struct(data); err != nil {
 		return
@@ -196,6 +251,26 @@ func (s *service) ModifyStock(data *dto.UpdateStockDTO) (err error) {
 		return
 	}
 	if err = s.repository.UpdateStock(data); err != nil {
+		return
+	}
+	id := uuid.New().String()
+	dataSupply := models.Supply{
+		Id:      id,
+		CodeNo:  "INV/" + id[:3] + "/" + id[len(id)-3:],
+		AdminId: data.AdminId,
+	}
+	dataProducts := []models.SupplyProduct{}
+	for _, el := range data.Datas {
+		dataSupply.SumStock = dataSupply.SumStock + el.Stock
+		dataSupply.Name = dataSupply.Name + ", " + el.Name
+		dataProducts = append(dataProducts, models.SupplyProduct{
+			SupplyId:  id,
+			ProductId: el.Id,
+			Amount:    el.Stock,
+			Cost:      el.Price,
+		})
+	}
+	if err = s.repository.CreateSupplyProduct(dataSupply, dataProducts); err != nil {
 		return
 	}
 	return

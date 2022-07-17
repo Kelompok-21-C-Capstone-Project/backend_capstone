@@ -151,6 +151,33 @@ func (_m *Service) GetById(id string) (models.ProductResponse, error) {
 	return r0, r1
 }
 
+// GetSupplyInvocie provides a mock function with given fields: params
+func (_m *Service) GetSupplyInvocie(params ...string) (dto.DataSupplyDTO, error) {
+	_va := make([]interface{}, len(params))
+	for _i := range params {
+		_va[_i] = params[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 dto.DataSupplyDTO
+	if rf, ok := ret.Get(0).(func(...string) dto.DataSupplyDTO); ok {
+		r0 = rf(params...)
+	} else {
+		r0 = ret.Get(0).(dto.DataSupplyDTO)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(...string) error); ok {
+		r1 = rf(params...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Modify provides a mock function with given fields: id, updateproductDTO
 func (_m *Service) Modify(id string, updateproductDTO dto.UpdateProductDTO) (models.ProductResponse, error) {
 	ret := _m.Called(id, updateproductDTO)
