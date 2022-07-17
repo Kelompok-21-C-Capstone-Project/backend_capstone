@@ -44,6 +44,7 @@ type ClientTransactionsResponse struct {
 	Category           string    `json:"type" example:"paket-data"`
 	Icon               string    `json:"icon" example:"mdi-paket-data"`
 	Status             string    `json:"status" example:"Pending"`
+	ProductId          string    `json:"product_id" example:"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`
 	Product            string    `json:"label" example:"Telkomsel 5GB Super Tiktok"`
 	TransactionDetails string    `json:"phone_number" example:"2312312412523"`
 	Charged            uint32    `json:"price" example:"11500"`
