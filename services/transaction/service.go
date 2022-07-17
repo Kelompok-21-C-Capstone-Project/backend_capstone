@@ -92,19 +92,6 @@ func (s *service) GetAll() (transactions []dto.ClientTransactionsResponse, err e
 	return
 }
 func (s *service) UsersGetAll(uid string, params ...string) (transactions dto.ResponseUserTransaction, err error) {
-	// if params[2] == "" {
-	// 	params[2] = time.Now().Format("02-01-2006") + "_" + time.Now().AddDate(0, 0, 1).Format("02-01-2006")
-	// }
-	// if params[2] != "" {
-	// 	regexDateRange := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])_([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
-	// 	if resDR, _ := regexp.MatchString(regexDateRange, params[2]); !resDR {
-	// 		return
-	// 	}
-	// 	date := strings.Split(params[2], "_")
-	// 	dateTop, _ := time.Parse("02-01-2006 15:04:05", date[1]+" 08:04:00")
-	// 	date[1] = dateTop.AddDate(0, 0, 1).Format("02-01-2006")
-	// 	params = append(params, date...)
-	// } else
 	if params[1] != "" {
 		regexDate := "([0-9])([0-9])-([0-9])([0-9])-([0-9])([0-9])([0-9])([0-9])"
 		if resR, _ := regexp.MatchString(regexDate, params[1]); !resR {

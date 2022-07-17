@@ -3,6 +3,7 @@ package products
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/product/dto"
+	"log"
 	"strconv"
 
 	"github.com/google/uuid"
@@ -192,12 +193,13 @@ func (repo *PostgresRepository) GetSupplyInvocie(params ...string) (data dto.Dat
 	if err != nil {
 		return
 	}
+	log.Print(params[4], " ", params[5])
 	if den == -1 {
-		if err = repo.db.Model(&data.Data).Select("code_no as id, name, to_char(created_at::timestamp at time zone'gmt+7','DD-MM-YYYY') as date,sum_stock as sum)").Count(&data.PageLength).Where("code_no like ? or lower(name) like lower(?) and to_char(supplies.created_at::timestamp at time zone 'gmt+7','DD-MM-YYYY HH24:MI:SS') >= ? and to_char(supplies.created_at::timestamp at time zone 'gmt+7','DD-MM-YYYY HH24:MI:SS') < ?", "%"+params[0]+"%", "%"+params[0]+"%", params[4], params[5]).Find(&data.Data).Error; err != nil {
+		if err = repo.db.Model(&data.Data).Select("code_no as id, name, to_char(created_at::timestamp at time zone'gmt+7','DD-MM-YYYY') as date,sum_stock as sum)").Count(&data.PageLength).Where("(code_no like ? or lower(name) like lower(?)) and to_char(supplies.created_at::timestamp at time zone 'gmt+7','DD-MM-YYYY HH24:MI:SS') >= ? and to_char(supplies.created_at::timestamp at time zone 'gmt+7','DD-MM-YYYY HH24:MI:SS') < ?", "%"+params[0]+"%", "%"+params[0]+"%", params[4], params[5]).Find(&data.Data).Error; err != nil {
 			return
 		}
 	}
-	if err = repo.db.Model(&data.Data).Select("code_no as id, name, to_char(created_at::timestamp at time zone'gmt+7','DD-MM-YYYY') as date,sum_stock as sum").Count(&data.PageLength).Where("code_no like ? or lower(name) like lower(?) and to_char(supplies.created_at::timestamp at time zone 'gmt+7','DD-MM-YYYY HH24:MI:SS') >= ? and to_char(supplies.created_at::timestamp at time zone 'gmt+7','DD-MM-YYYY HH24:MI:SS') < ?", "%"+params[0]+"%", "%"+params[0]+"%", params[4], params[5]).Scopes(Paginate(params[1], params[2])).Find(&data.Data).Error; err != nil {
+	if err = repo.db.Debug().Model(&data.Data).Select("code_no as id, name, to_char(created_at::timestamp at time zone'gmt+7','DD-MM-YYYY') as date,sum_stock as sum").Count(&data.PageLength).Where("(code_no like ? or lower(name) like lower(?)) and to_char(supplies.created_at::timestamp at time zone 'gmt+7','DD-MM-YYYY HH24:MI:SS') >= ? and to_char(supplies.created_at::timestamp at time zone 'gmt+7','DD-MM-YYYY HH24:MI:SS') < ?", "%"+params[0]+"%", "%"+params[0]+"%", params[4], params[5]).Scopes(Paginate(params[1], params[2])).Find(&data.Data).Error; err != nil {
 		return
 	}
 	return
