@@ -57,9 +57,7 @@ func (repo *PostgresRepository) FindAll(params ...string) (dataCount int64, prod
 		params[2] = "5"
 	}
 	var status bool
-	if params[3] == "" {
-		status = true
-	} else if params[3] == "false" {
+	if params[3] == "false" {
 		status = false
 	} else {
 		status = true
@@ -76,7 +74,19 @@ func (repo *PostgresRepository) FindAll(params ...string) (dataCount int64, prod
 		return
 	}
 	if den == -1 {
+		if params[3] == "" {
+			if err = repo.db.Debug().Table("product_brands").Select("product_brands.*, product_categories.name as category, count (products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_brand_id = product_brands.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Joins("left join products on products.product_brand_category_id = product_brand_categories.id").Where("products.deleted is null and product_brands.deleted is null and (lower(product_brands.name) like lower(?) or lower(product_brands.id) like lower(?))", "%"+params[0]+"%", "%"+params[0]+"%").Group("product_brands.id,product_categories.name").Count(&dataCount).Scan(&productBrands).Error; err != nil {
+				return
+			}
+			return
+		}
 		if err = repo.db.Debug().Table("product_brands").Select("product_brands.*, product_categories.name as category, count (products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_brand_id = product_brands.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Joins("left join products on products.product_brand_category_id = product_brand_categories.id").Where("products.deleted is null and product_brands.deleted is null and (lower(product_brands.name) like lower(?) or lower(product_brands.id) like lower(?)) and product_brands.is_available = ?", "%"+params[0]+"%", "%"+params[0]+"%", &status).Group("product_brands.id,product_categories.name").Count(&dataCount).Scan(&productBrands).Error; err != nil {
+			return
+		}
+		return
+	}
+	if params[3] == "" {
+		if err = repo.db.Debug().Table("product_brands").Select("product_brands.*, product_categories.name as category, count (products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_brand_id = product_brands.id").Joins("left join product_categories on product_categories.id = product_brand_categories.product_category_id").Joins("left join products on products.product_brand_category_id = product_brand_categories.id").Where("products.deleted is null and product_brands.deleted is null and (lower(product_brands.name) like lower(?) or lower(product_brands.id) like lower(?))", "%"+params[0]+"%", "%"+params[0]+"%").Group("product_brands.id,product_categories.name").Count(&dataCount).Scopes(Paginate(params[1], params[2])).Scan(&productBrands).Error; err != nil {
 			return
 		}
 		return

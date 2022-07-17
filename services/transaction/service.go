@@ -126,16 +126,17 @@ func (s *service) UsersGetAll(uid string, params ...string) (transactions dto.Re
 	if err != nil {
 		return
 	}
-	if den < -1 || den == 0 {
-		den = 10
-	} else if den == -1 {
-		den = int(count)
+	if den < -1 {
+		transactions.Count = int(math.Ceil(float64(count) / float64(10)))
+	} else if den == -1 || den == 0 {
+		transactions.Count = 1
+	} else {
+		transactions.Count = int(math.Ceil(float64(count) / float64(den)))
 	}
 	if data == nil {
 		transactions.Data = []dto.ClientTransactionsResponse{}
 		return
 	}
-	transactions.Count = int(math.Ceil(float64(count) / float64(den)))
 	transactions.Data = *data
 	return
 }
@@ -313,14 +314,15 @@ func (s *service) AdminDetailTransaction(params ...string) (dashboardData dto.Da
 	if err != nil {
 		return
 	}
-	if den < -1 || den == 0 {
-		den = 10
-	} else if den == -1 {
-		den = int(dashboardData.Transactions.PageLength)
+	if den < -1 {
+		dashboardData.Transactions.PageLength = int64(math.Ceil(float64(dashboardData.Transactions.PageLength) / float64(10)))
+	} else if den == -1 || den == 0 {
+		dashboardData.Transactions.PageLength = 1
+	} else {
+		dashboardData.Transactions.PageLength = int64(math.Ceil(float64(dashboardData.Transactions.PageLength) / float64(den)))
 	}
 	if dashboardData.Transactions.Data == nil {
 		dashboardData.Transactions.Data = []dto.DetailTransactionDTO{}
 	}
-	dashboardData.Transactions.PageLength = int64(math.Ceil(float64(dashboardData.Transactions.PageLength) / float64(den)))
 	return
 }

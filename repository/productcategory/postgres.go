@@ -52,9 +52,7 @@ func (repo *PostgresRepository) FindAll(params ...string) (DataCount int64, prod
 		params[2] = "5"
 	}
 	var status bool
-	if params[3] == "" {
-		status = true
-	} else if params[3] == "false" {
+	if params[3] == "false" {
 		status = false
 	} else {
 		status = true
@@ -71,7 +69,19 @@ func (repo *PostgresRepository) FindAll(params ...string) (DataCount int64, prod
 		return
 	}
 	if den == -1 {
+		if params[3] == "" {
+			if err = repo.db.Table("product_categories").Select("product_categories.* , count (products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Where("products.deleted is null and product_categories.deleted is null and (lower(product_categories.id) like lower(?) or lower(product_categories.name) like lower(?))", "%"+params[0]+"%", "%"+params[0]+"%").Group("product_categories.id").Order("product_categories.is_available desc").Count(&DataCount).Scan(&productCategories).Error; err != nil {
+				return
+			}
+			return
+		}
 		if err = repo.db.Table("product_categories").Select("product_categories.* , count (products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Where("products.deleted is null and product_categories.deleted is null and (lower(product_categories.id) like lower(?) or lower(product_categories.name) like lower(?)) and product_categories.is_available = ?", "%"+params[0]+"%", "%"+params[0]+"%", &status).Group("product_categories.id").Order("product_categories.is_available desc").Count(&DataCount).Scan(&productCategories).Error; err != nil {
+			return
+		}
+		return
+	}
+	if params[3] == "" {
+		if err = repo.db.Table("product_categories").Select("product_categories.* , count (products.id) as product").Joins("left join product_brand_categories on product_brand_categories.product_category_id = product_categories.id").Joins("left join products on product_brand_categories.id = products.product_brand_category_id").Where("products.deleted is null and product_categories.deleted is null and (lower(product_categories.id) like lower(?) or lower(product_categories.name) like lower(?))", "%"+params[0]+"%", "%"+params[0]+"%").Group("product_categories.id").Order("product_categories.is_available desc").Count(&DataCount).Scopes(Paginate(params[1], params[2])).Scan(&productCategories).Error; err != nil {
 			return
 		}
 		return

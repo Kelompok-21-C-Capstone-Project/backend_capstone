@@ -76,15 +76,16 @@ func (s *service) AdminDetailUser(params ...string) (data dto.UserDashboadDTO, e
 	if err != nil {
 		return
 	}
-	if den < -1 || den == 0 {
-		den = 10
-	} else if den == -1 {
-		den = int(data.PageLength)
+	if den < -1 {
+		data.PageLength = int64(math.Ceil(float64(data.PageLength) / float64(10)))
+	} else if den == -1 || den == 0 {
+		data.PageLength = 1
+	} else {
+		data.PageLength = int64(math.Ceil(float64(data.PageLength) / float64(den)))
 	}
 	if err != nil {
 		return
 	}
-	data.PageLength = int64(math.Ceil(float64(data.PageLength) / float64(den)))
 	return
 }
 

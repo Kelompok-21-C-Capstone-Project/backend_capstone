@@ -81,12 +81,13 @@ func (s *service) GetAll(params ...string) (productBrands dto.ResponseBodyProduc
 	if err != nil {
 		return
 	}
-	if den < -1 || den == 0 {
-		den = 10
-	} else if den == -1 {
-		den = int(dataCount)
+	if den < -1 {
+		productBrands.PageLength = int(math.Ceil(float64(dataCount) / float64(10)))
+	} else if den == -1 || den == 0 {
+		productBrands.PageLength = 1
+	} else {
+		productBrands.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
 	}
-	productBrands.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
 	if datas == nil {
 		productBrands.Data = []dto.ProductBrand{}
 		return

@@ -52,6 +52,7 @@ func (repo *PostgresRepository) DashboardDetailUser(params ...string) (data dto.
 		if err = repo.db.Model(&data.Datas).Select("users.id as id,users.name as name, users.phone as phone, users.email as email,sum(payments.billed) as spending, count(transactions.id) as transactions").Joins("left join transactions on transactions.user_id = users.id left join payments on payments.transaction_id = transactions.id").Where("transactions.deleted is null and (lower(users.name) like lower(?) or lower(users.email) like lower(?) or lower(users.phone) like lower(?))", "%"+params[0]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Group("users.id").Count(&data.PageLength).Find(&data.Datas).Error; err != nil {
 			return
 		}
+		return
 	}
 	if err = repo.db.Model(&data.Datas).Select("users.id as id,users.name as name, users.phone as phone, users.email as email,sum(payments.billed) as spending, count(transactions.id) as transactions").Joins("left join transactions on transactions.user_id = users.id left join payments on payments.transaction_id = transactions.id").Where("transactions.deleted is null and (lower(users.name) like lower(?) or lower(users.email) like lower(?) or lower(users.phone) like lower(?))", "%"+params[0]+"%", "%"+params[0]+"%", "%"+params[0]+"%").Group("users.id").Count(&data.PageLength).Scopes(Paginate(params[1], params[2])).Find(&data.Datas).Error; err != nil {
 		return
