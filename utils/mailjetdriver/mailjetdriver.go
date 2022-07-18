@@ -84,19 +84,26 @@ func (d *MailjetDriver) SendBill(name string, email string, bill dto.BillClient)
 	messages := mailjet.MessagesV31{Info: messagesInfo}
 	_, err = d.mailjetClient.SendMailV31(&messages)
 	if err != nil {
-		log.Print("Email gagal dikirim")
+		log.Print("Email billing gagal dikirim")
 		log.Print(err)
 		return
 	}
-	log.Print("Berhasil kirim email")
+	log.Print("Berhasil kirim email billing")
 	return
 }
 
 func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClient) (err error) {
 	var text string
-	fileContent, err := ioutil.ReadFile("./media/invoice.html")
+
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		return errors.New("unable to get the current filename")
+	}
+	log.Print()
+	filePath := filepath.Join(filepath.Dir(filename), "./media/invoice.html")
+	fileContent, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Print("Membuka file gagal")
+		log.Print("Membuka file gagal invoice")
 		text = HTML_INVOICE
 	} else {
 		// Convert []byte to string
@@ -128,11 +135,11 @@ func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClie
 	messages := mailjet.MessagesV31{Info: messagesInfo}
 	_, err = d.mailjetClient.SendMailV31(&messages)
 	if err != nil {
-		log.Print("Email gagal dikirim")
+		log.Print("Email invoice gagal dikirim")
 		log.Print(err)
 		return
 	}
-	log.Print("Berhasil kirim email")
+	log.Print("Berhasil kirim email invoice")
 	return
 }
 
