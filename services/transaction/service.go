@@ -258,6 +258,7 @@ func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (e
 	}
 	if err = s.repository.MidtransUpdate(midtransData.TransactionId, midtransData.Status); err != nil {
 		err = errors.New("Midtrans Transaction Id " + midtransData.TransactionId + " Fail To Update")
+		return
 	}
 	bills, err := s.repository.GetBillById(midtransData.TransactionId)
 	if err != nil {

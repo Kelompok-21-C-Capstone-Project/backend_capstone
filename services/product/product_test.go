@@ -12,21 +12,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-// var productrepo = &mocks.Repository{Mock: mock.Mock{}}
-// var productservice = product.NewService(productrepo)
-
 func TestProductService_GetById(t *testing.T) {
-
-	// program mock
-	// productrepo.Mock.On("FindById", "1").Return(nil)
-
-	// product, err := productservice.GetById("1")
-
-	// assert.Nil(t, product)
-	// assert.NotNil(t, err)
-}
-
-func TestGetById(t *testing.T) {
 	var mockRepo = new(mocks.Repository)
 	t.Run("success", func(t *testing.T) {
 		service := product.NewService(mockRepo)
@@ -61,26 +47,32 @@ func TestProductService_GetAll(t *testing.T) {
 	})
 	t.Run("fail: error for datacount", func(t *testing.T) {
 		service := product.NewService(mockRepo)
-		mockRepo.On("FindAll", mock.Anything).Return(nil, errors.New("error datacount"))
-		_, err := service.GetAll("")
+		mockRepo.On("FindAll", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(dto.ResponseBodyProduct{}, errors.New("error datacount")).Once()
+		_, err := service.GetAll("key", "1", "2")
 		assert.Error(t, err)
 	})
 	t.Run("success", func(t *testing.T) {
 		service := product.NewService(mockRepo)
-		mockRepo.On("FindAll", mock.Anything).Return(&models.ProductResponse{}, nil).Once()
-		_, err := service.GetAll("")
+		mockRepo.On("FindAll", mock.Anything, mock.Anything, mock.Anything).Return(dto.ResponseBodyProduct{}, nil).Once()
+		_, err := service.GetAll("key", "1", "2")
 		assert.NoError(t, err)
 	})
 
 }
 
-func TestProductService_ClientBySlug(t *testing.T) {
+func TestProductService_ClientGetAllBySlug(t *testing.T) {
 	var mockRepo = new(mocks.Repository)
 	t.Run("fail: error parameter slug", func(t *testing.T) {
 		service := product.NewService(mockRepo)
-		mockRepo.On("ClientFindAllBySlug", mock.Anything).Return(nil, errors.New("there is error"))
+		mockRepo.On("ClientFindAllBySlug", mock.Anything).Return(nil, errors.New("there is error")).Once()
 		_, err := service.ClientGetAllBySlug("slug")
 		assert.Error(t, err)
+	})
+	t.Run("success", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("ClientFindAllBySlug", mock.Anything).Return(&dto.ProductCategory{}, nil).Once()
+		_, err := service.ClientGetAllBySlug("orang-tua")
+		assert.NoError(t, err)
 	})
 
 }
@@ -97,15 +89,89 @@ func TestProductService_ClientAll(t *testing.T) {
 
 func TestProductService_Create(t *testing.T) {
 	var mockRepo = new(mocks.Repository)
-	t.Run("fail: create data", func(t *testing.T) {
+	t.Run("fail: brand id is invalid", func(t *testing.T) {
 		service := product.NewService(mockRepo)
-		_, err := service.Create()
+		dtoData := dto.CraeteProductDTO{
+			Name:        "some product",
+			Price:       3000,
+			PriceBuy:    1000,
+			Profit:      2000,
+			Stock:       10,
+			Description: "some product description",
+			BrandId:     "5f8fe693-fbee-438d-9ca9-",
+			CategoryId:  "5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5",
+			IsAvailable: false,
+		}
+		_, err := service.Create(dtoData)
+		assert.Error(t, err)
+	})
+	t.Run("fail: category id is invalid", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		dtoData := dto.CraeteProductDTO{
+			Name:        "some product",
+			Price:       3000,
+			PriceBuy:    1000,
+			Profit:      2000,
+			Stock:       10,
+			Description: "some product description",
+			BrandId:     "5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5",
+			CategoryId:  "5f8fe693-fbee-438d-9ca9-",
+			IsAvailable: false,
+		}
+		_, err := service.Create(dtoData)
+		assert.Error(t, err)
+	})
+	t.Run("fail: category/brand id is not found", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("ValidateProductBrandCategories", mock.Anything, mock.Anything).Return("", errors.New("category not found")).Once()
+		dtoData := dto.CraeteProductDTO{
+			Name:        "some product",
+			Price:       3000,
+			PriceBuy:    1000,
+			Profit:      2000,
+			Stock:       10,
+			Description: "some product description",
+			BrandId:     "5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5",
+			CategoryId:  "5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5",
+			IsAvailable: false,
+		}
+		_, err := service.Create(dtoData)
+		assert.Error(t, err)
+	})
+	t.Run("fail: insert fail", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("ValidateProductBrandCategories", mock.Anything, mock.Anything).Return("5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5", nil).Once()
+		mockRepo.On("Insert", mock.Anything).Return(nil, errors.New("insert fail")).Once()
+		dtoData := dto.CraeteProductDTO{
+			Name:        "some product",
+			Price:       3000,
+			PriceBuy:    1000,
+			Profit:      2000,
+			Stock:       10,
+			Description: "some product description",
+			BrandId:     "5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5",
+			CategoryId:  "5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5",
+			IsAvailable: false,
+		}
+		_, err := service.Create(dtoData)
 		assert.Error(t, err)
 	})
 	t.Run("success", func(t *testing.T) {
 		service := product.NewService(mockRepo)
-		mockRepo.On("Insert", mock.Anything).Return(dto.CraeteProductDTO{}, nil).Once()
-		_, err := service.Create()
+		mockRepo.On("ValidateProductBrandCategories", mock.Anything, mock.Anything).Return("5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5", nil).Once()
+		mockRepo.On("Insert", mock.Anything).Return(&models.ProductResponse{}, nil).Once()
+		dtoData := dto.CraeteProductDTO{
+			Name:        "some product",
+			Price:       3000,
+			PriceBuy:    1000,
+			Profit:      2000,
+			Stock:       10,
+			Description: "some product description",
+			BrandId:     "5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5",
+			CategoryId:  "5f8fe693-fbee-438d-9ca9-a58b7c0b6bf5",
+			IsAvailable: false,
+		}
+		_, err := service.Create(dtoData)
 		assert.NoError(t, err)
 	})
 }

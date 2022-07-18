@@ -17,7 +17,6 @@ import (
 	categoryRepo "backend_capstone/repository/productcategory"
 	transactionRepo "backend_capstone/repository/transaction"
 	userRepo "backend_capstone/repository/user"
-	paymentService "backend_capstone/services/payment"
 	productService "backend_capstone/services/product"
 	brandService "backend_capstone/services/productbrand"
 	categoryService "backend_capstone/services/productcategory"
@@ -42,8 +41,7 @@ func RegisterModules(dbCon *utils.DatabaseConnection, configs *configs.AppConfig
 	transactionPermitService := transactionService.NewService(transactionPermitRepository, midtransPermitUtils, mailjetPermitUtils)
 	transactionPermitController := transactionController.NewController(transactionPermitService)
 
-	paymentPermitService := paymentService.NewService(nil)
-	paymentV1PermitController := paymentController.NewController(paymentPermitService)
+	paymentV1PermitController := paymentController.NewController()
 
 	categoryPermitRepository := categoryRepo.RepositoryFactory(dbCon)
 	categoryPermitService := categoryService.NewService(categoryPermitRepository)

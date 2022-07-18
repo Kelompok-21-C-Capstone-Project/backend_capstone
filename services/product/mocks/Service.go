@@ -107,29 +107,6 @@ func (_m *Service) GetAll(params ...string) (dto.ResponseBodyProduct, error) {
 	return r0, r1
 }
 
-// GetAllByCategory provides a mock function with given fields: categoryId
-func (_m *Service) GetAllByCategory(categoryId string) ([]models.ProductResponse, error) {
-	ret := _m.Called(categoryId)
-
-	var r0 []models.ProductResponse
-	if rf, ok := ret.Get(0).(func(string) []models.ProductResponse); ok {
-		r0 = rf(categoryId)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]models.ProductResponse)
-		}
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(categoryId)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // GetById provides a mock function with given fields: id
 func (_m *Service) GetById(id string) (models.ProductResponse, error) {
 	ret := _m.Called(id)
