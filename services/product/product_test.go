@@ -3,6 +3,7 @@ package product_test
 import (
 	"backend_capstone/models"
 	"backend_capstone/services/product"
+	"backend_capstone/services/product/dto"
 	"backend_capstone/services/product/mocks"
 	"errors"
 	"testing"
@@ -53,6 +54,75 @@ func TestProductService_GetAll(t *testing.T) {
 		_, err := service.GetAll("", "&$!^@#", "12")
 		assert.Error(t, err)
 	})
+	t.Run("fail: error parameter", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		_, err := service.GetAll("", "-1", "satu")
+		assert.Error(t, err)
+	})
+	t.Run("fail: error for datacount", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("FindAll", mock.Anything).Return(nil, errors.New("error datacount"))
+		_, err := service.GetAll("")
+		assert.Error(t, err)
+	})
+	t.Run("success", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("FindAll", mock.Anything).Return(&models.ProductResponse{}, nil).Once()
+		_, err := service.GetAll("")
+		assert.NoError(t, err)
+	})
+
+}
+
+func TestProductService_ClientBySlug(t *testing.T) {
+	var mockRepo = new(mocks.Repository)
+	t.Run("fail: error parameter slug", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("ClientFindAllBySlug", mock.Anything).Return(nil, errors.New("there is error"))
+		_, err := service.ClientGetAllBySlug("slug")
+		assert.Error(t, err)
+	})
+
+}
+
+func TestProductService_ClientAll(t *testing.T) {
+	var mockRepo = new(mocks.Repository)
+	t.Run("fail: fetch all client", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("ClientFindAll", mock.Anything).Return(nil, errors.New("there is error"))
+		_, err := service.ClientGetAll()
+		assert.Error(t, err)
+	})
+}
+
+func TestProductService_Create(t *testing.T) {
+	var mockRepo = new(mocks.Repository)
+	t.Run("fail: create data", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		_, err := service.Create()
+		assert.Error(t, err)
+	})
+	t.Run("success", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("Insert", mock.Anything).Return(dto.CraeteProductDTO{}, nil).Once()
+		_, err := service.Create()
+		assert.NoError(t, err)
+	})
+}
+
+func TestProductService_Remove(t *testing.T) {
+	var mockRepo = new(mocks.Repository)
+	t.Run("fail: error id", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		err := service.Remove("06086f3c-7d3c-4d83")
+		assert.Error(t, err)
+	})
+	t.Run("success", func(t *testing.T) {
+		service := product.NewService(mockRepo)
+		mockRepo.On("Delete", mock.Anything).Return(mockRepo.Delete, nil).Once()
+		err := service.Remove("06086f3c-7d3c-4d83-a0fa-9f4a287dfbdc")
+		assert.NoError(t, err)
+	})
 
 	// program mock
 	// productrepo.Mock.On("FindAll").Return(nil)
@@ -62,9 +132,7 @@ func TestProductService_GetAll(t *testing.T) {
 	// assert.Nil(t, product)
 	// assert.NotNil(t, err)
 
-}
-
-func TestProductService_ModifyProduct(t *testing.T) {
+	// func TestProductService_ModifyProduct(t *testing.T) {
 
 	// program mock
 	// productrepo.Mock.On("Update", "1").Return(nil)
