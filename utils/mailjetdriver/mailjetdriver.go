@@ -85,7 +85,6 @@ func (d *MailjetDriver) SendBill(name string, email string, bill dto.BillClient)
 	_, err = d.mailjetClient.SendMailV31(&messages)
 	if err != nil {
 		log.Print("Email billing gagal dikirim")
-		log.Print(err)
 		return
 	}
 	log.Print("Berhasil kirim email billing")
@@ -109,11 +108,11 @@ func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClie
 		// Convert []byte to string
 		text = string(fileContent)
 	}
-
 	text = strings.Replace(text, "<%name%>", name, 1)
-	text = strings.Replace(text, "<%product_name%>", bill.Product, 1)
+	text = strings.Replace(text, "<%product_name%>", bill.Product, 2)
 	text = strings.Replace(text, "<%payment_price%>", strconv.Itoa(int(bill.Billed)), 1)
 	text = strings.Replace(text, "<%payment_details%>", bill.PaymentDetails, 1)
+	text = strings.Replace(text, "<%payment_time%>", bill.UpdatedAt.Format("02-01-2006 15:04:05"), 1)
 
 	messagesInfo := []mailjet.InfoMessagesV31{
 		{
@@ -136,7 +135,6 @@ func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClie
 	_, err = d.mailjetClient.SendMailV31(&messages)
 	if err != nil {
 		log.Print("Email invoice gagal dikirim")
-		log.Print(err)
 		return
 	}
 	log.Print("Berhasil kirim email invoice")
@@ -188,6 +186,7 @@ var (
 		 </table>
 	 </body>
 	</html>`
+
 	HTML_INVOICE = `<!DOCTYPE html>
 	<html lang="en">
 	<head>
@@ -217,17 +216,34 @@ var (
 							<table style="padding: 40px 30px 40px 30px;">
 								<tr>
 									<td>
-										Item : <%product_name%>
+										Item 
+									</td>
+									<td>
+										: <%product_name%>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										Price :Rp<%payment_price%>,00
+										Price 
+									</td>
+									<td>
+										: Rp<%payment_price%>,00
 									</td>
 								</tr>
 								<tr>
 									<td>
-										Payment Method: <%payment_details%>
+										Payment Method
+									</td>
+									<td>
+										: <%payment_details%>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Payment Time
+									</td>
+									<td>
+										: <%payment_time%>
 									</td>
 								</tr>
 							</table>

@@ -150,7 +150,7 @@ func (repo *PostgresRepository) GetTransactionProduct(pid string) (product *mode
 	return
 }
 func (repo *PostgresRepository) GetBillById(tid string) (bill dto.BillClient, err error) {
-	if err = repo.db.Debug().Table("transactions").Select("payments.id as id, transactions.id as transaction_id, payments.status as status, payments.description as va_number, payments.method_details as payment_details, payments.billed as billed, payments.charged as charger, products.name as product, products.price as product_price, payments.created_at as deadline").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on products.id = transactions.product_id").Where("transactions.deleted is null and transactions", &tid).Scan(&bill).Error; err != nil {
+	if err = repo.db.Debug().Table("transactions").Select("payments.id as id, transactions.id as transaction_id, payments.status as status, payments.description as va_number, payments.method_details as payment_details, payments.billed as billed, payments.charged as charger, products.name as product, products.price as product_price, payments.created_at::timestamp at time zone 'gmt+7' as deadline, payments.updated_at::timestamp at time zone 'gmt+7' as updated_at").Joins("left join payments on payments.transaction_id = transactions.id").Joins("left join products on products.id = transactions.product_id").Where("transactions.deleted is null and transactions.id = ?", &tid).Scan(&bill).Error; err != nil {
 		return
 	}
 	return

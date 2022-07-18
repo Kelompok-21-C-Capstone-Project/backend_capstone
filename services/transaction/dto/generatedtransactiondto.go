@@ -28,6 +28,7 @@ type BillClient struct {
 	Product        string    `json:"product_name,omitempty" example:"Telkomsel 5GB Super Tiktok"`
 	ProductPrice   uint32    `json:"product_price,omitempty" example:"10000"`
 	Deadline       time.Time `json:"dead_line,omitempty" example:"2022-07-05T14:32:46.996074+07"`
+	UpdatedAt      time.Time `json:"paid_time,omitempty" example:"2022-07-05T14:32:46.996074+07"`
 }
 
 func (BillClient) TableName() string {
