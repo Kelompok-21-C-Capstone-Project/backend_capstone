@@ -2,14 +2,12 @@ package payment
 
 import (
 	"backend_capstone/api/payment/response"
-	paymentUsease "backend_capstone/services/payment"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 type Controller struct {
-	service paymentUsease.Service
 }
 
 var (
@@ -74,10 +72,8 @@ var (
 	}
 )
 
-func NewController(service paymentUsease.Service) *Controller {
-	return &Controller{
-		service: service,
-	}
+func NewController() *Controller {
+	return &Controller{}
 }
 
 // GetAll godoc

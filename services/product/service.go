@@ -17,7 +17,7 @@ import (
 
 type Repository interface {
 	FindById(id string) (product *models.ProductResponse, err error)
-	FindAll(params ...string) (dataCount int64, products *[]dto.Product, err error)
+	FindAll(params ...string) (products dto.ResponseBodyProduct, err error)
 	ClientFindAll() (products *[]dto.ProductCategory, err error)
 	ClientFindAllBySlug(slug string) (products *dto.ProductCategory, err error)
 	Insert(data *models.Product) (product *models.ProductResponse, err error)
@@ -34,7 +34,6 @@ type Service interface {
 	GetAll(params ...string) (products dto.ResponseBodyProduct, err error)
 	ClientGetAll() (products []dto.ProductCategory, err error)
 	ClientGetAllBySlug(slug string) (products dto.ProductCategory, err error)
-	GetAllByCategory(categoryId string) (products []models.ProductResponse, err error)
 	Create(createproductDTO dto.CraeteProductDTO) (product models.ProductResponse, err error)
 	Modify(id string, updateproductDTO dto.UpdateProductDTO) (product models.ProductResponse, err error)
 	ModifyStock(data *dto.UpdateStockDTO) (err error)
@@ -85,23 +84,17 @@ func (s *service) GetAll(params ...string) (products dto.ResponseBodyProduct, er
 	if err != nil {
 		return
 	}
-	dataCount, data, err := s.repository.FindAll(params...)
-	log.Print(dataCount)
+	products, err = s.repository.FindAll(params...)
 	if err != nil {
 		return
 	}
 	if den < -1 {
-		products.PageLength = int(math.Ceil(float64(dataCount) / float64(10)))
+		products.PageLength = int64(math.Ceil(float64(products.PageLength) / float64(10)))
 	} else if den == -1 || den == 0 {
 		products.PageLength = 1
 	} else {
-		products.PageLength = int(math.Ceil(float64(dataCount) / float64(den)))
+		products.PageLength = int64(math.Ceil(float64(products.PageLength) / float64(den)))
 	}
-	if data == nil {
-		products.Data = []dto.Product{}
-		return
-	}
-	products.Data = *data
 	return
 }
 func (s *service) ClientGetAllBySlug(slug string) (category dto.ProductCategory, err error) {
@@ -130,9 +123,6 @@ func (s *service) ClientGetAll() (products []dto.ProductCategory, err error) {
 			}
 		}
 	}
-	return
-}
-func (s *service) GetAllByCategory(categoryId string) (products []models.ProductResponse, err error) {
 	return
 }
 func (s *service) Create(createproductDTO dto.CraeteProductDTO) (product models.ProductResponse, err error) {

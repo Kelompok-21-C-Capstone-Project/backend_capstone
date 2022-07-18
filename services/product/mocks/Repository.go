@@ -90,7 +90,7 @@ func (_m *Repository) Delete(id string) error {
 }
 
 // FindAll provides a mock function with given fields: params
-func (_m *Repository) FindAll(params ...string) (int64, *[]dto.Product, error) {
+func (_m *Repository) FindAll(params ...string) (dto.ResponseBodyProduct, error) {
 	_va := make([]interface{}, len(params))
 	for _i := range params {
 		_va[_i] = params[_i]
@@ -99,30 +99,21 @@ func (_m *Repository) FindAll(params ...string) (int64, *[]dto.Product, error) {
 	_ca = append(_ca, _va...)
 	ret := _m.Called(_ca...)
 
-	var r0 int64
-	if rf, ok := ret.Get(0).(func(...string) int64); ok {
+	var r0 dto.ResponseBodyProduct
+	if rf, ok := ret.Get(0).(func(...string) dto.ResponseBodyProduct); ok {
 		r0 = rf(params...)
 	} else {
-		r0 = ret.Get(0).(int64)
+		r0 = ret.Get(0).(dto.ResponseBodyProduct)
 	}
 
-	var r1 *[]dto.Product
-	if rf, ok := ret.Get(1).(func(...string) *[]dto.Product); ok {
+	var r1 error
+	if rf, ok := ret.Get(1).(func(...string) error); ok {
 		r1 = rf(params...)
 	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).(*[]dto.Product)
-		}
+		r1 = ret.Error(1)
 	}
 
-	var r2 error
-	if rf, ok := ret.Get(2).(func(...string) error); ok {
-		r2 = rf(params...)
-	} else {
-		r2 = ret.Error(2)
-	}
-
-	return r0, r1, r2
+	return r0, r1
 }
 
 // FindById provides a mock function with given fields: id

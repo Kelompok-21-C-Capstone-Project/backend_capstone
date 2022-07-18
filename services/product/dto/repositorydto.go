@@ -5,7 +5,7 @@ import (
 )
 
 type ResponseBodyProduct struct {
-	PageLength int       `json:"page_length" example:"3"`
+	PageLength int64     `json:"page_length" example:"3"`
 	Data       []Product `json:"datas"`
 }
 
