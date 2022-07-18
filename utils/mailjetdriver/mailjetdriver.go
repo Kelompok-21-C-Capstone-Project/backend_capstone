@@ -126,11 +126,13 @@ func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClie
 		},
 	}
 	messages := mailjet.MessagesV31{Info: messagesInfo}
-	res, err := d.mailjetClient.SendMailV31(&messages)
-	log.Printf("Data: %+v\n", res)
+	_, err = d.mailjetClient.SendMailV31(&messages)
 	if err != nil {
+		log.Print("Email gagal dikirim")
+		log.Print(err)
 		return
 	}
+	log.Print("Berhasil kirim email")
 	return
 }
 
