@@ -238,9 +238,6 @@ func (s *service) ModifyStock(data *dto.UpdateStockDTO) (err error) {
 	if err = s.validate.Struct(data); err != nil {
 		return
 	}
-	if err = s.validate.Struct(data.Datas); err != nil {
-		return
-	}
 	_, err = uuid.Parse((*data).AdminId)
 	if err != nil {
 		return

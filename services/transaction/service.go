@@ -50,8 +50,6 @@ type Service interface {
 	UsersGetById(uid string, tid string) (transaction dto.ClientTransactionsResponse, err error)
 	Create(userId string, createtransactionDTO dto.CreateTransactionDTO) (bill dto.BillClient, err error)
 	GetBill(uid string, tid string) (bills dto.BillClient, err error)
-	Modify() (transaction models.TransactionResponse, err error)
-	Remove() (err error)
 	MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (err error)
 	AdminDetailTransaction(params ...string) (dashboardData dto.DashboardDetailTransactionDTO, err error)
 }
@@ -201,7 +199,7 @@ func (s *service) Create(userId string, createtransactionDTO dto.CreateTransacti
 	if err != nil {
 		return
 	}
-	err = s.mailjet.SendBill(userInfo.Name, createtransactionDTO.Email, bill)
+	err = s.mailjet.SendBill(userInfo.Name, userInfo.Email, bill)
 	if err != nil {
 		return
 	}
@@ -272,12 +270,6 @@ func (s *service) MidtransAfterPayment(midtransData dto.MidtransAfterPayment) (e
 	if err != nil {
 		return
 	}
-	return
-}
-func (s *service) Modify() (transaction models.TransactionResponse, err error) {
-	return
-}
-func (s *service) Remove() (err error) {
 	return
 }
 func (s *service) AdminDetailTransaction(params ...string) (dashboardData dto.DashboardDetailTransactionDTO, err error) {

@@ -84,29 +84,35 @@ func (d *MailjetDriver) SendBill(name string, email string, bill dto.BillClient)
 	messages := mailjet.MessagesV31{Info: messagesInfo}
 	_, err = d.mailjetClient.SendMailV31(&messages)
 	if err != nil {
-		log.Print("Email gagal dikirim")
-		log.Print(err)
+		log.Print("Email billing gagal dikirim")
 		return
 	}
-	log.Print("Berhasil kirim email")
+	log.Print("Berhasil kirim email billing")
 	return
 }
 
 func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClient) (err error) {
 	var text string
-	fileContent, err := ioutil.ReadFile("./media/invoice.html")
+
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		return errors.New("unable to get the current filename")
+	}
+	log.Print()
+	filePath := filepath.Join(filepath.Dir(filename), "./media/invoice.html")
+	fileContent, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Print("Membuka file gagal")
+		log.Print("Membuka file gagal invoice")
 		text = HTML_INVOICE
 	} else {
 		// Convert []byte to string
 		text = string(fileContent)
 	}
-
 	text = strings.Replace(text, "<%name%>", name, 1)
-	text = strings.Replace(text, "<%product_name%>", bill.Product, 1)
+	text = strings.Replace(text, "<%product_name%>", bill.Product, 2)
 	text = strings.Replace(text, "<%payment_price%>", strconv.Itoa(int(bill.Billed)), 1)
 	text = strings.Replace(text, "<%payment_details%>", bill.PaymentDetails, 1)
+	text = strings.Replace(text, "<%payment_time%>", bill.UpdatedAt.Format("02-01-2006 15:04:05"), 1)
 
 	messagesInfo := []mailjet.InfoMessagesV31{
 		{
@@ -126,11 +132,12 @@ func (d *MailjetDriver) SendInvoice(name string, email string, bill dto.BillClie
 		},
 	}
 	messages := mailjet.MessagesV31{Info: messagesInfo}
-	res, err := d.mailjetClient.SendMailV31(&messages)
-	log.Printf("Data: %+v\n", res)
+	_, err = d.mailjetClient.SendMailV31(&messages)
 	if err != nil {
+		log.Print("Email invoice gagal dikirim")
 		return
 	}
+	log.Print("Berhasil kirim email invoice")
 	return
 }
 
@@ -179,6 +186,7 @@ var (
 		 </table>
 	 </body>
 	</html>`
+
 	HTML_INVOICE = `<!DOCTYPE html>
 	<html lang="en">
 	<head>
@@ -208,17 +216,34 @@ var (
 							<table style="padding: 40px 30px 40px 30px;">
 								<tr>
 									<td>
-										Item : <%product_name%>
+										Item 
+									</td>
+									<td>
+										: <%product_name%>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										Price :Rp<%payment_price%>,00
+										Price 
+									</td>
+									<td>
+										: Rp<%payment_price%>,00
 									</td>
 								</tr>
 								<tr>
 									<td>
-										Payment Method: <%payment_details%>
+										Payment Method
+									</td>
+									<td>
+										: <%payment_details%>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Payment Time
+									</td>
+									<td>
+										: <%payment_time%>
 									</td>
 								</tr>
 							</table>
