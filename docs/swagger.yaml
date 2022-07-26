@@ -1,0 +1,2291 @@
+definitions:
+  backend_capstone_services_product_dto.ProductCategory:
+    properties:
+      id:
+        example: xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      label:
+        example: Some Category
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/dto.ClientProduct'
+        type: array
+      slug:
+        example: some-category
+        type: string
+    type: object
+  backend_capstone_services_productcategory_dto.ProductCategory:
+    properties:
+      description:
+        example: some description
+        type: string
+      icon:
+        example: mdi-some-category
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Some Name
+        type: string
+      product_sum:
+        example: 33
+        type: integer
+      slug:
+        example: some-name
+        type: string
+    type: object
+  dto.BillClient:
+    properties:
+      bill:
+        example: 11500
+        type: integer
+      charged:
+        example: 1500
+        type: integer
+      dead_line:
+        example: 2022-07-05T14:32:46.996074+07
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      payment_method:
+        example: Mandiri Virtual Account
+        type: string
+      product_name:
+        example: Telkomsel 5GB Super Tiktok
+        type: string
+      product_price:
+        example: 10000
+        type: integer
+      status:
+        example: Pending
+        type: string
+      transaction_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      va_number:
+        example: "2312312412523"
+        type: string
+    type: object
+  dto.ClientProduct:
+    properties:
+      category_id:
+        example: xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      description:
+        example: Some description
+        type: string
+      group:
+        example: Telkomsel
+        type: string
+      id:
+        example: xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      is_discount:
+        example: false
+        type: boolean
+      label:
+        example: Telkomsel 5GB Super 24H
+        type: string
+      price:
+        example: 50000
+        type: integer
+      stock:
+        example: 30
+        type: integer
+    type: object
+  dto.ClientTransactionsResponse:
+    properties:
+      created_at:
+        example: 2022-07-05T14:32:46.996074+07
+        type: string
+      icon:
+        example: mdi-paket-data
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      label:
+        example: Telkomsel 5GB Super Tiktok
+        type: string
+      payment_method:
+        example: Virtual Account
+        type: string
+      phone_number:
+        example: "2312312412523"
+        type: string
+      price:
+        example: 11500
+        type: integer
+      product_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      status:
+        example: Pending
+        type: string
+      type:
+        example: paket-data
+        type: string
+    type: object
+  dto.DashboardDetailTransactionDTO:
+    properties:
+      summary:
+        $ref: '#/definitions/dto.DetailPenjualanDTO'
+      transaksi:
+        $ref: '#/definitions/dto.DataTransactionDTO'
+    type: object
+  dto.DataSupplyDTO:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/dto.SupplyProductDTO'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+    type: object
+  dto.DataTransactionDTO:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/dto.DetailTransactionDTO'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+    type: object
+  dto.DetailPenjualanDTO:
+    properties:
+      total_komisi:
+        type: integer
+      total_penjualan:
+        type: integer
+      total_transaksi:
+        type: integer
+    type: object
+  dto.DetailTransactionDTO:
+    properties:
+      category:
+        example: Paket Data
+        type: string
+      invoice:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      nominal:
+        example: 35000
+        type: integer
+      order_time:
+        example: 01/02/2022 23:12
+        type: string
+      payment_method:
+        example: BCA Virtual Account
+        type: string
+      payment_time:
+        example: 01/02/2022 23:12
+        type: string
+      status:
+        example: Pending
+        type: string
+      user_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      user_name:
+        example: Hadi
+        type: string
+    type: object
+  dto.ProductBrand:
+    properties:
+      category:
+        example: E-Money
+        type: string
+      description:
+        example: some description
+        type: string
+      icon_path:
+        example: mdi-some-brand
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      is_available:
+        example: false
+        type: boolean
+      name:
+        example: some name
+        type: string
+      product_sum:
+        example: 33
+        type: integer
+    type: object
+  dto.ResponseBodyProductBrand:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/dto.ProductBrand'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+    type: object
+  dto.ResponseBodyProductCategory:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/backend_capstone_services_productcategory_dto.ProductCategory'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+    type: object
+  dto.ResponseUserTransaction:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.ClientTransactionsResponse'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+    type: object
+  dto.SupplyProductDTO:
+    properties:
+      jumlah:
+        example: 30
+        type: integer
+      no_faktur:
+        example: INV/ADSA/ASD
+        type: string
+      product_data:
+        example: Paket, PLN, Pulsa
+        type: string
+      tanggal:
+        example: 12-02-2022
+        type: string
+    type: object
+  dto.UserDashboadDTO:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/dto.UserDetails'
+        type: array
+      page_length:
+        example: 3
+        type: integer
+    type: object
+  dto.UserDetails:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      nama:
+        type: string
+      telepon:
+        type: string
+      total_pembelian:
+        type: integer
+      total_transaksi:
+        type: integer
+    type: object
+  models.PaymentResponse:
+    properties:
+      amount:
+        type: integer
+      billed:
+        type: integer
+      charged:
+        type: integer
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      method:
+        type: string
+      methodDetails:
+        type: string
+      status:
+        type: string
+      transactionId:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.ProductBrandCategoryResponse:
+    properties:
+      brand_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      category_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      products:
+        items:
+          $ref: '#/definitions/models.ProductResponse'
+        type: array
+      slug:
+        type: string
+    type: object
+  models.ProductBrandResponse:
+    properties:
+      description:
+        example: some description
+        type: string
+      icon_path:
+        example: /path/to/file
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      is_available:
+        example: false
+        type: boolean
+      name:
+        example: some name
+        type: string
+      product_category:
+        items:
+          $ref: '#/definitions/models.ProductCategoryResponse'
+        type: array
+    type: object
+  models.ProductCategoryResponse:
+    properties:
+      description:
+        example: some description
+        type: string
+      icon:
+        example: mdi-some-category
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Some Name
+        type: string
+      slug:
+        example: some-name
+        type: string
+    type: object
+  models.ProductResponse:
+    properties:
+      category:
+        $ref: '#/definitions/models.ProductBrandCategoryResponse'
+      category_id:
+        type: string
+      description:
+        example: some description
+        type: string
+      discount:
+        type: number
+      harga_beli:
+        example: 30000
+        type: integer
+      harga_jual:
+        example: 30000
+        type: integer
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      is_discount:
+        example: false
+        type: boolean
+      komisi:
+        example: 30000
+        type: integer
+      name:
+        example: Some Product
+        type: string
+      stock:
+        example: 30
+        type: integer
+      transactions:
+        items:
+          $ref: '#/definitions/models.TransactionResponse'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  models.TransactionResponse:
+    properties:
+      date:
+        type: string
+      description:
+        example: some description
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      payment:
+        $ref: '#/definitions/models.PaymentResponse'
+      product_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      updated:
+        type: string
+      user_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+    type: object
+  models.UserResponse:
+    properties:
+      email:
+        example: testmail@mail.com
+        format: email
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        format: uuid
+        type: string
+      name:
+        example: somen name
+        type: string
+      phone:
+        example: "0811111111"
+        type: string
+      role:
+        example: user
+        type: string
+      username:
+        example: username
+        type: string
+    type: object
+  request.CreateBrandRequest:
+    properties:
+      description:
+        example: Telekomunikasi
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Telkomsel
+        type: string
+    type: object
+  request.CreateCategoryRequest:
+    properties:
+      description:
+        example: some description
+        type: string
+      icon:
+        example: mdi-data-icon
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: soma name
+        type: string
+    type: object
+  request.CreateProductRequest:
+    properties:
+      brand_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      category_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      description:
+        example: some description
+        type: string
+      harga_beli:
+        example: 30000
+        type: integer
+      harga_jual:
+        example: 30000
+        type: integer
+      is_available:
+        example: true
+        type: boolean
+      komisi:
+        example: 30000
+        type: integer
+      name:
+        example: Some Product
+        type: string
+      stock:
+        example: 20
+        type: integer
+    type: object
+  request.CreateTransactionRequest:
+    properties:
+      email:
+        example: testmail@mail.com
+        type: string
+      payment_data:
+        example: Misal nomer yang akan ditagih (nomer hp untuk gopay)
+        type: string
+      payment_details:
+        example: Mandiri Virtual Account
+        type: string
+      payment_method:
+        example: Virtual Account
+        type: string
+      price:
+        example: 300000
+        type: integer
+      product_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
+        type: string
+      transaction_data:
+        example: Data seperti nomer hp/nomer padam yg menerima produk pembelian
+        type: string
+    type: object
+  request.LoginUserRequest:
+    properties:
+      identifier:
+        example: username
+        minLength: 5
+        type: string
+      password:
+        example: supersecret
+        minLength: 8
+        type: string
+    type: object
+  request.PayloadUpdateStock:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/request.UpdateProductStock'
+        type: array
+      date:
+        example: 27-03-2022
+        type: string
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+    type: object
+  request.RegisterAdminRequest:
+    properties:
+      email:
+        example: somemail@mail.com
+        format: email
+        type: string
+      key:
+        example: adminsupersecret
+        type: string
+      name:
+        example: some name
+        minLength: 5
+        type: string
+      password:
+        example: supersecret
+        minLength: 8
+        type: string
+      phone:
+        example: "0833333333"
+        minLength: 10
+        type: string
+      username:
+        example: username
+        minLength: 5
+        type: string
+    type: object
+  request.RegisterUserRequest:
+    properties:
+      email:
+        example: test@mail.com
+        format: email
+        type: string
+      name:
+        example: some name
+        minLength: 5
+        type: string
+      password:
+        example: supersecret
+        minLength: 8
+        type: string
+      phone:
+        example: "081111111"
+        minLength: 10
+        type: string
+      username:
+        example: some username
+        minLength: 5
+        type: string
+    type: object
+  request.UpdateBrandRequest:
+    properties:
+      description:
+        example: Excelent Celullar
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: XL
+        type: string
+    type: object
+  request.UpdateCategoryRequest:
+    properties:
+      description:
+        example: some description
+        type: string
+      icon:
+        example: mdi-some-category
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: some name
+        type: string
+    type: object
+  request.UpdateProductRequest:
+    properties:
+      brand_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      category_id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      description:
+        example: some description
+        type: string
+      harga_beli:
+        example: 30000
+        type: integer
+      harga_jual:
+        example: 30000
+        type: integer
+      is_available:
+        example: true
+        type: boolean
+      is_discount:
+        example: true
+        type: boolean
+      komisi:
+        example: 30000
+        type: integer
+      name:
+        example: Some Product
+        type: string
+      stock:
+        example: 20
+        type: integer
+    type: object
+  request.UpdateProductStock:
+    properties:
+      add:
+        example: 3
+        type: integer
+      harga_total:
+        example: 30
+        type: integer
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      product_data:
+        example: Paket, PLN, Pulsa
+        type: string
+    type: object
+  request.UpdateUserRequest:
+    properties:
+      name:
+        example: some name
+        type: string
+      password:
+        example: supersecret
+        type: string
+      phone:
+        example: "0822222222"
+        type: string
+    type: object
+  response.BasicBrandResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicBrandSuccessResponse:
+    properties:
+      status:
+        example: success
+        type: string
+    type: object
+  response.BasicCategoryResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicCategorySuccessResponse:
+    properties:
+      status:
+        example: success
+        type: string
+    type: object
+  response.BasicProductResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicProductSuccessResponse:
+    properties:
+      status:
+        example: success
+        type: string
+    type: object
+  response.BasicTransactionResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicUserResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  response.BasicUserSuccessResponse:
+    properties:
+      status:
+        example: success
+        type: string
+    type: object
+  response.JwtPayload:
+    properties:
+      email:
+        example: somemail@mail.com
+        type: string
+      ext:
+        example: 1257894000000
+        type: integer
+      iat:
+        example: 1257894000000
+        type: integer
+      id:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+      name:
+        example: some name
+        type: string
+      phone:
+        example: 08XXXXXXXX
+        type: string
+      role:
+        example:
+        - admin
+        items:
+          type: string
+        type: array
+      username:
+        example: username
+        type: string
+    type: object
+  response.PaymentMethods:
+    properties:
+      id:
+        example: 1
+        type: integer
+      services:
+        items:
+          $ref: '#/definitions/response.PaymentService'
+        type: array
+      type:
+        example: Virtual Account
+        type: string
+    type: object
+  response.PaymentService:
+    properties:
+      icon:
+        example: mdi-va-mandiri
+        type: string
+      id:
+        example: 1
+        type: integer
+      label:
+        example: Mandiri Virtual Account
+        type: string
+    type: object
+  response.SuccessLoginResponse:
+    properties:
+      status:
+        example: success
+        type: string
+      token:
+        example: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx.eyJjcmVhdGVkX2F0IjoiMjAyMi0wNy0wxxxxxxxxxxxxxxxxxxxxxxxxxxxxF9hdCI6IjIwMjItMDctMDNUMTA6MjA6NDYuMzAzNDA1OSswNzowMCIsImlkIjoiYWZjNxxxxxxxxxxxxxxxxxxxxxxxxxxxxbmFtZSI6Iml6YXFpIiwicm9xxxxxxxxxxxxxxxxxxxxxxxxxxxxJ9.-VKi0DWLKT1SxxxxxxxxxxxxxY2UbxbtFOj7cPA
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/admin_register:
+    post:
+      consumes:
+      - application/json
+      description: Create new admin
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterAdminRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      summary: Admin register
+      tags:
+      - admins
+  /v1/admins/customers:
+    get:
+      description: Get all user data to dashboard
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserDashboadDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all user data
+      tags:
+      - products
+  /v1/admins/products/invoices:
+    get:
+      description: invoice data about product supply
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      - description: search data by date range
+        in: query
+        name: date_range
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DataSupplyDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get product supply invoice
+      tags:
+      - admins
+  /v1/admins/transactions/details:
+    get:
+      description: Get all transaction data for admin dashboard
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by date range
+        in: query
+        name: date_range
+        type: string
+      - description: search data by status
+        in: query
+        name: status
+        type: string
+      - description: search data by category
+        in: query
+        name: category
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.DashboardDetailTransactionDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get transaction data for admin dashboard
+      tags:
+      - admins
+  /v1/auth:
+    post:
+      consumes:
+      - application/json
+      description: Delete user data from database
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user data by id
+      tags:
+      - users
+  /v1/clients/payments:
+    get:
+      description: Get all payment methods and services
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.PaymentMethods'
+      summary: Get all payment
+      tags:
+      - clients
+  /v1/clients/products:
+    get:
+      description: Get all products by all category frontned from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/backend_capstone_services_product_dto.ProductCategory'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      summary: Get products by all category for frontned
+      tags:
+      - clients
+  /v1/clients/products/:slug:
+    get:
+      description: Get product by specific category for frontend from database
+      parameters:
+      - description: Slug category
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend_capstone_services_product_dto.ProductCategory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      summary: Get product by specific category for frontend
+      tags:
+      - clients
+  /v1/clients/products/categories:
+    get:
+      description: Get product category for client side
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ProductCategoryResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      summary: Get all category
+      tags:
+      - clients
+  /v1/product_brands:
+    get:
+      description: Get product brand by id
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ResponseBodyProductBrand'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get brand
+      tags:
+      - product_brands
+    post:
+      consumes:
+      - application/json
+      description: Create new product brand
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateBrandRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ProductBrandResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create brand
+      tags:
+      - product_brands
+  /v1/product_brands/{id}:
+    delete:
+      description: Delete brand data from database
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicBrandSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete brand data by id
+      tags:
+      - product_brands
+    get:
+      description: Get product brand by id
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductBrandResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get brand
+      tags:
+      - product_brands
+    put:
+      consumes:
+      - application/json
+      description: Update brand data
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateBrandRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductBrandResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update brand
+      tags:
+      - product_brands
+  /v1/product_brands/{id}/categories/{category_id}:
+    delete:
+      description: Remove category from brand
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: category_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicBrandSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Remove category from brand
+      tags:
+      - product_brands
+    post:
+      description: Add category to brand
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: category_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicBrandSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicBrandResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add category to brand
+      tags:
+      - product_brands
+  /v1/product_categories:
+    get:
+      description: Get product category for admin side
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ResponseBodyProductCategory'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all category
+      tags:
+      - product_categories
+    post:
+      consumes:
+      - application/json
+      description: Create new product category
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ProductCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create category
+      tags:
+      - product_categories
+  /v1/product_categories/{id}:
+    delete:
+      description: Delete category data from database
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicCategorySuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete category data by id
+      tags:
+      - product_categories
+    get:
+      description: Get product category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get category
+      tags:
+      - product_categories
+    put:
+      consumes:
+      - application/json
+      description: Update category data
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicCategoryResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update category
+      tags:
+      - product_categories
+  /v1/products:
+    get:
+      description: Get product data from database
+      parameters:
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by brand
+        in: query
+        name: brand
+        type: string
+      - description: search data by category
+        in: query
+        name: category
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ProductBrandResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get product
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Create new product product
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create product
+      tags:
+      - products
+  /v1/products/{id}:
+    delete:
+      description: Delete product data from database
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicProductSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete product data by id
+      tags:
+      - products
+    get:
+      description: Get product product by id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get product
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: Update product data
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update product
+      tags:
+      - products
+  /v1/products/stocks:
+    put:
+      consumes:
+      - application/json
+      description: Update mulitple product stock
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.PayloadUpdateStock'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/request.PayloadUpdateStock'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicProductResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update product stock
+      tags:
+      - products
+  /v1/tokens:
+    get:
+      description: Get detailed token data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JwtPayload'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get token payload
+      tags:
+      - tokens
+  /v1/transactions:
+    get:
+      description: Get transaction data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.BillClient'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get transaction
+      tags:
+      - transactions
+  /v1/transactions/{id}:
+    delete:
+      description: Delete transaction data from database
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicProductSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete transaction data by id
+      tags:
+      - transactions
+    get:
+      description: Get transaction transaction by id
+      parameters:
+      - description: transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.BillClient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get transaction
+      tags:
+      - transactions
+    put:
+      consumes:
+      - application/json
+      description: Update transaction data
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update transaction
+      tags:
+      - transactions
+  /v1/user_register:
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      summary: User register
+      tags:
+      - users
+  /v1/users/:id/transactions:
+    get:
+      description: Get all transaction from specific user
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: search data by query
+        in: query
+        name: query
+        type: string
+      - description: search data by date
+        in: query
+        name: date
+        type: string
+      - description: search data by date range
+        in: query
+        name: date_range
+        type: string
+      - description: search data by status
+        in: query
+        name: status
+        type: string
+      - description: search data by category
+        in: query
+        name: category
+        type: string
+      - description: search data by page
+        in: query
+        name: page
+        type: string
+      - description: search data by page size
+        in: query
+        name: page_size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ResponseUserTransaction'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all transaction from specific user
+      tags:
+      - users
+  /v1/users/:id/transactions/:transaction_id:
+    get:
+      description: Get all transaction from specific user
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: transaction ID
+        in: path
+        name: transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ClientTransactionsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all transaction from specific user
+      tags:
+      - users
+  /v1/users/{id}:
+    delete:
+      description: Delete user data from database
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BasicUserSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user data by id
+      tags:
+      - users
+    get:
+      description: Get detailed user data by id from database
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user data by id
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user data
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicUserResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user
+      tags:
+      - users
+  /v1/users/{id}/transactions/{transaction_id}/bills:
+    get:
+      description: Get transaction transactions nill by id & user id
+      parameters:
+      - description: transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: transaction ID
+        in: path
+        name: transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.BillClient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get transactions bill
+      tags:
+      - users
+  /v1/users/transactions:
+    post:
+      consumes:
+      - application/json
+      description: Create new transaction for users
+      parameters:
+      - description: Payload format
+        in: body
+        name: Payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.BillClient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BasicTransactionResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: User create transaction
+      tags:
+      - users
+swagger: "2.0"
