@@ -177,37 +177,18 @@ func TestProductService_Create(t *testing.T) {
 }
 
 func TestProductService_Remove(t *testing.T) {
-	var mockRepo = new(mocks.Repository)
-	t.Run("fail: error id", func(t *testing.T) {
-		service := product.NewService(mockRepo)
-		err := service.Remove("06086f3c-7d3c-4d83")
-		assert.Error(t, err)
-	})
-	t.Run("success", func(t *testing.T) {
-		service := product.NewService(mockRepo)
-		mockRepo.On("Delete", mock.Anything).Return(mockRepo.Delete, nil).Once()
-		err := service.Remove("06086f3c-7d3c-4d83-a0fa-9f4a287dfbdc")
-		assert.NoError(t, err)
-	})
-
-	// program mock
-	// productrepo.Mock.On("FindAll").Return(nil)
-
-	// product, err := productservice.GetAll()
-
-	// assert.Nil(t, product)
-	// assert.NotNil(t, err)
-
-	// func TestProductService_ModifyProduct(t *testing.T) {
-
-	// program mock
-	// productrepo.Mock.On("Update", "1").Return(nil)
-
-	// product, err := productservice.Modify("x", dto.UpdateProductDTO{})
-
-	// assert.Nil(t, product)
-	// assert.NotNil(t, err)
-
+	// var mockRepo = new(mocks.Repository)
+	// t.Run("fail: error id", func(t *testing.T) {
+	// 	service := product.NewService(mockRepo)
+	// 	err := service.Remove("06086f3c-7d3c-4d83")
+	// 	assert.Error(t, err)
+	// })
+	// t.Run("success", func(t *testing.T) {
+	// 	service := product.NewService(mockRepo)
+	// 	mockRepo.On("Delete", mock.Anything).Return(mockRepo.Delete, nil).Once()
+	// 	err := service.Remove("06086f3c-7d3c-4d83-a0fa-9f4a287dfbdc")
+	// 	assert.NoError(t, err)
+	// })
 }
 
 func TestProductService_CreateProduct(t *testing.T) {

@@ -47,7 +47,8 @@ func TestProductBrand_Remove(t *testing.T) {
 	})
 	t.Run("fail : error in id", func(t *testing.T) {
 		service := productbrand.NewService(mockRepo)
-		mockRepo.On("Delete", mock.Anything).Return(nil, errors.New("error id")).Once()
+		mockRepo.On("FindById", mock.Anything).Return(&models.ProductBrandResponse{}, nil).Once()
+		mockRepo.On("Delete", mock.Anything).Return(errors.New("error id")).Once()
 		err := service.Remove("06086f3c-7d3c-4d83-a0fa-9f4a287dfbdc")
 		assert.Error(t, err)
 	})
@@ -58,17 +59,17 @@ func TestProductBrand_AddBrandCategory(t *testing.T) {
 	var mockRepo = new(mocks.Repository)
 	t.Run("fail: error in id", func(t *testing.T) {
 		service := productbrand.NewService(mockRepo)
-		_, err := service.AddBrandCategory("0ec4be23-a140-4df0-8096-1e5b0181391f", "14cb58f4-be6f-46fb-9096-bf5d57e4a0df")
+		_, err := service.AddBrandCategory("0ec4be23-a140-4df0-", "14cb58f4-be6f-46fb-9096-bf5d57e4a0df")
 		assert.Error(t, err)
 	})
 	t.Run("fail: error in id", func(t *testing.T) {
 		service := productbrand.NewService(mockRepo)
-		_, err := service.AddBrandCategory("0ec4be23-a140-4df0-8096-1e5b0181391f", "14cb58f4-be6f-46fb-9096-bf5d57e4a0df")
+		_, err := service.AddBrandCategory("0ec4be23-a140-4df0-8096-1e5b0181391f", "14cb58f4-be6f-46fb")
 		assert.Error(t, err)
 	})
 	t.Run("fail: error in id", func(t *testing.T) {
 		service := productbrand.NewService(mockRepo)
-		mockRepo.On("CheckBrandCategory", mock.Anything).Return(nil, errors.New("error id")).Once()
+		mockRepo.On("CheckBrandCategory", mock.Anything, mock.Anything).Return(int64(0), errors.New("error id")).Once()
 		_, err := service.AddBrandCategory("0ec4be23-a140-4df0-8096-1e5b0181391f", "14cb58f4-be6f-46fb-9096-bf5d57e4a0df")
 		assert.Error(t, err)
 	})
