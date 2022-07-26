@@ -12,7 +12,6 @@ require (
 )
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/midtrans/midtrans-go v1.3.1
 	gorm.io/driver/postgres v1.3.8
